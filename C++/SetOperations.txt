@@ -1,0 +1,42 @@
+1. Insert Elements
+
+    std::set<int> mySet;
+    mySet.insert(5); // Inserts 5 into the set
+
+2. Erase Elements
+    Removes elements by value or by iterator.
+
+    mySet.erase(3);       // Erases the element with value 3
+    mySet.erase(mySet.begin()); // Erases the first element
+
+3. Find Elements
+
+    Finds an element in the set and returns an iterator to it (or mySet.end() if it’s not found).
+    const it = mySet.find(5);
+    if (it != mySet.end()) {
+        std::cout << "found" << *it<<endl;
+    }
+
+5. Size of Set
+
+    cout << "Size: " << mySet.size() << std::endl;
+
+6. Clear Set
+
+    mySet.clear(); // The set is now empty
+
+7. Check if Empty
+
+    if (mySet.empty()) {
+        std::cout << "Set is empty\n";
+    }
+
+9. Iterating Over the Set
+
+    Use iterators to traverse all elements.
+
+    for (const auto& elem : mySet) {
+        std::cout << elem << " ";
+    }
+
+10. Using Iterator for find

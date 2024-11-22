@@ -1,0 +1,50 @@
+string str = "Hello"; // Direct initialization
+
+2. Accessing Characters
+    operator[]: Access a character.
+    char ch = str[0]; // 'H'
+
+3. Appending and Concatenation
+    std::string str2 = "Hello" + str; // "HelloHello World"
+
+4. Insertion
+
+    insert(): Inserts characters or another string at a specific position.
+    str.insert(5, " Beautiful"); // "Hello Beautiful World"
+
+5. Erasing and Clearing
+    erase(): Removes a part of the string or a single character.
+
+        parameters: startIndex, count
+        str.erase(5, 10); // "Hello World"
+
+    clear(): Empties the entire string.
+        str.clear(); // ""
+
+6. Finding Substrings and Characters
+
+    find(): Finds the first occurrence of a substring or character.
+        size_t pos = str.find("World"); // Returns index or std::string::npos if not found
+
+7. Substring Extraction
+    substr(): Extracts a substring.
+        string sub = str.substr(0, 5); // "Hello"
+
+8. Replacing Parts of a String
+
+    replace(): Replaces part of the string with another string.
+        str.replace(6, 5, "Universe"); // "Hello Universe"
+
+9. Comparing Strings
+
+    compare(): Compares two strings lexicographically.
+    int result = str.compare("Hello World"); // 0 if equal, <0 if str < "Hello World", >0 otherwise
+
+10. Length
+    size() or length(): Returns the number of characters in the string.
+
+11. insert a character at position k, n times.
+    str.insert(k, n, ch);
+
+12. Appending a character n times at the last.
+    str.append(n, ch);

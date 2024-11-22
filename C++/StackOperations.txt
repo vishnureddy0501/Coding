@@ -1,0 +1,20 @@
+1. Push Element
+
+    std::stack<int> myStack;
+    myStack.push(10); // Adds 10 to the top of the stack
+
+2. Pop Element
+
+    myStack.pop(); // Removes the top element (20 in this case)
+
+3. Top Element
+
+    int topElement = myStack.top(); // Accesses the top element (10 after pop)
+
+4. Check if Stack is Empty
+
+    Returns true if the stack is empty, false otherwise.
+
+    if (myStack.empty()) {
+        std::cout << "Stack is empty\n";
+    }

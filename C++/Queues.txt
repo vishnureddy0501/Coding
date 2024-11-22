@@ -1,0 +1,27 @@
+push, pop, front, back, empty, size
+
+1. Push Element (Enqueue)
+    std::queue<int> myQueue;
+    myQueue.push(10); // Adds 10 to the end of the queue
+    myQueue.push(20); // Adds 20 to the end
+
+2. Pop Element (Dequeue)
+    Removes the element from the front of the queue.
+    myQueue.pop(); // Removes the front element (10 in this case)
+
+3. Access Front Element
+    Returns the front element of the queue (the first element that was added).
+    int frontElement = myQueue.front(); // Accesses the front element (20 after pop)
+
+4. Access Back Element
+    Returns the last element of the queue (the most recently added element).
+    int backElement = myQueue.back(); // Accesses the last element (20 in this case)
+
+5. Check if Queue is Empty
+    Returns true if the queue is empty, false otherwise.
+    if (myQueue.empty()) {
+        std::cout << "Queue is empty\n";
+    }
+
+6. Get Size of Queue
+    std::cout << "Size of queue: " << myQueue.size() << std::endl;

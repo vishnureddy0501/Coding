@@ -1,0 +1,78 @@
+1. Inserting Elements
+
+    std::map<int, std::string> myMap;
+    myMap[1] = "Apple";  // Inserts {1, "Apple"}
+
+    using insert:
+    -------------
+    // insert like a pair
+    myMap.insert({3, "Cherry"});  // Inserts {3, "Cherry"}
+    myMap.insert({1, "Orange"}); // Won't insert as key 1 already exists
+    
+    // myMap.insert won't work if the key already exists.
+
+2. insert / udate if key already exists:
+
+    myMap[1] = "Updated Value"; // updates the value for key 1 if it exists, or inserts if it doesn't
+
+2. Accessing Elements
+    myMap[key]
+
+3. Finding Elements
+    find: Returns an iterator to the element if found, or map.end() if not.
+    m.find(key) != m.end() // check weather the map contains a key.
+
+    auto it = myMap.find(2);
+    if (it != myMap.end()) {
+        std::cout << "Found key 2 with value: " << it->second << "\n";
+    } else {
+        std::cout << "Key 2 not found!\n";
+    }
+
+4. Removing Elements
+
+    Remove by Key:
+        myMap.erase(2); // Removes the element with key 2
+
+    Remove by Iterator:
+        auto it = myMap.find(1);
+        if (it != myMap.end()) {
+            myMap.erase(it); // Erases element at iterator
+        }
+
+5. Checking Size and Emptiness
+    size(): Returns the number of elements in the map.
+        myMap.size();
+    empty(): Returns true if the map is empty.
+        if (myMap.empty()) {
+            std::cout << "Map is empty.";
+        }
+
+6. Iterating Over a Map
+
+    for (auto &value: m) {
+        cout<< value.first <<" "<<value.second<<endl;
+    }
+
+    for (auto it = myMap.begin(); it != myMap.end(); ++it) {
+        std::cout << it->first << ": " << it->second << "\n";
+    }
+
+8. Clearing the Map
+    clear(): Removes all elements from the map.
+        myMap.clear();
+
+unordered_map: 
+---------------
+same as normal map, but declaration is different
+
+unordered_map<int, int> m;
+// insertion, deletion, access 0(1) time complexity
+
+
+multimap:
+--------
+it can store multiple keys also
+
+multimap<int, int> m;
+m.insert({key, value})

@@ -1,0 +1,74 @@
+1. Converting int to Other Types
+int main() {
+    int num = 42;
+
+    // int to float
+    float f = float(num);
+
+    // int to double
+    double d = double(num);
+
+    // int to long double
+    long double ld = long double(num);
+
+    // int to string
+    string s = to_string(num);
+
+    // int to char (for single-digit ints 0-9)
+    char c = char(num + '0'); // assuming num is 0-9
+}
+
+2. Converting char to Other Types
+
+int main() {
+    char ch = '5';
+
+    // char to int (for numeric characters '0' - '9')
+    int num = int(ch - '0');
+
+    // char to string
+    string str = ""; // Initialize an empty string
+    char c = 'A';    // Character to add
+    str.push_back(c);
+
+    // char to float, double, long double
+    float f = float(num);
+    double d = double(num);
+    long double ld = long double(num);
+}
+
+3. Converting string to Other Types
+
+cpp
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+    string str = "123.45";
+
+    // string to int
+    int num = stoi(str); // Only works if `str` is an integer string like "123"
+
+    // string to float
+    float f = stof(str);
+
+    // string to double
+    double d = stod(str);
+
+    // string to long double
+    long double ld = stold(str);
+}
+
+Converting to float:
+--------------------
+float(something)
+
+Converting to int:
+-----------------
+int(something)
+to_string(something)
+char(something)
+double(something)
+long double(something)
