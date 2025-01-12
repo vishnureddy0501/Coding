@@ -25,3 +25,58 @@ push, pop, front, back, empty, size
 
 6. Get Size of Queue
     std::cout << "Size of queue: " << myQueue.size() << std::endl;
+
+6. Delete From Back of Queue:
+    q.pop_back();
+
+
+queue<int>
+----------
+std::queue is specifically designed for FIFO behavior
+meaning elements are inserted at the back and removed from the front.
+ It does not provide access to the front for insertion, which is what push_front would require.
+
+deque<int>
+----------
+q.push_back()
+q.push_front()
+q.pop_back()
+q.pop_front()
+q.size()
+q.rear()
+q.front()
+
+insert middle:
+------------
+   deque<int> dq = {10, 20, 30, 40, 50};
+
+    // Insert 25 in the middle (after the second element)
+    auto it = dq.begin() + 2;  // Iterator pointing to the third element
+    dq.insert(it, 25);
+
+    // Display the deque after insertion
+    for (int val : dq) {
+        cout << val << " "; // Output: 10 20 25 30 40 50
+    }
+
+
+erase middle:
+------------
+int main() {
+    deque<int> dq = {10, 20, 30, 40, 50};
+
+    // Delete the element in the middle (after the second element)
+    auto it = dq.begin() + 2;  // Iterator pointing to the third element (30)
+    dq.erase(it);  // Removes 30
+
+    // Display the deque after deletion
+    for (int val : dq) {
+        cout << val << " "; // Output: 10 20 40 50
+    }
+
+    return 0;
+}
+
+
+for pushing in the front, we need to use deque<int>
+Deque is a double ended queue, where we can do push, pop from both front, back.

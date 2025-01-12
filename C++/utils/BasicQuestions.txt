@@ -1,0 +1,18 @@
+Projects:
+--------
+Reinforcement Learning approach for smart traffic signal control
+
+1. placement cell automation
+2. academic cell automation
+3. Secure vault
+ -> created a secure vault for storing files. We can create a group and members of this has access to the shared files.
+ -> 
+
+aviso:
+-----
+1. Deals and Forecast app development, theme changes
+2. Activity and Relationship app
+3. Sales Engagement app
+4. conversational intelligence
+5 Experience in d3.
+6. worked in the backend as well.

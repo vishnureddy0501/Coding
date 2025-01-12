@@ -1,0 +1,66 @@
+
+Vertical scaling Vs Horizontal scaling:
+--------------------------------------
+Vertical scaling -> increase the resorces of each server
+        -> Preprocessing requests is fast when compared to Horizontal scaling
+        -> we can't increase the resources after some capacity
+        -> Not fault tolerant. if the server fails then whole application is down
+        -> Load Balancer is not required.
+Horizontal scaling -> increase the number of servers
+        -> Preprocessing requests is slow when compared to Vertical scaling
+        -> Requires load Balancing
+        -> Scalability is effectively unlimited; just add more nodes.
+        -> Fault tolerant. if some server fails others can handle it.
+
+Load Balancing:
+--------------
+        -> Adding and removing servers
+      -> Distributing load across the all the servers equally
+      -> Distribution of load is done using hashing
+      https://www.youtube.com/watch?v=K0Ta65OqQkY&list=PLMCXHnjXnTnvo6alSjVkgxV-VH6EPyvoX&index=3
+
+
+consistent hashing
+00:00 Request Hashing
+03:00 Request Mapping
+06:02 Problems
+07:01 Virtual Servers
+09:40 Applications
+10:18 Thank you!
+
+
+What is Message Queues?
+------------------------
+Notes to self:
+* Servers are processing jobs in parallel.
+* A server can crash. The jobs running on the crashed server still needs to get processed.
+* A notifier constantly polls the status of each server and if a server crashes it takes ALL unfinished jobs (listed in some database) and distributes it to the rest of the servers. Because distribution uses a load balancer (with consistent hashing) duplicate processing will not occur as job_1 which might be processing on server_3 (alive) will land again on server_3, and so on.
+* This "notifier with load balancing" is a "Message Queue".
+
+
+Monolithic Vs Microservices Architecture
+----------------------------------------
+Monolithic supports both Horizontal scaling and Vertical scaling.
+Microservices Architecture also supports both Horizontal scaling and Vertical scaling.
+
+Monolith - Single/Multiple machine running the computation
+
+Microservice - It's a division of whole works into business units which are turned into specific microservice. 
+
+Adv Monolith:
+- Good for small teams 
+- Less duplication for tests etc
+- Faster because everything is in same box
+
+Disadv Monlith:
+- Require more context
+- Deployment is complex (everything is touching every other thing)
+- Too much responsibility on one server
+- Tight coupling 
+
+Adv Micro:
+- Easy to scale
+- Parallel development is easy 
+
+Disadv Micro:
+- Tougher to design

@@ -1,5 +1,14 @@
 string str = "Hello"; // Direct initialization
 
+find:
+---
+str1.find(str2) // return the matched index. else returns -1
+
+substring:
+---------
+logs[i].substr(j + 1, logs[i].size() - left.size())
+
+
 2. Accessing Characters
     operator[]: Access a character.
     char ch = str[0]; // 'H'

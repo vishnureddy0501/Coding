@@ -1,0 +1,140 @@
+important syntaxes:
+------------------
+https://leetcode.com/problems/the-k-weakest-rows-in-a-matrix/
+https://leetcode.com/problems/sort-the-students-by-their-kth-score/submissions/1497252679/
+
+Key Features:
+------------
+uses vector as data structure
+By default max-heap (maximum element is stored at the top)
+Efficient Operations: Push, pop, and top operations are logarithmic in complexity (O(log N)).
+
+#include <bits/stdc++.h>
+using namespace std;
+
+priority_queue<int> pq; // Max-heap (default)
+
+priority_queue<int, vector<int>, greater<int>> minHeap; // Min-heap
+
+functions:
+----------
+
+1. push(element)
+    Adds a new element to the priority queue.
+    Reorganizes the heap to maintain the order.
+    Time complexity: O(log N).
+    pq.push(5);
+2. pop()
+    Removes the top element (largest for max-heap, smallest for min-heap).
+    Reorganizes the heap to maintain the order.
+    Time complexity: O(log N).
+    pq.pop();
+3. top()
+    Returns the top element of the priority queue (largest in max-heap, smallest in min-heap).
+    Does not remove the element.
+    Time complexity: O(1).
+    int topElement = pq.top();
+4. empty()
+    Returns true if the priority queue is empty; otherwise, false.
+    if (pq.empty()) {
+        std::cout << "Queue is empty";
+    }
+5. size()
+    Returns the number of elements in the priority queue.
+
+
+Example of a Max-Heap
+--------------------
+int main() {
+    priority_queue<int> pq;
+
+    pq.push(10);
+    pq.push(20);
+    pq.push(5);
+
+    while (!pq.empty()) {
+        std::cout << pq.top() << " "; // Prints elements in descending order
+        pq.pop();
+    }
+
+    return 0;
+}
+
+
+
+Example of a Min-Heap
+----------------------
+int main() {
+    // Min-heap
+    priority_queue<int, vector<int>, greater<int>> minHeap;
+
+    minHeap.push(10);
+    minHeap.push(20);
+    minHeap.push(5);
+
+    while (!minHeap.empty()) {
+        std::cout << minHeap.top() << " "; // Prints elements in ascending order
+        minHeap.pop();
+    }
+
+    return 0;
+}
+
+
+
+Custom Comparator
+------------------
+You can define a custom comparator for more complex sorting logic.
+
+
+struct CustomCompare {
+    bool operator()(int a, int b) {
+        return a % 10 > b % 10; // Compare based on the last digit
+    }
+};
+
+int main() {
+    priority_queue<int, vector<int>, CustomCompare> pq;
+
+    pq.push(34);
+    pq.push(45);
+    pq.push(12);
+
+    while (!pq.empty()) {
+        std::cout << pq.top() << " ";
+        pq.pop();
+    }
+
+    return 0;
+}
+
+Output: 45 34 12
+Here, elements are sorted by the last digit in ascending order.
+
+
+Summary
+    std::priority_queue is a powerful tool for managing heaps efficiently.
+
+
+Example of sandy's code:
+------------------------
+indirect way of using minHeap
+
+class Solution {
+public:
+    vector<int> getFinalState(vector<int>& a, int k, int x) {
+        int n = a.size();
+        priority_queue<pair<int, int>> q;
+        for (int i = 0; i < n; ++i) {
+            q.push({-a[i], -i});
+        }
+        while (k--) {
+            auto [v, idx] = q.top();
+            q.pop();
+            v *= x;
+            a[-idx] = -v;
+            q.push({v, idx});
+        }
+        return a;
+    }
+};

@@ -1,0 +1,10 @@
+Preprocessing using cron jobs
+Backup servers
+Microservices
+Distributed Systems
+Load Balancing
+Decoupling
+Logging and metrics calculation
+Extensibility
+Low-level system design
+Database Sharding

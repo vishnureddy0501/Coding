@@ -36,3 +36,20 @@ vec.insert(vec.begin() + 2, toInsert.begin(), toInsert.end());
 extract some part of vector and assign to other:
 -----------------------------------------------
     std::vector<int> subset(original.begin() + start, original.begin() + start + length);
+
+
+
+custom sort:
+-----------
+    struct CustomSort {
+        bool operator()(const std::pair<int, int>& a,
+                        const std::pair<int, int>& b) const {
+            if (a.first == b.first) {
+                return a.second <
+                       b.second; // Sort by second element if first is equal
+            }
+            return a.first < b.first; // Otherwise, sort by first element
+        }
+    };
+    vector<pair<int, int>> v;
+    sort(v.begin(), v.end(), CustomSort());
