@@ -1,0 +1,24 @@
+(applicable for c++ version 23 or higher)
+
+    #include <ranges>
+    #include<bits/stdc++.h>
+    using namespace std;
+    
+    vector<string> split(string s, string delimiter) {
+        vector<string> result;
+        for (auto part : views::split(s, delimiter)) {  
+            string temp = string(part.begin(), part.end());
+            result.push_back(temp);
+        }
+        return result;
+    }
+    
+    string s = "apple##banana";
+    string delimiter = "##";
+    vector<string> words = split(date, delimiter);
+    
+    
+    for making it work for character delimiter
+    char ch = ',';
+    string delimiter = "";
+    delimiter.push_back(ch); // character is pushed to string delimiter. now use this
