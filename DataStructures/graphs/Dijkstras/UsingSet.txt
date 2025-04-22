@@ -1,0 +1,35 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    vector<int> dijkstra(int V, vector<vector<pair<int, int>>>& adj, int src) {
+        // Distance vector
+        vector<int> dist(V, INT_MAX);
+        dist[src] = 0;
+
+        // Min-heap (set of {distance, node})
+        set<pair<int, int>> st;
+        st.insert({0, src});
+
+        while (!st.empty()) {
+            auto [currDist, node] = *st.begin();
+            st.erase(st.begin());
+
+            for (auto& [adjNode, weight] : adj[node]) {
+                if (currDist + weight < dist[adjNode]) {
+                    // If already in set with a higher distance, remove it
+                    if (dist[adjNode] != INT_MAX) {
+                        st.erase({dist[adjNode], adjNode});
+                    }
+
+                    // Update distance and insert new pair
+                    dist[adjNode] = currDist + weight;
+                    st.insert({dist[adjNode], adjNode});
+                }
+            }
+        }
+
+        return dist;
+    }
+};

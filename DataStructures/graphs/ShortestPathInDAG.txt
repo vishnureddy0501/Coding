@@ -1,0 +1,59 @@
+Single source shortest path.
+---------------------------
+shortest path to each node from source
+
+we can do this using topologicalSort. (you can use dfs topologicalSort / bfs topologicalSort).
+Dfs topologicalSort is simple
+
+
+DAG doesn't contain cycles. Hence we can use it.
+
+
+
+
+void dfs(vector<vector<pair<int, int>>>& graph, vector<int>& visited, vector<int>& st, int index) {
+    visited[index] = 1;
+    for (int i = 0; i<graph[index].size(); i++) {
+        if (visited[graph[index][i].first] == 0) {
+            dfs(graph, visited, st, graph[index][i].first);
+        }
+    }
+    st.push_back(index);
+}
+
+void shortestPath(vector<vector<pair<int, int>>> &graph, vector<int>& dist, vector<int>& st) {
+    int flag = 0;
+    for (int j = st.size() -1; j >= 0; j--) {
+        if (st[j] != 0 && flag == 0) {
+            dist[st[j]] = -1;
+            continue;
+        } else {
+            flag = 1;
+        }
+        auto it = st[j];
+        for (int i = 0; i < graph[it].size(); i++) {
+            int vert = graph[it][i].first, cost = graph[it][i].second;
+            dist[vert] = min(dist[vert], dist[it] + cost);
+        }
+    }
+}
+
+vector<int> shortestPathInDAG(int n, int m, vector<vector<int>> &edges)
+{
+    vector<vector<pair<int, int>>> graph(n);
+    for (int i = 0; i<edges.size(); i++) {
+        graph[edges[i][0]].push_back({ edges[i][1], edges[i][2]});
+    }
+    vector<int> st;
+    vector<int> visited(n, 0);
+    for (int i = 0; i<n; i++) {
+        if (visited[i] == 0) {
+            dfs(graph, visited, st, i);
+        }
+    }
+    vector<int> dist(n, INT_MAX);
+    dist[0] = 0;
+    shortestPath(graph, dist, st);
+    vector<int> v;
+    return dist;    
+}

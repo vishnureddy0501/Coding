@@ -1,0 +1,50 @@
+🧩 width / height
+-----------------
+Used in all types of layout (block, grid, flex, etc.)
+
+In Flexbox, it's overridden by flex-basis (if both are set).
+.item {
+  width: 200px;
+}
+
+🧩 flex-basis
+--------------
+Controls the initial size of the item before grow/shrink happens.
+
+Acts like width in row direction and height in column.
+
+.item {
+  flex-basis: 200px;
+}
+📦 The item starts at 200px, but can grow or shrink depending on the other flex-* properties.
+
+⚠️ If you use both:
+.item {
+  width: 200px;
+  flex-basis: 100px;
+}
+✅ In Flexbox, flex-basis takes priority.
+
+🧠 Real Example
+🔹 Using flex-basis
+.item {
+  flex: 1 1 200px; /* grow: 1, shrink: 1, basis: 200px */
+}
+📦 The item starts at 200px, but can grow/shrink based on space.
+
+🔹 Using width
+.item {
+  width: 200px;
+}
+📦 The item will always be 200px, unless something overrides it.
+
+✅ Use flex-basis when:
+You're inside a Flexbox container
+
+You want flexible sizing that starts at a specific size
+
+You're using flex-grow and flex-shrink
+
+🔥 Bonus Tip: Shorthand
+flex: 1 1 200px;
+/* = flex-grow: 1; flex-shrink: 1; flex-basis: 200px; */

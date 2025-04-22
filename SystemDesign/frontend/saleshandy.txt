@@ -1,0 +1,4 @@
+Saleshandy uses tinymce as their email editor. 
+it has lot of inbuilt options.
+Saleshandy uses apex charts. (using the library is good. don't go with d3 directly)
+aviso uses quill editor. which is opensource, but not that much good.

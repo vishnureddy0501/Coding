@@ -1,0 +1,59 @@
+see jenny's lecture. it is good.
+--------------------------------
+1. maintain visited array with 3 flags. 
+    -1 if the node is not visited
+    0 if node is visited
+    1 if the node is deleted from queue.
+
+while you are pushing adjacent elements to queue,if you reach any adjacent element with visited 0 then there is a cycle.
+visited 0 means, you already visited that node from some other path. now again you find the path to that node.
+Hence cycle.
+
+striver code:
+--------------
+#include <bits/stdc++.h>
+using namespace std;
+
+bool bfs(vector<vector<int>>& graph, vector<bool>& visited, int start) {
+    queue<pair<int, int>> q; // {current_node, parent}
+    q.push({start, -1});
+    visited[start] = true;
+
+    while (!q.empty()) {
+        auto [node, parent] = q.front();
+        q.pop();
+
+        for (int neighbor : graph[node]) {
+            if (!visited[neighbor]) {
+                visited[neighbor] = true;
+                q.push({neighbor, node});
+            } else if (neighbor != parent) {
+                // If already visited and not coming from parent → cycle
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+string cycleDetection(vector<vector<int>>& edges, int n, int m) {
+    vector<vector<int>> graph(n);
+    for (auto& edge : edges) {
+        int u = edge[0] - 1;
+        int v = edge[1] - 1;
+        graph[u].push_back(v);
+        graph[v].push_back(u);
+    }
+
+    vector<bool> visited(n, false);
+    for (int i = 0; i < n; ++i) {
+        if (!visited[i]) {
+            if (bfs(graph, visited, i)) {
+                return "Yes";
+            }
+        }
+    }
+
+    return "No";
+}

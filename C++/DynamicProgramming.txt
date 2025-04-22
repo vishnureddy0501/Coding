@@ -1,0 +1,14 @@
+Dp on Grids / 2D Matrices:
+--------------------------
+count pairs
+count pairs with obstacles
+mininum path sum
+max path sum (on some conditions we can solve using DP)
+triangle 
+2 start points
+
+how to do the space optimization:
+---------------------------------
+suppose you are using 2d array in problems like 0/1 knapsack.
+we can achive the result using 2 single dimentional arrays curr, prev.
+Hence this way we can reduce the space taken.

@@ -1,0 +1,3 @@
+when to optimize recursion:
+---------------------------
+Remember that whenever you have recursion with more than 1 recursive function in it, It's always possible that some of the recursive function we are re-calculating

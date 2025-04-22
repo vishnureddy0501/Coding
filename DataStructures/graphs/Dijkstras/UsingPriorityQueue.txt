@@ -1,0 +1,39 @@
+Dijakstras algorithm doesn't work for a graph with negative weight cycles.
+if a graph contains atleast 1 negative weight edge, dijkstra algorithm doesn't work.
+
+why do we need to use priority_queue in dijkstra?
+--------------------------------------------------
+sortin the queue based on the cost will decrease the number of operations.
+Hence store {cost, node} in priority_queue. 
+
+
+#include <bits/stdc++.h> 
+int shortestPath(vector<vector<pair<int, int>>> &graph, vector<int>& dict, int source) {
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> q;
+
+	// cost first, node second. to sort it based on cost.
+    q.push({0, source});
+    while(q.size() > 0) {
+        auto it = q.top();
+        q.pop();
+        int x = it.second, cost = it.first;
+        for (int i = 0; i < graph[x].size(); i++) {
+            if (dict[graph[x][i].first] > cost + graph[x][i].second) {
+                dict[graph[x][i].first] = cost + graph[x][i].second;
+                q.push({cost + graph[x][i].second, graph[x][i].first}); // cost first, node second
+            }
+        }
+    }
+    return 0;
+}
+vector<int> dijkstra(vector<vector<int>> &vec, int n, int edges, int source) {
+    vector<vector<pair<int, int>>> graph(n);
+    for (int i = 0; i<vec.size(); i++) {
+        graph[vec[i][0]].push_back({ vec[i][1], vec[i][2]});
+        graph[vec[i][1]].push_back({ vec[i][0], vec[i][2]});
+    }   
+    vector<int> dict(n, INT_MAX);
+    dict[source] = 0;
+    shortestPath(graph, dict, source);
+    return dict;
+}

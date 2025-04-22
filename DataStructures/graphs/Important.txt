@@ -1,0 +1,19 @@
+we can use bool array instead of int array to mark visited....it will take less memory.
+
+Rotten oranges - follow strivers code.
+Number of enclases - strivers code. 
+
+
+for tress - we can use bfs/ dfs for finding shortest path.
+	we can use dfs only if we have unique path to reach a node.
+
+finding shortest path using dfs is applicable only in trees. because in trees we have unique path from a node to another node.
+
+
+for graphs, for finding the shortest path we have to use bfs only.
+
+
+Dfs -> runs in exponential time
+Bfs -> runs in polynomial time.
+
+Hence, we will prefer Bfs over Dfs whenever possible

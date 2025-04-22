@@ -1,0 +1,21 @@
+justify-content works on the main-axis
+align-items works on the cross-axis
+rowGap - gap b/w rows.
+columnGap - gap b/w columns.
+gap: for both rowGap, columnGap.
+
+align-items is a CSS property used with Flexbox and Grid layouts to control how items are aligned along the cross axis of the container.
+
+📌 In Flexbox:
+---------------
+The main axis is the direction set by flex-direction (default is row).
+The cross axis is perpendicular to the main axis.
+So align-items controls vertical alignment when flex-direction: row, and horizontal alignment when flex-direction: column.
+💡 Common Values for align-items:
+
+Value	What it does
+stretch	(Default) Stretches items to fill the container along the cross axis
+flex-start	Aligns items to the start of the cross axis
+flex-end	Aligns items to the end of the cross axis
+center	Centers items along the cross axis
+baseline	Aligns items by their text baseline

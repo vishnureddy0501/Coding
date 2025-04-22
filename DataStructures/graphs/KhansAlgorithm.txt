@@ -1,0 +1,4 @@
+(nothing but topologicalSort using bfs + queue)
+
+it works for not connected graphs also. 
+course schedule 1, course schedule 2

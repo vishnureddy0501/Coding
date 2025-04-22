@@ -1,0 +1,39 @@
+
+🧩 alignItems — per item in one row/column
+👉 Use when:
+You want to align items along the cross axis (usually vertically if flex-direction: row) — for a single row or column of items.
+
+📌 Works with:
+Flexbox
+
+Grid
+
+🎯 Affects:
+All direct children of the flex container (how each one aligns in the cross direction).
+
+💡 Example:
+.container {
+  display: flex;
+  height: 200px;
+  align-items: center; /* All items centered vertically */
+}
+🧩 alignContent — for multiple rows
+👉 Use when:
+You have multiple rows or lines of items and you want to align the entire block of rows inside the container (like packing boxes into a shelf).
+
+📌 Works with:
+Flexbox (only when items wrap)
+
+Grid
+
+🎯 Affects:
+The entire group of rows or columns (not individual items).
+
+💡 Example:
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  height: 400px;
+  align-content: space-between; /* Spreads out rows vertically */
+}
+🟡 If you don’t have flex-wrap: wrap, alignContent won’t have any effect.

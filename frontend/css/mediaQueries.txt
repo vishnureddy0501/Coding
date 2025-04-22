@@ -1,0 +1,43 @@
+
+🔹 1. Change styles for phones (max-width: 600px)
+
+@media (max-width: 600px) {
+  body {
+    background-color: lightblue;
+  }
+}
+
+🔹 2. Tablet styles (between 601px and 900px)
+@media (min-width: 601px) and (max-width: 900px) {
+  body {
+    background-color: lightgreen;
+  }
+}
+
+🔹 3. Desktop styles (min-width: 901px)
+@media (min-width: 901px) {
+  body {
+    background-color: lightcoral;
+  }
+}
+
+🔹 4. Hide an element on small screens
+@media (max-width: 600px) {
+  .sidebar {
+    display: none;
+  }
+}
+
+🔹 5. Responsive font size
+@media (max-width: 600px) {
+  h1 {
+    font-size: 24px;
+  }
+}
+
+@media (min-width: 601px) {
+  h1 {
+    font-size: 36px;
+  }
+}
+📝 Makes text smaller on smaller screens.

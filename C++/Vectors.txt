@@ -23,7 +23,7 @@ find in a vector:
 8. Clearing Elements
     vec.clear();  // vec: {}
 
-vec.erase(vec.begin() + 1, vec.begin() + 3); // erase multiple
+vec.erase(vec.begin() + 1, vec.begin() + 3); // erase multiple. second argument exclusive
 
 insert another vector:
 ---------------------
@@ -53,3 +53,17 @@ custom sort:
     };
     vector<pair<int, int>> v;
     sort(v.begin(), v.end(), CustomSort());
+
+
+remove duplicates from vector:
+-------------------------------
+vector<int> nums = {10, 20, 10, 30};
+set<int> st(nums.begin(), nums.end());  // Convert vector to set to remove duplicates
+nums.assign(st.begin(), st.end());
+
+
+swap:
+------
+vector<int> v1 = {10, 20};
+vector<int> v2 = {30, 40};
+v1.swap(v2); // swap the vectors. 

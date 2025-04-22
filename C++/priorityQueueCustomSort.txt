@@ -1,0 +1,9 @@
+    struct queueCustomComparator {
+        bool operator()(const vector<int>& a, const vector<int>& b) {
+            return a[0] < b[0];  // Max-heap (Largest value at top)
+        }
+    };
+
+	priority_queue<vector<int>, vector<vector<int>>, queueCustomComparator> q;
+
+	q.push({ 10, 20});

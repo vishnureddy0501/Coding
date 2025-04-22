@@ -1,3 +1,10 @@
+very important questions for maps usage:
+-----------------------------------------
+https://leetcode.com/problems/vertical-order-traversal-of-a-binary-tree/
+
+custom sort the map based on the value is impossible.
+custom sort based on keys we can do. same code as the priority_queue.
+
 1. Inserting Elements
 
     std::map<int, std::string> myMap;

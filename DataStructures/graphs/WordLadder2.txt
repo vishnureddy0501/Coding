@@ -1,0 +1,52 @@
+// In interviews this approach is fine. don't worry that it is not working in leetcode. ignore it.
+
+class Solution {
+public:
+    vector<vector<string>> findLadders(string begin, string end, vector<string>& nums) {
+        queue<vector<string>> q;
+        unordered_map<string, int> m;
+        for (int i =0; i<nums.size(); i++) {
+            m[nums[i]]++;
+        }
+        q.push({ begin });
+        vector<vector<string>> res;
+        vector<string> newPath;
+        int found = 0;
+        unordered_map<string, int> usedOnLevel;
+        while(q.size() > 0) {
+            int size = q.size();
+            usedOnLevel.clear();
+            for (int k = 0; k < size; k++) {
+                auto it = q.front();
+                q.pop();
+                string str = it[it.size() - 1];
+                if (str == end) {
+                    res.push_back(it);
+                    found = 1;
+                    continue;
+                }
+                for (int i = 0; i<str.size(); i++) {
+                    for (int j = 0; j < 26; j++) {
+                        char ch = 'a' + j;
+                        if (ch != str[i]) {
+                            string s = str;
+                            s[i] = ch;
+                            if (m.find(s) != m.end()) {
+                                usedOnLevel[s] = 1;
+                                newPath.clear();
+                                newPath = it;
+                                newPath.push_back(s);
+                                q.push(newPath);
+                            }
+                        }
+                    }
+                }
+            }
+            if (found) break;
+            for (auto &value: usedOnLevel) {
+                m.erase(value.first);
+            }
+        }
+        return res;
+    }
+};

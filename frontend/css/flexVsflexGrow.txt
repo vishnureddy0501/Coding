@@ -1,0 +1,9 @@
+flex: <positive number>
+
+it implicitly means flexGrow: positive number, flexShrink: 0, flexBasis: 0.
+
+you have other properties like:
+-------------------------------
+flexGrow: <positive number>
+flexShrink: <positive number>
+flex: flexGrow flexShrink flexBasis // Shorthand property

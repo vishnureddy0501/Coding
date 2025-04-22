@@ -1,3 +1,4 @@
+
 string str = "Hello"; // Direct initialization
 
 find:
@@ -14,7 +15,20 @@ logs[i].substr(j + 1, logs[i].size() - left.size())
     char ch = str[0]; // 'H'
 
 3. Appending and Concatenation
+
+    most important:
+    ---------------
+    never use + for string Concatenation. use append/ push_back
     std::string str2 = "Hello" + str; // "HelloHello World"
+
+    correct usage:
+    --------------
+    append: (use following ways)
+        string str = "";
+        string str1 = "def";
+        str.append("abc");
+        str.append(str1);
+        str.append(" ").append(str1);  
 
 4. Insertion
 

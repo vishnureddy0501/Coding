@@ -1,0 +1,22 @@
+auto-complete feature:
+---------------------
+you have to search for something & you have to get suggestions. (you don't have to implement infinite scroll, pagination here. if user wants a more specific thing, he will searches with more keywords)
+
+1. use debouncing to avoid too many api calls
+2. one you get the response, cache it in redux store.
+	eg: searched for "abc", 
+		data: {
+			// key is the searched thing. value is the results corresponding to it.
+			"abc": [], // results for abc
+			"ac": [] // results for ac
+		}
+
+3. if user requests for more api calls before the prev one response comes.
+	then if we don't take action then ui updates 2 times. not good.
+
+	solution1: cancell the pending api calls and trigger the latest one.
+				not good approach
+	solution2: before triggering the api store timestamp in a variable. and send it in payload also. ask backend time to send timestamp also in response.
+
+		if timestamps are same then update in both cache & UI.
+		else update in cache only.  (so that for future requests you don't have to make api call)

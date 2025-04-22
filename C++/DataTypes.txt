@@ -1,0 +1,3 @@
+For cpp, use unsigned int for the DP table to prevent overflow and convert back to int when returning the result
+
+use unsigned int, unsigned long long to avoid overflow. (only for positive numbers)

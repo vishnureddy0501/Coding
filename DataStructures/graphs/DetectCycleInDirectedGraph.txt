@@ -1,0 +1,36 @@
+bool dfs(vector<vector<int>>& graph, vector<bool>& visited, int node, int parent, vector<bool>& pathVisited) {
+    visited[node] = true;
+    pathVisited[node] = true;
+    for (int neighbor : graph[node]) {
+        if (!visited[neighbor]) {
+            if (dfs(graph, visited, neighbor, node, pathVisited)) {
+                return true;
+            }
+        } else if (pathVisited[neighbor]) {
+            return true;
+        }
+    }
+    pathVisited[node] = false;
+    return false;
+}
+
+int detectCycleInDirectedGraph(int n, vector<pair< int, int >> & edges) {
+    vector<vector<int>> graph(n);
+    for (auto& edge : edges) {
+        int u = edge.first - 1;
+        int v = edge.second - 1;
+        graph[u].push_back(v);
+    }
+
+    vector<bool> visited(n, false);
+     vector<bool> pathVisited(n, false);
+    for (int i = 0; i < n; ++i) {
+        if (!visited[i]) {
+            if (dfs(graph, visited, i, -1, pathVisited)) {
+                return 1;
+            }
+        }
+    }
+
+    return 0;
+}

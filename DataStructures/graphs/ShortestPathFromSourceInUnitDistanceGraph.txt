@@ -1,0 +1,31 @@
+https://www.geeksforgeeks.org/problems/shortest-path-in-undirected-graph-having-unit-distance/1
+
+class Solution {
+  public:
+    void bfs(vector<vector<int>>& graph, vector<int>& dict, int src) {
+        queue<int> q;
+        q.push(src);
+        dict[src] = 0;
+        while(q.size() > 0) {
+            auto it = q.front();
+            q.pop();
+            int cost = dict[it];
+            for (auto &node: graph[it]) {
+                if (dict[node] > cost + 1) {
+                    dict[node] = cost + 1;
+                    q.push(node);
+                }
+            }
+        }
+    }
+    // Function to find the shortest path from source to all other nodes
+    vector<int> shortestPath(vector<vector<int>>& graph, int src) {
+        int n = graph.size();
+        vector<int> dict(n, INT_MAX);
+        bfs(graph, dict, src);
+        for (int& d : dict) {
+            if (d == INT_MAX) d = -1;
+        }
+        return dict;
+    }
+};

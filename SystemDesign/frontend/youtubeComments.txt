@@ -1,0 +1,53 @@
+implement comments listing in 2 ways:
+-----------------------------------------------
+1. after new page fetch re-render the whole list. (this is costly. but in aviso forecast cell edits, we need this approach only)
+2. after new page fetch re-render only the new list & keep the old ones as it is. 
+(if some person updates the already existing element in that list then you will see the stale data till page-refresh. youtube do this approach only. they are find with stale data)
+
+How the live comments works?
+---------------------------
+we will set some limit on the number of comments & we show the latest 1000 comments only. remaining we don't display.
+
+a person will post the comment. other perons also post their comments. we don't use sockets here generally. 
+if it is a group chat, we can use websockets. but here no need. it is fine if we show the comments after some time. Hence poling we use generally.
+
+Mechanism of live commenting:
+------------------------------
+1. poling (youtube uses this)
+2. server sent events (complex to setup, costly interms on connections)
+3. websockets (costly to setup the connections)
+
+poling -> short poling, long poling
+
+poling: frontend sends the request to check if there is any new data.
+-------
+
+there might be the cases where the frontend requests for data (poling) but we don't have new data yet in backend.
+
+short polling: time difference b/w 2 polings is less.
+--------------
+
+long polling: time difference b/w 2 polings is more. 
+-------------
+
+poling is not good sometimes. because when we request data. there might be chances that we don't have the data.
+
+
+server sent events (complex to implement, not suggested)
+-----------------------------------------------------------
+one way connection (backend to fronend)
+server need to have a dedicated connection with the client for informing that update happened.
+
+server sents some events to client saying that we have some latest set of comments. 
+then the frontend will request for latest data. this way we don't have unncessary requests from fronend.
+
+
+websockets:
+------------
+websockets are 2 way connection.
+
+
+Live streaming protocols:
+------------------------
+1. WebRTC (web realtime communication)- open source, Uses UDP (there are high changes of loosing packets. not reliable)
+2. RTMP - realtime messaging protocol, uses TCP, reliable, fast. (youtube uses RTMP)

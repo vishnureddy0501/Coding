@@ -1,0 +1,21 @@
+for image do i have to use width : 100% or max-width : 100% ?
+----------------------------------------------------------------
+
+✅ Use **max-width: 100%**
+---------------------------
+after reaching the original size then don't want to stretch it more. 
+img {
+  max-width: 100%;
+  height: auto;
+}
+Why: This is the most common and safe way to make images responsive without stretching them.
+
+🟡 Use **width: 100%**
+---------------------
+You want the image to always fill the container’s width, regardless of the image's original size.
+
+img {
+  width: 100%;
+  height: auto;
+}
+Be careful: This can cause blurry or pixelated images if the image gets scaled up too much.

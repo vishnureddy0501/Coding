@@ -1,0 +1,46 @@
+    static bool customCompare (int a, int b) {
+        return a > b; // if a > b then return true so that sort won't happen
+    }
+
+    custom sort a vector by passing more parameters:
+    ------------------------------------------------
+    class Solution {
+public:
+    static bool customSort(const vector<int>& a, const vector<int>& b, int k) {
+        return a[k] > b[k]; // don't swap if a is larger
+    }
+    vector<vector<int>> sortTheStudents(vector<vector<int>>& score, int k) {
+        sort(score.begin(), score.end(), [k](const vector<int>& a, const vector<int>& b) {
+    return customSort(a, b, k);
+});
+        return score;
+    }
+};
+
+passing 2 parameters:
+----------------------
+
+    class Solution {
+public:
+    static bool customSort(const vector<int>& a, const vector<int>& b, int k, int i) {
+        
+    }
+    vector<vector<int>> sortTheStudents(vector<vector<int>>& score, int k) {
+        int i = 0;
+        sort(score.begin(), score.end(), [k,i](const vector<int>& a, const vector<int>& b) {
+    return customSort(a, b, k, i);
+});
+        return score;
+    }
+};
+
+
+stable sort in c++:
+-----------------
+
+    // definitely keep const else it won't work.
+    static bool customSort (const string &a, const string &b) {
+        return a.size() < b.size(); // don't swap if a.size() is smaller
+    }
+
+    stable_sort(words.begin(), words.end(), customSort);

@@ -1,0 +1,40 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+bool dfs(vector<vector<int>>& graph, vector<bool>& visited, int node, int parent) {
+    visited[node] = true;
+
+    for (int neighbor : graph[node]) {
+        if (!visited[neighbor]) {
+            if (dfs(graph, visited, neighbor, node)) {
+                return true;
+            }
+        } else if (neighbor != parent) {
+            // Visited neighbor that's not the parent → cycle
+            return true;
+        }
+    }
+
+    return false;
+}
+
+string cycleDetection(vector<vector<int>>& edges, int n, int m) {
+    vector<vector<int>> graph(n);
+    for (auto& edge : edges) {
+        int u = edge[0] - 1;
+        int v = edge[1] - 1;
+        graph[u].push_back(v);
+        graph[v].push_back(u);
+    }
+
+    vector<bool> visited(n, false);
+    for (int i = 0; i < n; ++i) {
+        if (!visited[i]) {
+            if (dfs(graph, visited, i, -1)) {
+                return "Yes";
+            }
+        }
+    }
+
+    return "No";
+}

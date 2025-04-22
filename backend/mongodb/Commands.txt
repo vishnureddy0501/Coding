@@ -1,0 +1,2 @@
+1. insert into collection
+2. findByIdAndDelete, findByIdAndUpdate

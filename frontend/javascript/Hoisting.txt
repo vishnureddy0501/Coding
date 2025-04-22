@@ -1,0 +1,58 @@
+
+what is hoisting?
+------------------
+declarations moved to top of the their scope (function score / global scope) before the code execution.
+
+🔍 Example with var:
+---------------------
+console.log(x); // undefined, not an error!
+var x = 5;
+Why doesn't this throw an error? Because JavaScript interprets it like this:
+---------------------------------------------------------------------------
+The declaration var x is hoisted, but the assignment x = 5 stays where it is.
+
+🚫 With let and const:
+--------------------
+console.log(y); // ReferenceError: Cannot access 'y' before initialization
+let y = 10;
+let and const are also hoisted, but not initialized, so they are in a "temporal dead zone" from the start of the block until the declaration is encountered.
+
+✅ Function Hoisting
+---------------------
+Function declarations are fully hoisted (both the declaration and definition):
+
+sayHello(); // "Hello"
+
+function sayHello() {
+  console.log("Hello");
+}
+
+function expressions are not hoisted:
+-------------------------------------
+sayHi is undefind. Hence it will throw an error.
+sayHi(); // TypeError: sayHi is not a function
+
+var sayHi = function () {
+  console.log("Hi");
+};
+
+
+var -> function scope. redeclaring is not a problem.
+eg: 
+	function func () {
+		var a = 10; // 10 is stored in the memory reference.
+		var a; // we are declared a again. not initialized. 10 stays in its memory location.
+		var a = 40;
+		console.log(var); // 40 gets printed
+	}
+
+eg: 
+	function func () {
+		var a = 10;
+		var a;
+		console.log(var); // 10 gets printed
+	}
+	
+let -> 
+
+https://www.youtube.com/watch?v=U1BXdBkXFgw&list=PLmcRO0ZwQv4QMslGJQg7N8AzaHkC5pJ4t&index=3

@@ -1,0 +1,24 @@
+1. Rendering Largelist (virtualization)
+2. Infinite scrolling & pagination
+3. Handling Live Video commenting
+4. Resource Optimization
+
+Infinite scrolling & pagination
+---------------------------------
+done in 2 ways. 
+1. offset based approach
+	facebook like applications where the realtime data is changing so frequently. 
+	the new new videos gets appended to the start of list. hence the page indexes keeps on changing. 
+
+	we can't rely on this approach if data is changing frequently.
+
+2. cursor based approach. (cursor is nothing but next pointer. think of something like linked list)
+	each item has cursor. api sends the cursor to fronend. if we want to request the new data then easy to get that usin cursor.
+	backend takes care of what the next cursor is. you don't have to worry.
+
+
+How to do resource Optimization?
+---------------------------------
+1. using CDN(content delivery network)
+2. storing images in webp format (better when compared to other formats)
+3. 

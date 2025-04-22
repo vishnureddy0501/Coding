@@ -1,0 +1,7 @@
+class Solution {
+public:
+    int findIndex (vector<int>& nums2, int val, int index, int i) {
+		// Always use references to avoid memory limit. if you use reference it won't create a new vector. it will use the existing one. it is best practise.
+		// if memory limit is error is not giving then ignore.
+    }
+};

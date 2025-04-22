@@ -1,0 +1,37 @@
+Full Binary Tree: Every node has 2 children or 0 children
+Complete Binary Tree: All levels are completely filled except the last level. 
+					Last level filled from left to right.
+					number of nodes in complete binary tree wiht height h : pow(2, h) - 1 (If last level is completely filled)
+
+Perfect Binary Tree: All leaf nodes are at the same level.
+Balanced Binary Tree: Max height is logN, N = number of nodes
+Degenerate Tree: (Skewed tree) all the nodes to the left / all the nodes to the right.
+
+
+diameter-of-binary-tree
+-----------------------
+try to compute in 1 traversal, while you are calculating the height of tree.
+
+Boundary traversal of a tree?
+--------------------------
+traverse left boundary without leaf.
+traverse leafs
+traverse right boundary without leafs and revese it.
+
+not combine 3 arrays.
+
+
+
+important:
+---------
+Try to solve the problem in 1 iteration
+
+vertical order traversal of a tree.
+-----------------------------------
+1. maintain  map<int, map<int, multiset<int>>> // x coordinate, y coordinate, value of node.
+	Use this approach only. it is feasible for further modifications
+
+Left view of binary tree:
+------------------------
+
+
