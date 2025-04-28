@@ -1,0 +1,51 @@
+The chmod command in Unix/Linux is used to change the permissions of files and directories.
+
+Basic Permissions
+Each file or directory has three types of permissions for three categories of users:
+
+Permissions:
+r – read
+
+w – write
+
+x – execute
+
+Categories:
+u – user (owner)
+
+g – group
+
+o – others
+
+a – all (user + group + others)
+
+chmod [options] mode file
+
+Numeric Mode (shorthand with numbers)
+-----------------------------------------
+Each permission has a numeric value:
+
+r = 4
+
+w = 2
+
+x = 1
+
+You sum them up for each user group.
+
+chmod 755 filename
+This means:
+
+7 = 4+2+1 → read, write, execute (user)
+
+5 = 4+0+1 → read, execute (group)
+
+5 = 4+0+1 → read, execute (others)
+
+Common numeric permissions:
+
+777: everyone can read/write/execute
+
+755: owner full access, others can read/execute
+
+644: owner read/write, others read-only

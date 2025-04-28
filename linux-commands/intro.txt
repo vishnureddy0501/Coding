@@ -1,0 +1,67 @@
+pwd: present working directory
+ls: list all files and folders in current directory
+mkdir: create directory
+touch file_name: create file
+ls -ltr: more info about files & directories in current directory.
+
+comments: # (just like python)
+
+top: combination of all 3 commands:
+-----------------------------------
+free -g: to know about available memory
+nproc: number of  cpus
+df -h: for file systems
+
+top: combination of above commands
+
+
+what is shell scripting?
+-------------------------
+it is for automating the tasks. doing things manually is very difficult.
+
+
+opening the file:
+------------------
+vi file_name
+
+:qa to exit from vim editor
+i for inserting at the end
+o open a new line below
+a append after cursor
+
+saving the file & exiting vim editor:
+-------------------------------------
+press esc
+:wq! 
+
+first ine of shell file:
+------------------------
+#!/bin/bash
+
+
+cat: 
+---
+cat file_name
+
+executing a file:
+---------------
+./file_Name
+
+
+set -x: debug mode
+--------------------
+set -x # debug mode. it will print command and then it's output
+
+# write rest of commands here.
+
+df -h 
+free -g
+nproc
+
+
+proceses info that are running:
+-----------------------------
+ps -ef
+
+ps -ef | grep "amazon" // filter processes with amazon keyword
+# vertical line is the pipe. which sends the output of first command to the second command.

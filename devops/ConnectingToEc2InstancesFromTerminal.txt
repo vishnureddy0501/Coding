@@ -1,0 +1,16 @@
+aviso@aviso:~$ aws configure
+AWS Access Key ID [None]: ^[[200~AKIAXZEFIF5Y52WEWT4X^[[201~
+AWS Secret Access Key [None]: ^[[200~TKQD8hTyXpjk+wFB1372DzWu87rPNEL7yDHrfFBV^[[201~
+Default region name [None]: us-east-1
+Default output format [None]: json
+aviso@aviso:~$ aws s3 ls
+
+An error occurred (403) when calling the ListBuckets operation: Forbidden
+aviso@aviso:~$ 
+
+
+
+method 2:
+---------
+we can do the same from code also.
+in python we have boto3 package for connecting to ec2 instance using code.

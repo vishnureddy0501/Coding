@@ -29,6 +29,17 @@ consistent hashing
 10:18 Thank you!
 
 
+virtual servers:
+----------------
+A virtual server is a server that runs inside another computer using software.
+they are not physical partitions. they are logical partions.
+each vm has it's own memory, cpu, hardware. 
+a vm don't depend on other vm.
+
+what is hypervisor?
+-------------------
+"A hypervisor creates and manages virtual machines on a physical computer."
+
 What is Message Queues?
 ------------------------
 Notes to self:

@@ -1,0 +1,74 @@
+Pascals Triangle:
+------------------
+find the value at row r, column c : (r-1) C (c-1)
+
+efficient code for calculating ncr:
+-----------------------------------
+
+long long nCr(int n, int r) {
+    if (r > n - r) r = n - r; // because C(n, r) == C(n, n-r)
+
+    long long res = 1;
+    for (int i = 0; i < r; i++) {
+        res *= (n - i);
+        res /= (i + 1);
+    }
+    return res;
+}
+
+find kth row in pascals Triangle:
+--------------------------------
+
+vector<long long int> geerateRow(int k) 
+{
+	// number of elements in kth row = k
+	vector<long long> res;
+	res.push_back(1);
+	long long ans = 1;
+	for (long long i = 1; i < k; i++) {
+		ans = ans*(k-i);
+		ans = ans / i;
+		res.push_back(ans);
+	}
+	return res;
+	
+} 
+
+
+geerate whole pascals Triangle:
+-------------------------------
+vector<vector<int>> pascalsTriangle (int n) {
+	vector<vector<int>> res;
+	for (int i = 1; i<=n; i++) {
+		res.push_back(geerateRow(i));
+	}
+	return res;
+}
+
+3 sum problem:
+----------------
+mind blowing Leetcode code
+
+the following problems are similar:
+------------------------------------
+count number of subbarys with sum k and 
+count number of subbarys wiht xor k
+
+int subarraysXor(vector<int> &nums, int x)
+{
+    int n = nums.size(), sum = 0, res = 0;
+    unordered_map<int, int> m;
+    for (int i = 0; i<n; i++) {
+        sum = sum ^ nums[i];
+        if (sum == x) {
+            res++;
+        } 
+
+        // (sum ^x) ^ x = sum
+        if (m.find(sum ^ x) != m.end()) {
+            res = res + m[sum^x];
+        }
+        m[sum]++;
+    }
+    return res;
+}

@@ -1,0 +1,43 @@
+app.get("/user/:id", async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id).select("name age city -email -password");
+    // Includes `name`, `age`, `city`, and `_id` (by default) but excludes `email` and `password`
+    
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
+app.get("/users", async (req, res) => {
+  try {
+    let page = parseInt(req.query.page) || 1; // Default to page 1
+    let limit = parseInt(req.query.limit) || 10; // Default to 10 users per page
+    let skip = (page - 1) * limit; 
+
+    // Fetch users with pagination (selecting only required fields)
+    const users = await User.find()
+      .select("name age city") // Include only required fields
+      .skip(skip)
+      .limit(limit);
+
+    // Get total user count
+    const totalUsers = await User.countDocuments();
+
+    res.json({
+      page,
+      totalPages: Math.ceil(totalUsers / limit),
+      totalUsers,
+      users,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
+

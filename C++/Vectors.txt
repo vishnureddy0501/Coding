@@ -61,9 +61,19 @@ vector<int> nums = {10, 20, 10, 30};
 set<int> st(nums.begin(), nums.end());  // Convert vector to set to remove duplicates
 nums.assign(st.begin(), st.end());
 
+remove consecutive duplicates:
+-------------------------------
+nums.sort(nums.begin(), nums.end());
+nums.erase(unique(nums.begin(), nums.end()), nums.end());
 
 swap:
 ------
 vector<int> v1 = {10, 20};
 vector<int> v2 = {30, 40};
 v1.swap(v2); // swap the vectors. 
+
+
+48. Rotate Image:
+------------------
+
+Spiral matrix I, II, III, IV

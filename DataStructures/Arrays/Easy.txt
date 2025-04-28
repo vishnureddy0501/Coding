@@ -1,0 +1,224 @@
+Remove duplicates from sorted array:
+------------------------------------
+class Solution {
+public:
+    int removeDuplicates(vector<int>& nums) {
+        int i = 0, n = nums.size();
+        for (int j = 1; j<n; j++) {
+            if (nums[i] != nums[j]) {
+                nums[i+1] = nums[j];
+                i++; 
+            }
+        }
+        return i + 1;
+    }
+};
+
+move zero to the end of array:
+-------------------------------
+    void moveZeroes(vector<int>& nums) {
+        int i = 0, n = nums.size();
+        for (int j = 0; j<n; j++) {
+            if (nums[j] != 0) {
+                nums[i] = nums[j];
+                i = i + 1; 
+            } else {
+                // don't increment i
+            }
+        }
+        for (int j = i; j<n; j++) {
+            nums[j] = 0;
+        }
+    }
+
+Union & Insertion of sorted arrays:
+----------------------------------
+
+
+
+
+longest subarray with sum k:
+------------------------------
+solution 1: this will work if array don't have negative values
+-----------
+int longestSubarrayWithSumK(vector<int> nums, long long k) {
+    long long prefixSum = 0, start = 0, res = 0;
+    for (long long i = 0; i<nums.size(); i++) {
+        prefixSum = prefixSum + nums[i];
+        while(prefixSum > k && start < nums.size()) {
+            prefixSum = prefixSum - nums[start];
+            start++;
+        }
+        if (prefixSum == k) {
+            res = max(res, i - start + 1);
+        }
+    }
+    return res;
+}
+
+solution 2: works for all cases
+-------------------------------
+
+#include<bits/stdc++.h>
+int longestSubarrayWithSumK(vector<int> nums, long long k) {
+    long long prefixSum = 0, res = 0;
+    map<long long, int> m;
+    for (long long i = 0; i<nums.size(); i++) {
+        prefixSum = prefixSum + nums[i];
+        if (prefixSum == k) {
+            res = max(res, i + 1);
+        }
+        if (m.find(prefixSum-k) != m.end()) {
+            res = max(res, i - m[prefixSum-k]);
+        }
+        if (m.find(prefixSum) == m.end()) {
+            m[prefixSum] = i;
+        }
+    }
+    return res;
+}
+
+
+sort array of 0's, 1's, 2's:
+-----------------------------
+void sortColors(vector<int>& nums) {
+        int low = 0, mid = 0, high = nums.size()-1;
+        while(mid <= high){
+            if(nums[mid] == 0){
+                swap(nums[low], nums[mid]);
+                low++;
+                mid++;
+            }
+            else if(nums[mid] == 1){
+                mid++;
+            }
+            else{
+                swap(nums[mid], nums[high]);
+                high--;
+            }
+        }
+    }
+
+majoirty element:
+--------------------
+optimized approach: it works if we have majoirty element. if there is no majoirty element then this approach will give a random answer.
+
+    int majorityElement(vector<int>& nums) {
+        int c = 0, val;
+        for (int i = 0; i < nums.size(); i++) {
+            if (c == 0) {
+                val = nums[i];
+            }
+            if (nums[i] == val) {
+                c++;
+            } else {
+                c--;
+            }
+        }
+        return val;
+    }
+
+majoirty element 2:
+------------------
+class Solution {
+public:
+    vector<int> majorityElement(vector<int>& nums) {
+        int count1 = 0, count2 = 0; // Counters for the potential majority elements
+        int candidate1 = 0, candidate2 = 0; // Potential majority element candidates
+
+        // First pass to find potential majority elements.
+        for (int i = 0; i < nums.size(); i++) {
+            // If count1 is 0 and the current number is not equal to candidate2, update candidate1.
+            if (count1 == 0 && nums[i] != candidate2) {
+                count1 = 1;
+                candidate1 = nums[i];
+            } 
+            // If count2 is 0 and the current number is not equal to candidate1, update candidate2.
+            else if (count2 == 0 && nums[i] != candidate1) {
+                count2 = 1;
+                candidate2 = nums[i];
+            } 
+            // Update counts for candidate1 and candidate2.
+            else if (candidate1 == nums[i]) {
+                count1++;
+            } else if (candidate2 == nums[i]) {
+                count2++;
+            } 
+            // If the current number is different from both candidates, decrement their counts.
+            else {
+                count1--;
+                count2--;
+            }
+        }
+
+        vector<int> result;
+        int threshold = nums.size() / 3; // Threshold for majority element
+
+        // Second pass to count occurrences of the potential majority elements.
+        count1 = 0, count2 = 0;
+        for (int i = 0; i < nums.size(); i++) {
+            if (candidate1 == nums[i]) {
+                count1++;
+            } else if (candidate2 == nums[i]) {
+                count2++;
+            }
+        }
+
+        // Check if the counts of potential majority elements are greater than n/3 and add them to the result.
+        if (count1 > threshold) {
+            result.push_back(candidate1);
+        }
+        if (count2 > threshold) {
+            result.push_back(candidate2);
+        }
+
+        return result;
+    }
+};
+
+
+kadens algorithm (largest subarray sum):
+----------------------------------------
+    int maxSubArray(vector<int>& nums) {
+        int prefixSum = 0, res = INT_MIN, n = nums.size(), start, end;
+        for (int i =0; i< n; i++) {
+            if (prefixSum == 0) start = i;
+            prefixSum = prefixSum + nums[i];
+            if (prefixSum > res) {
+                end = i;
+                res = prefixSum;
+            }
+            if (prefixSum < 0) {
+                prefixSum = 0;
+            }
+        }   
+        return res;
+    }
+
+Next premutation:
+-----------------
+
+    void nextPermutation(vector<int>& nums) {
+        int n = nums.size(), i = n - 2;
+        
+        // Step 1: Find the breakpoint
+        while (i >= 0 && nums[i] >= nums[i + 1]) {
+            i--;
+        }
+        
+        if (i >= 0) {
+            // Step 2: Find the smallest element larger than nums[i]
+            int j = n - 1;
+            while (nums[j] <= nums[i]) {
+                j--;
+            }
+            swap(nums[i], nums[j]);
+        }
+        
+        // Step 3: Reverse the subarray to the right of i
+        reverse(nums.begin() + i + 1, nums.end());
+    }
+
+Leetcode Game of Life:
+-----------------------
+very good question of manipulating the array itself.

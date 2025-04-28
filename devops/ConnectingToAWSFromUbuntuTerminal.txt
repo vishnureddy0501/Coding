@@ -1,0 +1,70 @@
+aviso@aviso:~/Desktop/Coding$ cd
+aviso@aviso:~$ ssh ubuntu@13.60.70.203
+The authenticity of host '13.60.70.203 (13.60.70.203)' can't be established.
+ECDSA key fingerprint is SHA256:zSsj1ZNI+SKOYoLpOKpFHPZg9SGY7DIMpQiEpqF903Q.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '13.60.70.203' (ECDSA) to the list of known hosts.
+ubuntu@13.60.70.203: Permission denied (publickey).
+aviso@aviso:~$ ls
+ aenv              editaction.vue                   personalGit.pub
+ CoverLetter.txt   Forecast_Consolidated_View.mp4   Pictures
+ css.txt          'Map Local.xml'                   popupdisplay.vue
+ D3.txt            Music                            Public
+ Desktop           myenv                            sample-project
+ Desktop.pem       node_modules                     snap
+ Documents         package-lock.json                Templates
+ Downloads         penv                             Videos
+ dropdown.vue      personalGit                      work
+aviso@aviso:~$ ssh -i /Downloads/test111.pem ubuntu@13.60.70.203
+Warning: Identity file /Downloads/test111.pem not accessible: No such file or directory.
+ubuntu@13.60.70.203: Permission denied (publickey).
+aviso@aviso:~$ ls
+ aenv              editaction.vue                   personalGit.pub
+ CoverLetter.txt   Forecast_Consolidated_View.mp4   Pictures
+ css.txt          'Map Local.xml'                   popupdisplay.vue
+ D3.txt            Music                            Public
+ Desktop           myenv                            sample-project
+ Desktop.pem       node_modules                     snap
+ Documents         package-lock.json                Templates
+ Downloads         penv                             Videos
+ dropdown.vue      personalGit                      work
+aviso@aviso:~$ ssh -i ./Downloads/test111.pem ubuntu@13.60.70.203
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@         WARNING: UNPROTECTED PRIVATE KEY FILE!          @
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+Permissions 0664 for './Downloads/test111.pem' are too open.
+It is required that your private key files are NOT accessible by others.
+This private key will be ignored.
+Load key "./Downloads/test111.pem": bad permissions
+ubuntu@13.60.70.203: Permission denied (publickey).
+aviso@aviso:~$ chmod 600 ./Downloads/test111.pem
+aviso@aviso:~$ ssh -i ./Downloads/test111.pem ubuntu@13.60.70.203
+Welcome to Ubuntu 24.04.2 LTS (GNU/Linux 6.8.0-1024-aws x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Thu Apr 24 19:32:28 UTC 2025
+
+  System load:  0.0               Temperature:           -273.1 C
+  Usage of /:   25.3% of 6.71GB   Processes:             108
+  Memory usage: 22%               Users logged in:       0
+  Swap usage:   0%                IPv4 address for ens5: 172.31.26.204
+
+
+Expanded Security Maintenance for Applications is not enabled.
+
+0 updates can be applied immediately.
+
+Enable ESM Apps to receive additional future security updates.
+See https://ubuntu.com/esm or run: sudo pro status
+
+
+The list of available updates is more than a week old.
+To check for new updates run: sudo apt update
+
+Last login: Thu Apr 24 19:24:07 2025 from 13.48.4.202
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+

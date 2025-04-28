@@ -1,0 +1,6 @@
+pillars of devops: automation, testing, monitoring, quality
+
+How to create Virtual servers using code?
+----------------------------------------
+1. AWS CLI (specific to aws)
+2. Teraform (most famous, works for different cloud providers)
