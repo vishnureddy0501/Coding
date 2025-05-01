@@ -1,0 +1,20 @@
+1. Once the code is done, remove the unnecessary memory
+	This garbage collection happens after execution of function is done.
+	eg: delete head; // something like this. it will free up the memory.
+
+
+deleteHead (Node* head) {
+	Node* temp = head;
+	head = head->next;
+	delete temp; // you can use free(temp) also
+}
+
+concept of dummy node: (for clean code if you want to return the answer in new list)
+---------------------------------------
+add 2 numbers (linked list)
+
+you have to return the result in new list. always prefer dummy node concept.
+
+take the initial dummy node with -1 as value. while doing sum append the nodes to dummy node. 
+
+then for the finalResult return dummyNode->next.

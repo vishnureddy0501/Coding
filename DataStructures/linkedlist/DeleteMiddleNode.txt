@@ -1,0 +1,9 @@
+slow, fast pointer.
+
+slow pointst to head, fast points to head.
+
+don't move slow in the fist time. and move the fast. (mind blowing)
+
+Hence slow pointed to mid-1, and fast pointed to end / null.
+
+you can erase slow->next now.

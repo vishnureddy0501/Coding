@@ -1,0 +1,11 @@
+1. while traversing list, create a node & insert in b/w the adjacent nodes.
+
+2. again start traversing and connect random pointers.
+	node1 -> newnode1 -> node2 -> newnode2 -> node3 -> newnode3
+
+	temp -> next->random = temp->random->next; // something like this.
+
+3. again start traversing and connect the next pointers.
+
+
+// make sure the original list, should not be modified.

@@ -1,0 +1,30 @@
+
+🔸 When You Must Manually Delete (use delete)
+--------------------------------------------
+If you manually allocate memory using new, then you are responsible for freeing it using delete.
+
+ListNode* head = new ListNode(5);
+// Do stuff with head
+delete head; // ✅ Must do this to avoid memory leak
+
+🔸 When You Should NOT Use delete
+-----------------------------------
+If the memory is allocated on the stack (normal variable declaration) or inside a function without new, it is automatically freed when it goes out of scope.
+
+ListNode head(5); // Stack allocation
+// No need to delete — automatically freed
+
+🔸 Inside Functions (Garbage Collection Misconception)
+-----------------------------------------------------------
+C++ does not have automatic garbage collection like Java/Python. But stack-allocated variables are cleaned up automatically at the end of function scope.
+
+void someFunction() {
+    ListNode head(5); // Automatically destroyed when function exits
+}
+Does not require a delete.
+
+✅ Summary
+
+Allocation			Do You Need to delete?		Memory Lifetime
+new					✅ Yes						Until you delete it
+Normal declaration	❌ No					Automatically freed at scope exit

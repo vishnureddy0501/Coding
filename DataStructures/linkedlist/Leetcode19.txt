@@ -1,0 +1,10 @@
+Delete kth node from the end.
+------------------------------
+1. slow = head, fast = head;
+2. do this k times. fast = fast->next;
+3. now move slow, fast by 1 step.
+4. by the time fast reaches end. slow reaches the node before kth node from end.
+5. beforeKthNode->next = beforeKthNode->next->next;
+
+// handle like this & check for edge cases also. think deeply
+// what happens if k = 1 & k = n. // these kind of things we have to check.

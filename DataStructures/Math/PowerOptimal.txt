@@ -1,0 +1,13 @@
+long long power(long long base, long long exp) {
+    long long result = 1;
+    while (exp > 0) {
+        if (exp % 2 == 1) {
+            result *= base;
+			exp--;
+        } else {
+			base = base*base;
+			exp = exp/2;
+		}
+    }
+    return result;
+}

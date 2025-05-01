@@ -1,0 +1,22 @@
+1. intially take all numbers as prime.
+2. go to the multiples of the number and mark them as not prime.
+3. then count the prime.
+
+
+int countPrimes(int n) {
+	vector<int> primes(n+1, 1); // 1 means the number is prime
+	for (int i = 2; i<=n; i++) {
+		if (primes[i] == 1) {
+			for (long long k = 2; k*i <= n; k++) {
+				primes[k*i] = 0;
+			}
+		}
+	}
+	int c = 0;
+	for (int i = 2; i<n; i++) {
+		if (primes[i] == 1) {
+			c++;
+		}
+	}
+	return c;
+}

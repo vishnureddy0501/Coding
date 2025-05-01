@@ -1,0 +1,24 @@
+standard pattern for sliding window:
+----------------------------------
+No need to write clumsy if-else conditions.
+
+for loop {
+	// consditions
+
+	while loop / for loop
+
+	// conditions.
+}
+
+
+Sliding window approaches:
+---------------------------
+
+1. longest subarray with sum <= k
+
+2. Number of subarrays where <condition>
+	it is tough to figure out weather to shrink or expand.
+
+	example: number of subarrays where sum = k 
+	-------
+	Hence (number of subarray where sum <= k) - (number of subarrays where sum <= k-1)

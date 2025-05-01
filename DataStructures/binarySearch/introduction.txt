@@ -1,0 +1,9 @@
+when to use binary search:
+-----------------------------
+your answer b/w x and y. and they asked to maximize or minimize something. then it is always a binary search problem.
+
+
+1539. Kth Missing Positive Number
+--------------------------------
+mind blowing logic (analyze using pen, paper)
+

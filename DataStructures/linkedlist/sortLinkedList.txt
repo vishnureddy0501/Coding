@@ -1,0 +1,11 @@
+148. Sort List 
+
+Must do in every revision. Merge sort implementation
+
+you have to modify the slow-fast pointer algorithm to make sure the mid points to first-middle. 
+
+if it points to second-middle then there are chances that right half is empty.
+
+most important:
+---------------
+In splitting make sure the left portion has atleast 1 element & right portion has atleast 1 element

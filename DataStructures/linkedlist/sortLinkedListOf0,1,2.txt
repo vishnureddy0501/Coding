@@ -1,0 +1,26 @@
+// best example of dummy nodes. very clean code because of dummyNodes.
+
+
+Node* sortList(Node *head){
+    Node* temp0 = new Node(-1), *temp1 = new Node(-1), *temp2 = new Node(-1);
+    Node* tail0 = temp0, *tail1 = temp1, *tail2 = temp2;
+    Node* temp = head;
+    while(temp != NULL) {
+        Node* next = temp->next;
+        temp->next = NULL;
+        if (temp->data == 0) {
+            tail0->next = temp;
+            tail0 = temp;
+        } else if (temp->data == 1) {
+            tail1->next = temp;
+            tail1 = temp;
+        } else {
+            tail2->next = temp;
+            tail2 = temp;
+        }
+        temp = next;
+    }
+    tail1->next = temp2->next;
+    tail0->next = temp1->next;
+    return temp0->next;
+}

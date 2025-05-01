@@ -1,0 +1,107 @@
+binary search standard template for all problems:
+--------------------------------------------------
+while(low <= high) {
+    // find mid;
+
+    low = mid + 1;
+    hight = mid - 1;
+}
+
+lower bound: smallest index such that number at that a[mid] >= value
+
+code for lower bound:
+--------------------
+
+int lower_bound(vector<int>& a, int value) {
+    int i = 0, j = a.size()-1, ans = a.size();
+    while (i <= j) {
+        int mid = i + (j - i) / 2;
+        if (a[mid] >= value) {
+			ans = mid;
+			j = mid - 1;
+        } else {
+			i = mid + 1; 
+        }
+    }
+    return ans;
+}
+
+c++ inbuilt function for lower_bound:
+------------------------------------
+auto it = lower_bound(nums.begin(), nums.end(), value);
+int index = it - nums.begin();
+
+upper bound: smallest index such that number at that a[mid] > value
+
+
+
+
+example: 
+-----------
+{1, 3, 3, 5, 7, 8, 8, 10};
+
+lower_bound of 5 : 5, index 3
+
+lower_bound of 6: 7, index 4
+
+lower_bound of 11 : No element >= 11, index arr.size()
+
+
+upper_bound of 5: 7, index 4
+
+upper_bound of 8: 10, index 7
+
+upper_bound of 10:
+-----------------
+No element > 10
+So upper_bound(10) = array size = 8.
+
+
+
+Floor & ceil in sorted array:
+-----------------------------
+Floor: largest number such that arr[index] <= value
+
+ceil: smallest number such that arr[index] >= value
+
+
+search in rotated sorted array ii:
+------------------------------------
+binary search solution works if you want to return true / false
+
+if you want to return least index then you have to use linear search
+
+
+class Solution {
+public:
+    bool search(vector<int>& nums, int target) {
+        int n = nums.size();
+        int i = 0, j = n-1;
+        while(i <= j) {
+            int mid = i + (j-i) / 2;
+            if (nums[mid] == target) {
+                return true;
+            } else if (nums[i] == nums[mid] && nums[mid] == nums[j]) {
+
+                // this else-if block is mind blowing
+                i++;
+                j--;
+            } else if (nums[i] <= nums[mid]) {
+                // left sorted
+                if (target >= nums[i] && target <= nums[mid]) {
+                    j = mid - 1;
+                } else {
+                    i = mid + 1;
+                }
+            } else {
+                // right sorted
+                if (target >= nums[mid] && target <= nums[j]) {
+                    i = mid + 1;
+                } else {
+                    j = mid - 1;
+                }
+            }
+        }
+        return false;
+    }
+};

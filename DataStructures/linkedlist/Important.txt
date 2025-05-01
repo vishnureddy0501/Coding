@@ -1,0 +1,11 @@
+1. Find the intersection point of y linked list.
+2. Detect cycle in linked list.
+3. find the length of loop
+	solution: detect cycle & traverse the circle
+4. find the starting point of circle.
+	solution: detect cycle. 
+			slow, fast collied at intersecion point.
+			place slow at head.
+			keep slow at intersecion point.
+			mode slow, fast by 1.
+			They will collide at intersecion point only.

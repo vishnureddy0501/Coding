@@ -41,6 +41,8 @@ extract some part of vector and assign to other:
 
 custom sort:
 -----------
+    return true;	Means a is before b (no swap needed)
+    return false;	Means a is after b (they will swap)
     struct CustomSort {
         bool operator()(const std::pair<int, int>& a,
                         const std::pair<int, int>& b) const {
