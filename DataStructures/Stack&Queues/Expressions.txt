@@ -1,0 +1,109 @@
+Infix to postfix
+-----------------
+direct algorithm that we use for the coversion using stack.
+
+in stack we should have high priority on top and low priority on bottom.
+
+if priority of 2 operators are equal then also, we will pop.
+
+
+Infix to prefix:
+-----------------
+1. reverse the expression
+2. convert '(' to ')' and ')' to '('
+2. infix to postfix with slight modifications. (changes in else part)
+3. reverse the result
+
+here if priority of 2 operators are equal then we don't pop. (most important)
+
+string infixToPostfix(string infix) { // slight modifications to infixToPostfix
+    infix = '(' + infix + ')';
+    int l = infix.size();
+    stack<char> char_stack;
+    string output;
+
+    for (int i = 0; i < l; i++) {
+        if (isalpha(infix[i]) || isdigit(infix[i])) {
+            output += infix[i];
+        } else if (infix[i] == '(') {
+            char_stack.push('(');
+        } else if (infix[i] == ')') {
+            while (char_stack.top() != '(') {
+                output += char_stack.top();
+                char_stack.pop();
+            }
+            char_stack.pop();
+        } else {
+
+			// for ^ it is same as infix to postfix
+			// for other operators <= becomes <
+			if (infix[i] == '^') {
+				while (getPriority(infix[i]) <= getPriority(char_stack.top())) {
+					output += char_stack.top();
+					char_stack.pop();
+				}
+			} else {
+				while (getPriority(infix[i]) < getPriority(char_stack.top())) {
+					output += char_stack.top();
+					char_stack.pop();
+				}
+			}
+            char_stack.push(infix[i]);
+        }
+    }
+
+    while (!char_stack.empty()) {
+        output += char_stack.top();
+        char_stack.pop();
+    }
+
+    return output;
+}
+
+
+postfix to infix:
+----------------
+top2 operator top1 // this you have to follow.
+
+string postToInfix(string s) {
+    stack<string> st;
+    for (int i = 0; i<s.size();i++) {
+        if (isalnum(s[i])) {
+            string str = "";
+            str.push_back(s[i]);
+            st.push(str);
+        } else {
+            string res = "";
+            res.push_back('(');
+            string b = st.top();
+            st.pop();
+            string a = st.top();
+            st.pop();
+            res.append(a);
+            res.push_back(s[i]);
+            res.append(b);
+            res.push_back(')');
+            st.push(res);
+        }
+    }
+    return st.top();
+}
+
+prefix to infix:
+---------------
+just like postfix to infix.
+
+but traverse from end. 
+
+top1 operator top2 // this you have to follow
+
+postfix to prefix:
+------------------
+
+similar to postfix to infix only. 
+but insert the operator before.
+
+prefix to postfix:
+-----------------
+similar to postfix to infix only.
+traverse from end.

@@ -1,0 +1,15 @@
+503. Next Greater Element II (very tricky with lot of edge cases for optimal approach)
+-----------------------------
+try to implement. else check the code i written
+
+Leetcode Tapping rain water
+
+
+907. Sum of Subarray Minimums
+-----------------------------
+for pse we have to keep < (lessthan)
+for nse we have to keep <= (lessthan and equal to)
+
+(or) vice versa
+
+84. Largest Rectangle in Histogram
