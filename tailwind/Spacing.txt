@@ -1,0 +1,18 @@
+Padding:
+-------
+p-1 
+p-[1rem]
+
+px-1
+px-[1rem]
+
+py-1
+py-[1rem]
+
+pt-1(padding-top), pr-1(padding-right), pl-1(padding-left), pb-1(padding-bottom)
+pt-[1rem]
+
+
+
+Margin:
+------

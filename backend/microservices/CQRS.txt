@@ -1,0 +1,10 @@
+❗ When Not to Use CQRS
+----------------------
+Small or simple apps (adds complexity)
+When strong consistency is a must
+
+✅ When CQRS Shines
+-------------------
+Systems with heavy read operations (e.g., dashboards)
+Complex business logic on writes
+High-scale, distributed systems (like event-driven microservices)

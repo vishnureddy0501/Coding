@@ -1,0 +1,19 @@
+https://tailwindcss.com/docs/overflow-wrap
+
+
+https://tailwindcss.com/docs/word-break
+
+
+wrap: when text exceeds the line we will shift it to new line.
+
+White Space:
+-----------
+https://tailwindcss.com/docs/white-space
+
+
+whitespace-normal: spaces, newlines not preserved. Wrap Text.
+whitespace-nowrap: spaces, newlines not preserved. No wrap.
+whitespace-pre: spaces, newlines preserved. No Wrap.
+whitespace-pre-line: new lines preserved. spaces not preserved. wrap text.
+whitespace-pre-wrap: spaces, newlines preserved. Wrap Text.
+whitespace-break-spaces: spaces, newlines preserved. White spaces at the end of line will be wrapped to next line.

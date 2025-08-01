@@ -1,0 +1,44 @@
+Bridges: if we remove an edge, number of components gets increased
+ 
+ #include<bits/stdc++.h>
+using namespace std;
+
+void dfs(vector<vector<int>>& graph, vector<int>& visited, vector<int>& timeOfInsertion, vector<int>& last, int index, int c, int parent, vector<vector<int>> &res) {
+    visited[index] = 1;
+    timeOfInsertion[index] = c;
+    last[index] = c;
+    for (int i = 0; i<graph[index].size(); i++) {
+        int neighbor = graph[index][i];
+        if (neighbor == parent) continue;
+        if (!visited[neighbor]) {
+            dfs(graph, visited, timeOfInsertion, last, neighbor, c + 1, index, res);
+            last[index] = min(last[index], last[neighbor]);
+
+            // If last[child] > timeOfInsertion[current], it's a bridge
+            if (last[neighbor] > timeOfInsertion[index]) {
+                res.push_back({index, neighbor});
+            }
+        } else {
+            // Back edge
+            last[index] = min(last[index], timeOfInsertion[neighbor]);
+        }
+    }
+}
+
+vector<vector<int>> findBridges(vector<vector<int>> &edges, int v, int e) {
+    vector<vector<int>> graph(v);
+    for (int i = 0; i<edges.size(); i++) {
+        graph[edges[i][0]].push_back(edges[i][1]);
+        graph[edges[i][1]].push_back(edges[i][0]);
+    }
+    vector<int> visited(v, 0);
+    vector<int> timeOfInsertion(v, 0);
+    vector<int> last(v, 0);
+    vector<vector<int>> res;
+    for (int i = 0; i<v; i++) {
+        if (visited[i]==0) {
+            dfs(graph, visited, timeOfInsertion, last, i, 1, -1, res);
+        }
+    }
+    return res;
+}

@@ -1,0 +1,58 @@
+
+void dfs(vector<vector<int>>& graph, vector<int>& visited, vector<int>& st, int index) {
+    visited[index] = 1;
+    for (int i = 0; i<graph[index].size(); i++) {
+        if (visited[graph[index][i]] == 0) {
+            dfs(graph, visited, st, graph[index][i]);
+        }
+    }
+    st.push_back(index);
+}
+
+vector<int> findComponents(vector<vector<int>>& graph, vector<int>& visited, int index) {
+    visited[index] = 1;
+	vector<int> st;
+    for (int i = 0; i<graph[index].size(); i++) {
+        if (visited[graph[index][i]] == 0) {
+            dfs(graph, visited, st, graph[index][i]);
+        }
+    }
+    st.push_back(index);
+	return st;
+}
+
+int stronglyConnectedComponents(int v, vector<vector<int>> &edges)
+{
+	vector<vector<int>> g(v);
+	vector<int> visited(v, 0);
+	for (int i = 0; i<edges.size(); i++) {
+		g[edges[i][0]].push_back(edges[i][1]);
+	}
+	vector<int> st;
+	for (int i = 0; i<v; i++) {
+		if (visited[i] == 0) {
+			dfs(g, visited, st, i);
+		}
+	}
+
+	vector<vector<int>> revG(v);
+	for (int i = 0; i<v; i++) {
+		visited[i] = 0;
+	}
+	for (int i = 0; i<edges.size(); i++) {
+		revG[edges[i][1]].push_back(edges[i][0]);
+	}
+	int c = 0;
+	vector<vector<int>> res;
+
+	for (int i = st.size()-1; i >= 0; i--) {
+		if (visited[st[i]] == 0) {
+
+			// the nodes visited in this iteration forms 1 strongly Connected Components
+			res.push_back(findComponents(revG, visited, st[i]));
+			c++;
+		}
+	}
+	// res gives connected components. c gives number of connected components
+	return c;
+}

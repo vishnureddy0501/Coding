@@ -1,0 +1,38 @@
+Maintain 2 different files 
+1. .env for production
+2. .env.dev for development
+
+
+1️⃣ Install dotenv
+	npm install dotenv
+2️⃣ Create your environment files
+	📄 .env (for production)
+		PORT=80
+		DB_URL=mongodb://prod-db-url
+	📄 .env.dev (for development)
+		PORT=3000
+		DB_URL=mongodb://localhost:27017/devdb
+3️⃣ Update your src/index.js (or app.js) to load correct file
+	import dotenv from 'dotenv';
+
+	// Use different .env files based on NODE_ENV
+	const envFile = process.env.NODE_ENV === 'dev' ? '.env.dev' : '.env';
+
+	dotenv.config({ path: envFile });
+
+	// Now use process.env variables
+	console.log('DB URL:', process.env.DB_URL);
+
+4️⃣ Update your package.json scripts
+
+	"scripts": {
+	"dev": "NODE_ENV=dev nodemon src/index.js",
+	"start": "NODE_ENV=production node src/index.js"
+	}
+✅ This way:
+
+	npm run dev → loads .env.dev
+
+	npm start → loads .env
+
+

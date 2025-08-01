@@ -1,0 +1,9 @@
+Container: it packages an applictation & its environment, so that it works in different systems.
+
+Docker Container: used to develop light-weight Containers.
+	Docker uses the same underlying operating system, which makes them light-weight
+
+Virtul Machine:
+	
+
+Docker: Docker is the tool that helps you create, manage, and run containers.

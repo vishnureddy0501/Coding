@@ -1,0 +1,40 @@
+(don't byhat anything. just implement the algorithm)
+
+#include <bits/stdc++.h> 
+using namespace std;
+
+struct CustomCompare {
+    bool operator()(const pair<int, pair<int, int>>& a, const pair<int, pair<int, int>>& b) {
+        return a.first > b.first;  // Max-heap (Largest value at top)
+    }
+};
+
+vector<pair<pair<int, int>, int>> calculatePrimsMST(int n, int m, vector<pair<pair<int, int>, int>> &g)
+{
+
+    vector<vector<pair<int, int>>> graph(n);
+    for (int i = 0; i<g.size(); i++) {
+        int x = g[i].first.first-1, y = g[i].first.second-1, w = g[i].second; 
+        graph[x].push_back({y, w});
+        graph[y].push_back({x, w});
+    }
+    vector<pair<pair<int, int>, int>> res;
+    priority_queue< pair<int, pair<int, int>>, vector<pair<int, pair<int, int>>>, CustomCompare> q;
+    q.push({ 0, {0, -1}}); // push weight, node, parent
+    vector<int> visited(n, 0);
+    
+    while(q.size() > 0) {
+        auto it = q.top();
+        q.pop();
+        int node = it.second.first, weight = it.first, parent = it.second.second;
+        if (parent != -1 && visited[node] == 0) res.push_back({{parent + 1, node + 1}, weight});
+        visited[node] = 1;
+        for (int i = 0; i<graph[node].size(); i++) {
+            int n = graph[node][i].first, w = graph[node][i].second;
+            if (visited[n] == 0 && n != parent) {
+                q.push({w, {n, node}});
+            }
+        }
+    }
+    return res;
+}

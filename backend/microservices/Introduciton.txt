@@ -1,0 +1,18 @@
+CQRS pattern:
+------------
+Command Query Responsibility Segregation
+
+insert, delete, update operations goes to one service.
+
+Query operations in other service.
+
+
+🌟 Why Use CQRS?
+	Scalability:
+		You can scale reads and writes separately.
+	Performance:
+		Read operations can be super fast without affecting writes.
+	Flexibility:
+		You can use different databases for reads and writes.
+	Clear Separation:
+		Easier to manage complex applications where reads far exceed writes (like social media feeds).

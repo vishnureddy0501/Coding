@@ -1,0 +1,22 @@
+Instert the content before & after the element. 
+before, after are pseudo classes.
+
+✅ Use Case Example
+	<p class="example">Hello</p>
+	.example::before {
+		content: "👋 ";
+	}
+	.example::after {
+		content: " 🌍";
+	}
+Result:
+👋 Hello 🌍
+
+🔹 The content Property
+	This is required when using ::before or ::after.
+	Without content, nothing will show.
+
+
+Note: 
+----
+These are not mandatory to use. we can write the code directly in html and avoid these.

@@ -1,0 +1,50 @@
+
+🛠 What Are Vite and Webpack?
+	Bundlers
+	Take your source code (like .jsx, .scss, .ts) and turn it into optimized, browser-ready code.
+
+🤔 Why Do We Need Them?
+--------------------
+Modern web apps use:	
+	JSX / TSX (React, TypeScript)
+	SCSS / CSS modules
+	ES Modules (import/export)
+	Code Splitting
+	Image optimization
+	Hot Reloading
+
+Browsers don’t understand these things natively, so you need a tool to:
+
+Task	Example
+💥 Bundle	Combine all .js, .css, .img into 1+ files
+🔁 Live Reload	Reload browser when code changes
+📦 Transpile	Convert JSX / TS to regular JS
+🔐 Env support	Env files
+Builds optimized files for production
+
+🆚 Vite vs Webpack – What's the Difference?
+Feature	Vite	Webpack
+🚀 Speed (Dev)	⚡ Super fast 	       🐢 Slower
+🧠 Config	Simple out of the box	    Powerful but complex
+🔁 HMR (Hot Reload)	Instant updates	    Slower reloads
+🧱 Build Time (Prod)	Fast	        Medium
+
+
+⚙️ Example: What Vite Does
+-------------------------
+You write this:
+	import './styles.scss';
+	import App from './App.jsx';
+
+Vite:
+	converts JSX to TS / Js
+	Compiles SCSS → CSS
+	Bundles imports
+	Runs dev server with hot reload
+	Builds optimized files for production
+
+Concept	Answer
+------- -------
+Do we need a bundler?	✅ Yes, unless you're building super-basic HTML+JS
+Should I use Vite or Webpack?	✅ Use Vite unless you need complex config or are working with legacy Webpack code
+What if I use Next.js?	These use Webpack/Vite internally

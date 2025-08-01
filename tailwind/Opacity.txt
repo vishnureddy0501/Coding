@@ -1,0 +1,32 @@
+
+✅ 2. Background Opacity
+html
+Copy
+Edit
+<div class="bg-blue-500/50">Semi-transparent blue background</div>
+Syntax:
+css
+Copy
+Edit
+bg-{color}/{opacity}
+✅ 3. Border/Shadow/Other Utilities
+border-red-500/40 → 40% opacity border
+
+shadow-black/20 → shadow with 20% opacity
+
+✅ 4. Standalone Opacity Class
+Use this when you want to apply a generic opacity to the whole element (including content):
+
+html
+Copy
+Edit
+<div class="opacity-50">This whole div is 50% opaque</div>
+Values:
+opacity-0, opacity-5, opacity-10, ..., opacity-100
+
+✨ Bonus: Hover/Focus Opacity
+html
+Copy
+Edit
+<button class="opacity-100 hover:opacity-60 transition">Hover me</button>
+Want to control opacity dynamically (JS/CSS transitions) or based on dark mode too?

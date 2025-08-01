@@ -3,3 +3,15 @@ sudo systemctl enable docker
 sudo systemctl status docker
 
 sudo systemctl start docker
+
+docker run hello-world:
+-----------------------
+some times it won't work.
+
+sudo chmod 666 /var/run/docker.sock (run this then do docker run hello-world)
+
+doing docker build:
+---------------------
+go to respective folder & do this.
+
+docker build -t vishnureddy8980/my-first-docker-image:latest .
