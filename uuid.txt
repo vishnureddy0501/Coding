@@ -1,0 +1,7 @@
+npm install uuid
+
+// file: src/index.js
+import { v4 as uuidv4 } from "uuid";
+
+const id = uuidv4();
+console.log("v4 id:", id);

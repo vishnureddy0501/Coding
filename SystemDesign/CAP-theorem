@@ -1,0 +1,33 @@
+What is CAP theorem?
+	You can only guarantee two of the following three properties at the same time:
+	Consistency, Availability, Partition tolerance
+
+C — Consistency
+---------------
+Every read receives the most recent write (or an error).
+Think: “Everyone sees the same data at the same time.”
+Example: If you update your Facebook profile picture, your friend sees the new one immediately — that’s consistency.
+
+A — Availability
+----------------
+Every request receives a response, even if it’s not the latest data.
+The system is always up to respond.
+Example: If a database node fails, another node still responds, even if it’s serving slightly old data.
+
+P — Partition Tolerance
+------------------------
+The system continues to operate despite network failures that split nodes into isolated groups.
+
+This is unavoidable in distributed systems — networks can and do fail.
+
+
+In real distributed systems:
+----------------------------
+Partition tolerance (P) is non-negotiable (networks aren’t perfect).
+So you must choose between:
+	CP (Consistency + Partition tolerance) → Sacrifice availability (some requests fail during network issues).
+	Example: MongoDB with majority writes.
+
+AP (Availability + Partition tolerance) → Sacrifice consistency (may serve stale data).
+Example: DynamoDB, Cassandra.
+

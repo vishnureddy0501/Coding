@@ -1,0 +1,36 @@
+flex-grow
+flex-shrink
+flex-basis
+flex
+align-self
+
+
+flex-grow:
+---------
+it says how to use extra space.
+default value: 0.
+
+flex-shrink:
+------------
+if width is decreased, how items shrinks.
+default value: 1.   (all the items shrink relatively on width decrease)
+
+
+flex-basis:
+-----------
+initial size of the item before extra space in the container is distributed.
+
+don't use width in flex boxes. use flex-basis.
+flex-basis: 100px; (50%, 10rem, 10vw... it will take these type of values)
+
+
+flex: short hand for all these 3 Properties
+-----
+<flex-grow> <flex-shrink> <flex-basis>
+
+
+align-self: auto, flex-start, flex-end, center, stretch
+----------
+similar to align-items. but we write align-self in child.
+
+default value: auto (align-items value that you give for the parent).

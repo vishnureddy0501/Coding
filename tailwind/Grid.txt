@@ -1,0 +1,129 @@
+Grid Line: Horizontal or vertical line in a grid.
+Grid Cell
+Grid Track: Space b/w 2 grid lines.
+Grid Area: Total space Surrounded by 4 grid lines.
+
+
+Grid container Properties:
+--------------------------
+display: grid, inline-grid
+
+display: grid displays all the items vertically. occupies the whole width of parent.
+display: inline-grid displays all the items vertically. occupies the necessary width only.
+
+
+grid-template-columns: 100px 200px 300px; // create 3 columns. first column width is 100px, 2nd column width is 200px, 3rd column width is 300px. 
+grid-template-columns: 200px 200px 200px;
+grid-template-columns: repeat(3, 200px); // repeats 200px 3 times
+grid-template-columns: repeat(3, 200px) repeat(3, 100px);
+
+fraction of available space:
+----------------------------
+	This works only if parent has defined height.
+	grid-template-columns: 1fr 2fr 3fr; // fraction of available space. col1 given (1/6)*container width. col2 given (2/6)* container width
+
+🔹 What is minmax() in CSS Grid?
+--------------------------------
+	minmax(min, max): “This column/row should never be smaller than min, and never bigger than max.”
+
+	grid-template-columns: minmax(100px, 1fr);
+		The column will be at least 100px wide
+		But it can grow up to 1 fraction of the remaining space
+
+	grid-template-columns: repeat(3, minmax(100px, 300px));
+	grid-template-columns: 200px minmax(150px, 1fr);
+
+	when to use:
+	----------
+		You want a column to grow only if there's space
+		But still not shrink too small and break your layout
+
+	🚫 If min > max?
+		Like minmax(500px, 200px) → Invalid! The layout won’t work as expected, because the minimum can't be more than the maximum.
+
+
+grid-template-rows:
+-------------------
+	similar to grid-template-columns only.
+
+
+grid-template: Short hand Property for rows & columns
+-------------
+	grid-template: <grid-template-rows> / <grid-template-columns>
+
+
+gaps:
+---------
+column-gap: 20px;
+row-gap: 30px;
+gap: <row-gap> <column-gap>
+
+
+justify-items, align-items used to control the alignment inside the cell. by writing these Properties in parent.
+
+justify-items  && justify-self:
+------------------------------
+justify-items controls how content inside each grid cell is aligned horizontally (left-to-right).
+🧠 Think of it like this:
+	“Inside each grid box, where should the content sit horizontally?”
+
+default: stretch
+
+✅ Common 	Values
+Value		Meaning
+start		Align content to the left of the cell
+end			Align content to the right of the cell
+center		Center the content horizontally
+stretch		Stretch the content to fill the cell width (default)
+
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 150px);
+  justify-items: center;
+}
+
+<div class="grid">
+  <div class="item1">One</div>
+  <div>Two</div>
+  <div>Three</div>
+</div>
+➡️ All items in the grid cells will be centered horizontally inside their respective grid boxes.
+
+🔄 You can override per item with justify-self:
+
+.item1 {
+  justify-self: end;
+}
+✅ This will move just that one item to the right side of its cell.
+
+align-items:
+-----------
+similar to justify-items. but along the vertical axis.
+align-items controls how content inside each grid cell is aligned vertically.
+
+default: stretch
+
+
+place-items: short hand 
+-----------
+place-items: <align-items> <justify-items>
+
+
+justify-content:
+---------------
+“Where should the whole grid layout sit within the grid container, if there’s extra horizontal space?”
+
+✅ It only works when:
+	The grid container has more space than needed (e.g., width: 1000px, but grid only takes up 600px).
+
+You have multiple columns or a layout that doesn’t fully fill the container.
+for placement of whole grid. 
+
+start(default), center, end, space-between, space-around, space-evenly
+
+align-content:
+-------------
+similar to justify-content. but in column direction
+
+place-content: <align-content> <justify-content>

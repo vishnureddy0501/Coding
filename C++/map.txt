@@ -68,6 +68,9 @@ custom sort based on keys we can do. same code as the priority_queue.
 8. Clearing the Map
     clear(): Removes all elements from the map.
         myMap.clear();
+    
+9. We can do maps comparision m1 == m2 like this.
+    (best tip)
 
 unordered_map: 
 ---------------
@@ -83,3 +86,7 @@ it can store multiple keys also
 
 multimap<int, int> m;
 m.insert({key, value})
+
+
+multimap is sorted on key. (ascending by default)
+multimap<int, int, greater<int>> m; // sorted by key descending

@@ -1,0 +1,21 @@
+Standard Template for Slow fast pointer approach:
+-------------------------------------------------
+
+// Phase 1: Detect intersection (if cycle exists)
+slow = start;
+fast = start;
+
+do {
+    slow = next(slow);          // move 1 step
+    fast = next(next(fast));    // move 2 steps
+} while (slow != fast);
+
+// Phase 2: Find cycle entry
+slow = start;
+while (slow != fast) {
+    slow = next(slow);
+    fast = next(fast);
+}
+
+// slow (or fast) is now at the cycle start
+return slow;

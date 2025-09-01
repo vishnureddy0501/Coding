@@ -16,3 +16,9 @@ pt-[1rem]
 
 Margin:
 ------
+all properties of padding works here also.
+
+m-auto      margin: auto;
+-m-4       keeping minus before. nagative margin
+
+mt-auto, mx-auto, my-auto, ml-auto  All of these will work.

@@ -1,0 +1,6 @@
+Binary to Gray code conversion:
+-------------------------------
+1. if decimal (0-9 digits) representation. directly apply.
+	num ^ (num >> 1)   [perform xor with num, right-shifted num]
+2. if you have binary representation in form of string. 
+	convert it to decimal representation and apply the formula

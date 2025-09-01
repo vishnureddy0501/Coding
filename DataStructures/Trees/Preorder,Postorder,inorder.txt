@@ -1,0 +1,4 @@
+construct binary tree from preorder, inorder. (unique tree possible)
+construct binary tree from postorder, inorder. (unique tree possible)
+construct binary tree from preorder, postorder. (multiple solutions) [watch jenny's trick]
+

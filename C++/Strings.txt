@@ -71,3 +71,24 @@ logs[i].substr(j + 1, logs[i].size() - left.size())
 
 12. Appending a character n times at the last.
     str.append(n, ch);
+
+13. isalnum(ch) // to find if ch is of type alphabet or digit.
+
+
+14. char type (digit) to int conversion
+    int v1 = num1[i] - '0', v2 = num2[j] - '0';
+
+
+16. find index of all occurrences of a string in other string.
+
+    vector<int> findAllOccurrences(string text, string pattern) {
+        vector<int> indices;
+        if (pattern.empty() || text.size() < pattern.size()) return indices;
+
+        for (int i = 0; i + pattern.size() <= text.size(); i++) {
+            if (text.substr(i, pattern.size()) == pattern) {
+                indices.push_back(i);
+            }
+        }
+        return indices;
+    }

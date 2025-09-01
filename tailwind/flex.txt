@@ -1,0 +1,63 @@
+https://www.syncfusion.com/blogs/post/css-flex-every-developer-should-know 
+
+Property			display: flex							display: inline-flex
+Layout model		Flexbox									Flexbox
+Box behavior		Block-level element						Inline-level element
+Surrounding flow	Starts on a new line					Flows with text (inline flow)
+Width				Expands to fill parent (if no size)		Shrinks to content if possible
+
+
+
+flex-direction:
+--------------
+	row, column, row-reverse, column-reverse.
+
+row-reverse:
+-----------
+	some extra space here(if present), item4, item3, item2, item1 
+
+column-reverse:
+--------------
+	some extra space here(if present)
+	item4
+	item3
+	item2
+	item1
+
+flex-wrap:
+---------
+	wrap, nowrap, wrap-reverse
+
+	flex-wrap: wrap-reverse:  wraps the context to previous row or previous column
+	--------------------------
+	if flex-direction: row then, wrapped items goes to previous row.
+
+	if flex-direction: column then, wrapped items goes to previous column.
+
+flex-flow: short hand for flex-direction and flex-wrap
+---------
+	flex-flow: row wrap;
+
+justify-content: alignment along main axis
+---------------
+start, center, end, space-between, space-around, space-evenly
+
+
+align-items:  Alignment along the cross axis.
+------------
+	by default align-items: stretch
+
+	if flex-direction is row:
+		default: stretch
+			items will stretch to the entire parent height
+		
+		flex-start
+			items placed at the start of cross axis. and takes necessary height only.
+		flex-end
+			items placed at the end of cross axis. and takes necessary height only.
+		center
+			items placed at the center of cross axis. and takes necessary height only.
+		baseline
+
+
+		

@@ -1,0 +1,29 @@
+Important:
+	Do NOT take modulo inside DFS while computing sums → it breaks correctness.
+	Only apply % MOD at the end.
+
+
+class Solution {
+public:
+    long long modulo = 1000000007;
+    long long postorder(TreeNode* root, long long &res, long long sum) {
+        if (root == NULL) return 0;
+        long long left = postorder(root->left, res, sum);
+        long long right = postorder(root->right, res, sum);
+        res = max(res, left * (sum - left));
+        res = max(res, right * (sum - right));
+        return left + right + root->val;
+    }
+    void inorder(TreeNode* root, long long &sum) {
+        if (root == NULL) return;
+        inorder(root->left, sum);
+        sum = sum + root->val;
+        inorder(root->right, sum);
+    }
+    int maxProduct(TreeNode* root) {
+        long long sum = 0, res = LLONG_MIN;
+        inorder(root, sum);
+        postorder(root, res, sum);
+        return res % modulo;
+    }
+};

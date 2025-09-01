@@ -1,0 +1,12 @@
+Webrtc vs Websockets:
+====================
+Websockets: Real-time communication through server.
+webrtc: real-time communication between browsers.
+		Data never touches server.
+		webrtc transports its data through UDP. UDP is fast.
+
+if webrtc is so fast, why do we need Websockets?
+------------------------------------------------
+UDP is not a reliable protocol for transfering the data.
+UDP doesn't validate data.
+No built in signaling.

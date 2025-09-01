@@ -11,3 +11,16 @@ delete head; // ✅ Must do this to avoid memory leak
 ListNode* head = new ListNode(5);
 ListNode* ttemp = head;
 delete ttemp;
+
+
+
+1. Once the code is done, remove the unnecessary memory
+	This garbage collection happens after execution of function is done.
+	eg: delete head; // something like this. it will free up the memory.
+
+
+deleteHead (Node* head) {
+	Node* temp = head;
+	head = head->next;
+	delete temp; // you can use free(temp) also
+}

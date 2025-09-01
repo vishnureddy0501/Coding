@@ -1,0 +1,12 @@
+grid-column-start: 1; (start at vertical line 1)
+grid-column-end: 3; (ends at vertical line 3)
+grid-row-start: 1;  (start at horizontal line 1)
+grid-row-end: 5; (end at horizontal line 5)
+
+grid-column: <grid-column-start> / <grid-column-end>
+grid-row: <grid-row-start> / <grid-row-end>
+
+justify-self, align-self, place-self 
+------------------------------------
+	(similar to justify-items, align-items, place-items)
+	We write these Properties in child.

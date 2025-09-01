@@ -1,0 +1,164 @@
+1. First principle of database design
+So we don’t dump everything in one collection. We organize based on:
+
+Access patterns (how data is queried most often).
+
+Growth (some data grows large, better to separate).
+
+Consistency (what needs to always be in sync).
+
+2. Entities in Twitter
+
+For Twitter, the main “things” are:
+
+User → profile info
+
+Tweet (Post) → text, images, videos, links
+
+Comment → reply to a tweet
+
+Follower/Following → relationship between users
+
+Media (Images, Videos) → actual files or URLs
+
+Likes/Retweets → interactions
+
+3. Designing collections in MongoDB
+(a) Users collection
+{
+  "_id": "user123", 
+  "username": "vishnu",
+  "email": "vishnu@example.com",
+  "name": "Vishnu Reddy",
+  "bio": "Backend learner 🚀",
+  "address": {
+    "city": "Hyderabad",
+    "country": "India"
+  },
+  "followersCount": 120,
+  "followingCount": 80
+}
+
+
+👉 Why separate? Because user info is reused everywhere (tweets, comments). If embedded inside tweets, updating a user (say username change) would be painful. So keep users separate.
+
+(b) Tweets collection
+{
+  "_id": "tweet456",
+  "userId": "user123",   // Reference to Users
+  "content": "Learning MongoDB is 🔥",
+  "media": [
+    { "type": "image", "url": "https://cdn.com/pic1.png" },
+    { "type": "video", "url": "https://cdn.com/vid1.mp4" }
+  ],
+  "links": ["https://example.com"],
+  "createdAt": "2025-08-30T12:00:00Z",
+  "likesCount": 50,
+  "retweetsCount": 10
+}
+
+
+👉 Why?
+
+Store media as URLs (actual files go to AWS S3, GCP, or similar).
+
+Tweet is separate because it grows a lot (billions of tweets).
+
+(c) Comments collection
+{
+  "_id": "comment789",
+  "tweetId": "tweet456",  // Reference to tweet
+  "userId": "user999",    // Who commented
+  "content": "Totally agree!",
+  "createdAt": "2025-08-30T12:05:00Z"
+}
+
+
+👉 Why separate? Because a tweet may have millions of comments. If we embedded inside Tweet doc, it would blow up size. MongoDB document size limit is 16MB → not good for large lists.
+
+(d) Followers / Following
+
+There are 2 ways:
+
+Embedding (good for small apps):
+
+{
+  "userId": "user123",
+  "followers": ["user789", "user555"],
+  "following": ["user222", "user333"]
+}
+
+
+Separate collection (scalable like Twitter):
+
+{
+  "_id": "rel1",
+  "followerId": "user123",
+  "followingId": "user999",
+  "createdAt": "2025-08-30T12:10:00Z"
+}
+
+
+👉 Why separate? Because Twitter users can have millions of followers. Embedding all into one user doc makes it too large. A separate Followers collection scales better.
+
+(e) Likes & Retweets
+
+Also stored in separate collections because numbers can be huge:
+
+{
+  "userId": "user123",
+  "tweetId": "tweet456",
+  "type": "like",   // or "retweet"
+  "createdAt": "2025-08-30T12:15:00Z"
+}
+
+4. How mapping happens (relationships)
+
+User → Tweet: via userId
+
+Tweet → Comments: via tweetId
+
+User → Followers: via followerId and followingId
+
+Tweet → Likes: via tweetId
+
+This is reference-based mapping (like foreign keys in SQL).
+In queries, you use joins (in SQL) or $lookup (in MongoDB) to fetch related data.
+
+5. Why design like this?
+
+Efficiency:
+
+Small documents load fast.
+
+Big growing lists are separated.
+
+Scalability:
+
+Each collection can be sharded (distributed across servers).
+
+Users with millions of followers don’t break the DB.
+
+Flexibility:
+
+You can add new interaction types later (like “bookmark”) without touching Tweets.
+
+6. Which database to use?
+
+MongoDB (NoSQL): Great for flexible schema (good for tweets, comments, dynamic media).
+
+PostgreSQL / MySQL (SQL): Good when you need strong relationships, constraints, and reporting.
+
+Hybrid approach: Many big apps (including Twitter, Instagram) use both:
+
+MongoDB / Cassandra for fast scalable storage.
+
+Postgres / MySQL for analytics, financials, strict relationships.
+
+✅ Rule of thumb:
+
+If data is highly relational → SQL.
+
+If data is flexible and grows fast → NoSQL.
+
+If you’re building a Twitter-like app → start with MongoDB for main feeds, use SQL later for analytics.

@@ -1,0 +1,76 @@
+streaming video using HLS (HTTP Live Streaming) from a frontend perspective :
+-----------------------------------------------------------------------------
+
+HLS is the easiest place to start because:
+	It works with .m3u8 playlist files.
+	You don’t have to handle low-level encoding or socket connections.
+
+It can stream both live and on-demand video.
+	1. How HLS Works (Quick Overview)
+		Video is split into small chunks (TS files, ~2–10 seconds each).
+		An .m3u8 playlist file lists the chunks and their order.
+		Your video player downloads chunks sequentially and plays them.
+		Browser support:
+			Safari (macOS/iOS) supports .m3u8 natively in <video>.
+			Chrome/Firefox/Edge need a JavaScript library like hls.js.
+	2. Setup a Simple HTML Page
+		We’ll use hls.js for maximum browser compatibility.
+
+			<!DOCTYPE html>
+			<html lang="en">
+			<head>
+			<meta charset="UTF-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<title>HLS Video Streaming</title>
+			</head>
+			<body>
+			<h1>HLS Streaming Demo</h1>
+			
+			<video id="video" controls width="640" height="360"></video>
+
+			<!-- hls.js library -->
+			<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+			<script>
+				const video = document.getElementById('video');
+				const videoSrc = 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8'; // Replace with your m3u8 URL
+
+				if (Hls.isSupported()) {
+					const hls = new Hls();
+					hls.loadSource(videoSrc);
+					hls.attachMedia(video);
+					hls.on(Hls.Events.MANIFEST_PARSED, function () {
+						video.play();
+					});
+				} else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+					// Native support for Safari
+					video.src = videoSrc;
+					video.addEventListener('loadedmetadata', () => video.play());
+				} else {
+					alert('HLS not supported in this browser');
+				}
+			</script>
+			</body>
+			</html>
+	3. What’s Happening Here
+		Hls.isSupported() → checks if hls.js is needed.
+		hls.loadSource(videoSrc) → loads the .m3u8 playlist.
+		hls.attachMedia(video) → binds the stream to the <video> element.
+		Safari fallback: Uses native HLS playback without the library.
+	4. Getting an .m3u8 Stream
+		You can use:
+		Test Streams → https://test-streams.mux.dev/
+
+OBS + Nginx RTMP → create your own live stream
+
+Video Hosting/CDNs → AWS MediaConvert, Mux, Vimeo Live, etc.
+
+5. Adding Custom UI (Optional)
+	If you want a custom-designed player instead of the default <video> controls, you’ll:
+	Hide controls on <video>.
+	Use JavaScript to control playback (video.play(), video.pause(), video.currentTime, video.volume).
+	Style buttons with CSS.
+
+6. Common Frontend Issues
+	CORS errors → Make sure the server hosting .m3u8 allows your domain in CORS headers.
+	MIME type errors → The server must serve .m3u8 as application/vnd.apple.mpegurl and .ts as video/mp2t.
+	Autoplay restrictions → Many browsers require muted for autoplay.
