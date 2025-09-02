@@ -1,0 +1,14 @@
+1. check if kth bit is set or not. 
+	(num >> k) & 1 
+
+	if above value is 1 then bit is set. 
+	else bit is not set.
+
+
+2. How to turn on a bit. 
+	(1 << i) | num
+
+	if i = 2:
+	   then (1 << i) becomes 100
+
+	   100 | num gives the result by changing ith bit from right to 1 
