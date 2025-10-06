@@ -51,3 +51,19 @@ int gcd (int n1, int n2) {
 	}
 	return gcd (n1%n2, n2); // gcd (greater%smaller, smaller);
 }
+
+
+lcm:
+----
+That works in theory ✅, but in practice it’s unsafe because a * b can easily overflow a 64-bit integer before the division happens.
+
+long long lcm(long long a, long long b) {
+    return (a * b) / gcd(a, b);
+}
+
+use this:
+----------
+long long lcm(long long a, long long b) {
+    return (a / gcd(a, b)) * b;
+}
+

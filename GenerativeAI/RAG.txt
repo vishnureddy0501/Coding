@@ -1,0 +1,25 @@
+problem statement: 
+-----------------
+if you want your LLM to answer domain specific question. How will you develop?
+
+eg: Explain information related to products only in amazon website?
+	Explain Details related to vishnu only?
+
+
+Solution 1:
+------------
+Fine Tuning
+
+disadvantages: Costly, Computationally Expensive, Time Consuming, Data Preprocessing, Data Cleaning, Fine Tuning, 
+
+if the data is updated frequently then we need to fine-tune the model again and again. (hard to update)
+
+if we want to remove some information, it is also very difficult to do.
+
+Solution 2: 
+------------
+RAG: Retrival Augmented Generation
+	Question + context form DB
+
+
+Query + Fetch Relevant information from DB -> Sent it to Model

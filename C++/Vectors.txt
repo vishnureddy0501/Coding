@@ -1,3 +1,12 @@
+  2D vector initialization:
+  -------------------------
+    vector<vector<int>> sheet;
+    vector<vector<int>> v(20, vector<int>(10, 0));
+    Spreadsheet(int rows) {
+        sheet.assign(rows, vector<int>(26, 0));
+    }
+  
+
     vector<int> vec = {10, 20, 30};
     cout << vec[1];       // Output: 20
     vec.push_back(value) //Adds value to the end.

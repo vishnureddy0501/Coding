@@ -1,0 +1,7 @@
+pair<int,int> parseCell(const string& cell) {
+	int col = cell[0] - 'A';
+	int row = stoi(cell.substr(1)) - 1; // 1-based to 0-based
+	return {row, col};
+}
+
+auto [r, c] = parseCell(cell);

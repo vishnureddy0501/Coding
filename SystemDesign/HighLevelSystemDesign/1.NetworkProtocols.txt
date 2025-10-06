@@ -1,0 +1,50 @@
+7 Layers in Network Protocol
+
+out of those 2 layers are important
+1. Application Layer  2. Transport Layer.
+
+
+
+1. Application Layer:
+---------------------
+2 types of Protocols
+
+	1. Client server Protocols
+		1. HTTP
+		2. FTP (file Transfer Protocol)
+		3. SMTP (we use this for emails)
+		4. Websockets
+
+	2. Peer to Peer Protocols
+		1. WebRTC
+
+
+	Client Server Architecture:
+	----------------------------
+	Client sends the request to server.
+	server responds back with response.
+
+
+	Websockets:(Bidirectonal Data Transfer)
+	-----------
+	client can talk to server. 
+	server can talk to client. 
+	but it is not peer to peer. (client1 cannot talk to client2 directly).
+
+	-> if client1 wants to send something to client2:
+	---------------------------------------------------
+		client1 sends data to server. server sends to client2.
+
+
+	SMTP:
+	----
+	 SMTP -> Sending the Email
+	 IMAP -> Accessing / Reading the Email
+
+
+
+	Peer to Peer Protocols: (Anyone speaks with Anyone)
+	-----------------------
+		clients can speak to the server.
+		server can speak with client.
+		client can speak with client.

@@ -1,0 +1,64 @@
+Transport Layer:
+----------------
+1. TCP/IP
+
+2. UDP/IP
+
+## 🚀 TCP (Transmission Control Protocol)
+Think of TCP as **WhatsApp messages**:
+- Every message must arrive, in the correct order.
+- If something is lost, it’s re-sent automatically.
+- The app developer doesn’t worry about packets, retries, or ordering → **TCP handles that**.
+
+### 🔧 As a full-stack dev, where you meet TCP:
+- **HTTP/HTTPS** → `fetch("/api/users")` runs over TCP.
+- **WebSockets** → built on TCP (guaranteed order, reliability).
+- **Databases** → MySQL/Postgres/MongoDB connections are TCP.
+- **File uploads/downloads** → TCP ensures no corruption.
+
+👉 You rarely write raw TCP, but you rely on it every day through **libraries, APIs, and DB drivers**.
+
+---
+
+## ⚡ UDP (User Datagram Protocol)
+Think of UDP as **live radio**:
+- Data is sent fast, no guarantee it arrives, no retries.
+- Packets can arrive late, duplicated, or out of order.
+- If something is lost, **your app must decide** how to handle it.
+
+### 🔧 As a full-stack dev, where you meet UDP:
+- **Real-time apps** → gaming, video calls, live streams (Zoom, PUBG).
+- **DNS lookups** → when browser asks *“what’s the IP for google.com?”*, usually UDP.
+- **Media servers** → WebRTC uses UDP under the hood for speed.
+- **IoT / telemetry** → small sensors blasting data, don’t care if 1 packet is lost.
+
+👉 You usually don’t hand-code UDP unless you’re in gaming, VoIP, or media,  
+but you’ll use **libraries that do (like WebRTC)**.
+
+---
+
+## 🚀 Developer Perspective
+
+| Feature           | TCP                              | UDP                               |
+|-------------------|----------------------------------|-----------------------------------|
+| **Reliability**   | Guaranteed delivery & order      | No guarantee                      |
+| **Speed**         | Slower (due to checks/retries)   | Faster (fire-and-forget)          |
+| **Use Cases**     | APIs, WebSockets, DB, file xfer  | Games, calls, streaming, DNS      |
+| **Your Involvement** | Almost zero (handled by OS/libs) | Sometimes handle packet loss yourself |
+
+---
+
+## 🎯 What a Full-Stack Dev Really Needs
+
+- **TCP** = backbone of APIs and DBs.  
+  You won’t code TCP directly, but everything you use (Express, Django, Prisma, Axios, etc.) sits on it.
+
+- **UDP** = real-time systems.  
+  If you ever touch WebRTC, game servers, or live streaming,  
+  understand that you can’t rely on delivery → need custom logic for retries or ignoring lost packets.
+
+---
+
+## 🛠 Debugging Tips
+- If your **HTTP call hangs** → usually a TCP connection issue.
+- If your **video call glitches** → probably UDP packet loss.

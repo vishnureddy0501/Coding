@@ -1,0 +1,12 @@
+When is a DP Problem?
+---------------------
+1. count the number of ways
+2. there are different ways to do a problems. find the minimum / maximum result.
+3. trying all possible ways.
+
+44. Wildcard Matching
+494. Target Sum (2 approaches: Using recursion, Using dynamic programming)
+983. Minimum Cost For Tickets
+62. Unique Paths (doing this using DP is not optimal. We has more optial than dp. which i have to find & learn)
+1463. Cherry Pickup II
+2035. Partition Array Into Two Arrays to Minimize Sum Difference (tried method not working because of constraints)

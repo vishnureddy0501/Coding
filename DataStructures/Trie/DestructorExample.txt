@@ -2,7 +2,6 @@ Example of Destructor code:
 ---------------------------
 free the memory in Destructor.
 
-
 struct Node {
     Node* links[26];
     int cntEndWith = 0;

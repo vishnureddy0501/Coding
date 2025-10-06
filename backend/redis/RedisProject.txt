@@ -1,0 +1,632 @@
+1. Install dependencies
+	mkdir redis-demo
+	cd redis-demo
+	npm init -y
+	npm install express ioredis
+	npm install --save-dev nodemon
+
+2. Project structure
+	redis-demo/
+	│── index.js
+	│── services/
+	│    └── redisClient.js
+	│── routes/
+	│    └── productRoutes.js
+	│── controllers/
+	│    └── productController.js
+
+3. services/redisClient.js
+
+	Centralized Redis connection using ioredis (good for production).
+
+	import Redis from "ioredis";
+
+	const redis = new Redis({
+	host: "127.0.0.1",  // change if using Docker/remote
+	port: 6379,
+	retryStrategy(times) {
+		return Math.min(times * 50, 2000); // reconnect delay
+	},
+	});
+
+	redis.on("connect", () => console.log("✅ Connected to Redis"));
+	redis.on("error", (err) => console.error("❌ Redis error", err));
+
+	export default redis;
+
+4. controllers/productController.js
+
+	Implements caching logic.
+
+	import redis from "../services/redisClient.js";
+
+	// Dummy DB (simulate slow query)
+	const productsDB = [
+	{ id: 1, name: "Laptop", price: 800 },
+	{ id: 2, name: "Phone", price: 500 },
+	{ id: 3, name: "Headphones", price: 120 },
+	];
+
+	export const getProducts = async (req, res) => {
+	try {
+		const cacheKey = "products";
+
+		// 1️⃣ Check Redis cache first
+		const cached = await redis.get(cacheKey);
+		if (cached) {
+		console.log("📦 Serving from cache");
+		return res.json(JSON.parse(cached));
+		}
+
+		// 2️⃣ Simulate DB fetch (slow)
+		console.log("🐢 Fetching from DB...");
+		const data = productsDB;
+
+		// 3️⃣ Store in Redis (expires in 60s)
+		await redis.set(cacheKey, JSON.stringify(data), "EX", 60);
+
+		res.json(data);
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ error: "Server error" });
+	}
+	};
+
+5. routes/productRoutes.js
+	import { Router } from "express";
+	import { getProducts } from "../controllers/productController.js";
+
+	const router = Router();
+
+	router.get("/", getProducts);
+
+	export default router;
+
+6. index.js
+	import express from "express";
+	import productRoutes from "./routes/productRoutes.js";
+
+	const app = express();
+	const PORT = process.env.PORT || 5000;
+
+	app.use(express.json());
+
+	// Routes
+	app.use("/api/products", productRoutes);
+
+	app.listen(PORT, () => {
+	console.log(`🚀 Server running on http://localhost:${PORT}`);
+	});
+
+7. package.json scripts
+	"scripts": {
+	"dev": "nodemon index.js",
+	"start": "node index.js"
+	}
+
+▶ Run the project
+	Make sure Redis is running:
+		redis-server
+	Then:
+		npm run dev
+
+
+Visit:
+👉 http://localhost:5000/api/products
+
+First request → slow (fetch from DB, then cache).
+Next requests → instant ⚡ (from Redis).
+You can later replace the productsDB with MongoDB or SQL queries, no code changes in caching logic.
+
+
+Would you like me to also show you how to cache per product (/api/products/:id) instead of caching the whole list? That’s often more useful in real e-commerce.
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+We’ll add a new route:
+👉 GET /api/products/:id → fetch one product, cache it individually.
+
+1. Update controllers/productController.js
+	import redis from "../services/redisClient.js";
+
+	// Dummy DB (simulate slow query)
+	const productsDB = [
+	{ id: 1, name: "Laptop", price: 800 },
+	{ id: 2, name: "Phone", price: 500 },
+	{ id: 3, name: "Headphones", price: 120 },
+	];
+
+	// Fetch all products (cached as a list)
+	export const getProducts = async (req, res) => {
+	try {
+		const cacheKey = "products";
+
+		const cached = await redis.get(cacheKey);
+		if (cached) {
+		console.log("📦 Serving products from cache");
+		return res.json(JSON.parse(cached));
+		}
+
+		console.log("🐢 Fetching all products from DB...");
+		const data = productsDB;
+
+		await redis.set(cacheKey, JSON.stringify(data), "EX", 60);
+
+		res.json(data);
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ error: "Server error" });
+	}
+	};
+
+	// Fetch single product (cached individually)
+	export const getProductById = async (req, res) => {
+	try {
+		const { id } = req.params;
+		const cacheKey = `product:${id}`;
+
+		// 1️⃣ Check cache
+		const cached = await redis.get(cacheKey);
+		if (cached) {
+		console.log(`📦 Serving product ${id} from cache`);
+		return res.json(JSON.parse(cached));
+		}
+
+		// 2️⃣ Simulate DB query
+		console.log(`🐢 Fetching product ${id} from DB...`);
+		const product = productsDB.find((p) => p.id === Number(id));
+
+		if (!product) {
+		return res.status(404).json({ error: "Product not found" });
+		}
+
+		// 3️⃣ Store in Redis (expires in 60s)
+		await redis.set(cacheKey, JSON.stringify(product), "EX", 60);
+
+		res.json(product);
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ error: "Server error" });
+	}
+	};
+
+2. Update routes/productRoutes.js
+	import { Router } from "express";
+	import { getProducts, getProductById } from "../controllers/productController.js";
+
+	const router = Router();
+
+	router.get("/", getProducts);
+	router.get("/:id", getProductById);
+
+	export default router;
+
+Do you want me to also show you how to invalidate/update Redis cache when data changes (like product update/delete)? That’s the real “production” step.
+---------------------------------------------------------------------------------------
+
+Perfect 👌 Now let’s add cache invalidation / updating so our Redis cache stays in sync when products change.
+
+We’ll extend the project with simple update and delete APIs for products, and make sure Redis cache is cleared (or updated).
+
+1. Update controllers/productController.js
+	import redis from "../services/redisClient.js";
+
+	// Dummy DB (in-memory for demo)
+	let productsDB = [
+	{ id: 1, name: "Laptop", price: 800 },
+	{ id: 2, name: "Phone", price: 500 },
+	{ id: 3, name: "Headphones", price: 120 },
+	];
+
+	// 🔹 Fetch all products (cached as list)
+	export const getProducts = async (req, res) => {
+	try {
+		const cacheKey = "products";
+
+		const cached = await redis.get(cacheKey);
+		if (cached) {
+		console.log("📦 Serving products from cache");
+		return res.json(JSON.parse(cached));
+		}
+
+		console.log("🐢 Fetching all products from DB...");
+		const data = productsDB;
+
+		await redis.set(cacheKey, JSON.stringify(data), "EX", 60);
+		res.json(data);
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ error: "Server error" });
+	}
+	};
+
+	// 🔹 Fetch single product
+	export const getProductById = async (req, res) => {
+	try {
+		const { id } = req.params;
+		const cacheKey = `product:${id}`;
+
+		const cached = await redis.get(cacheKey);
+		if (cached) {
+		console.log(`📦 Serving product ${id} from cache`);
+		return res.json(JSON.parse(cached));
+		}
+
+		console.log(`🐢 Fetching product ${id} from DB...`);
+		const product = productsDB.find((p) => p.id === Number(id));
+
+		if (!product) {
+		return res.status(404).json({ error: "Product not found" });
+		}
+
+		await redis.set(cacheKey, JSON.stringify(product), "EX", 60);
+		res.json(product);
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ error: "Server error" });
+	}
+	};
+
+	// 🔹 Update a product (and invalidate cache)
+	export const updateProduct = async (req, res) => {
+	try {
+		const { id } = req.params;
+		const { name, price } = req.body;
+
+		let product = productsDB.find((p) => p.id === Number(id));
+		if (!product) return res.status(404).json({ error: "Product not found" });
+
+		// Update in "DB"
+		product.name = name || product.name;
+		product.price = price || product.price;
+
+		// Invalidate caches
+		await redis.del(`product:${id}`);
+		await redis.del("products");
+
+		console.log(`♻ Cache cleared for product:${id} & products list`);
+		res.json(product);
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ error: "Server error" });
+	}
+	};
+
+	// 🔹 Delete a product (and invalidate cache)
+	export const deleteProduct = async (req, res) => {
+	try {
+		const { id } = req.params;
+
+		const index = productsDB.findIndex((p) => p.id === Number(id));
+		if (index === -1) return res.status(404).json({ error: "Product not found" });
+
+		// Remove from "DB"
+		const deleted = productsDB.splice(index, 1);
+
+		// Invalidate caches
+		await redis.del(`product:${id}`);
+		await redis.del("products");
+
+		console.log(`🗑 Product ${id} deleted. Cache cleared.`);
+		res.json({ message: "Product deleted", deleted });
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ error: "Server error" });
+	}
+	};
+
+2. Update routes/productRoutes.js
+	import { Router } from "express";
+	import {
+	getProducts,
+	getProductById,
+	updateProduct,
+	deleteProduct,
+	} from "../controllers/productController.js";
+
+	const router = Router();
+
+	router.get("/", getProducts);
+	router.get("/:id", getProductById);
+	router.put("/:id", updateProduct);   // update product
+	router.delete("/:id", deleteProduct); // delete product
+
+	export default router;
+
+
+⚡ Production Takeaways
+---------------------------
+	Always clear both specific & related caches when data changes.
+	Consider Redis namespaces (product:123, category:phones) for better cache management.
+	For large apps → use a pub/sub invalidation strategy across microservices.
+
+Want me to extend this into a Redis + MongoDB integration (real DB instead of dummy array), or keep it in-memory for now?
+-------------------------------------------------------------------------------------------------------------------------
+
+2. Project structure (updated)
+	redis-demo/
+	│── index.js
+	│── services/
+	│    ├── redisClient.js
+	│    └── db.js (write database connection code here)
+	│── models/
+	│    └── Product.js
+	│── controllers/
+	│    └── productController.js
+	│── routes/
+	│    └── productRoutes.js
+
+
+5. controllers/productController.js
+
+	Now uses MongoDB instead of dummy array:
+
+	import redis from "../services/redisClient.js";
+	import Product from "../models/Product.js";
+
+	// 🔹 Fetch all products (cached as list)
+	export const getProducts = async (req, res) => {
+	try {
+		const cacheKey = "products";
+
+		const cached = await redis.get(cacheKey);
+		if (cached) {
+		console.log("📦 Serving products from cache");
+		return res.json(JSON.parse(cached));
+		}
+
+		console.log("🐢 Fetching all products from MongoDB...");
+		const products = await Product.find();
+
+		await redis.set(cacheKey, JSON.stringify(products), "EX", 60);
+		res.json(products);
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ error: "Server error" });
+	}
+	};
+
+	// 🔹 Fetch single product
+	export const getProductById = async (req, res) => {
+	try {
+		const { id } = req.params;
+		const cacheKey = `product:${id}`;
+
+		const cached = await redis.get(cacheKey);
+		if (cached) {
+		console.log(`📦 Serving product ${id} from cache`);
+		return res.json(JSON.parse(cached));
+		}
+
+		console.log(`🐢 Fetching product ${id} from MongoDB...`);
+		const product = await Product.findById(id);
+
+		if (!product) return res.status(404).json({ error: "Product not found" });
+
+		await redis.set(cacheKey, JSON.stringify(product), "EX", 60);
+		res.json(product);
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ error: "Server error" });
+	}
+	};
+
+	// 🔹 Create product
+	export const createProduct = async (req, res) => {
+	try {
+		const { name, price } = req.body;
+
+		const newProduct = await Product.create({ name, price });
+
+		// Invalidate list cache
+		await redis.del("products");
+
+		res.status(201).json(newProduct);
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ error: "Server error" });
+	}
+	};
+
+	// 🔹 Update product (and invalidate cache)
+	export const updateProduct = async (req, res) => {
+	try {
+		const { id } = req.params;
+		const { name, price } = req.body;
+
+		const product = await Product.findByIdAndUpdate(
+		id,
+		{ name, price },
+		{ new: true }
+		);
+
+		if (!product) return res.status(404).json({ error: "Product not found" });
+
+		// Invalidate caches
+		await redis.del(`product:${id}`);
+		await redis.del("products");
+
+		res.json(product);
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ error: "Server error" });
+	}
+	};
+
+	// 🔹 Delete product (and invalidate cache)
+	export const deleteProduct = async (req, res) => {
+	try {
+		const { id } = req.params;
+
+		const deleted = await Product.findByIdAndDelete(id);
+		if (!deleted) return res.status(404).json({ error: "Product not found" });
+
+		// Invalidate caches
+		await redis.del(`product:${id}`);
+		await redis.del("products");
+
+		res.json({ message: "Product deleted", deleted });
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ error: "Server error" });
+	}
+	};
+
+6. routes/productRoutes.js
+	import { Router } from "express";
+	import {
+	getProducts,
+	getProductById,
+	createProduct,
+	updateProduct,
+	deleteProduct,
+	} from "../controllers/productController.js";
+
+	const router = Router();
+
+	router.get("/", getProducts);
+	router.get("/:id", getProductById);
+	router.post("/", createProduct);
+	router.put("/:id", updateProduct);
+	router.delete("/:id", deleteProduct);
+
+	export default router;
+
+7. index.js
+	import express from "express";
+	import { connectDB } from "./services/db.js";
+	import productRoutes from "./routes/productRoutes.js";
+
+	const app = express();
+	const PORT = process.env.PORT || 5000;
+
+	// Middleware
+	app.use(express.json());
+
+	// Routes
+	app.use("/api/products", productRoutes);
+
+	// Connect DB & start server
+	connectDB().then(() => {
+	app.listen(PORT, () => {
+		console.log(`🚀 Server running on http://localhost:${PORT}`);
+	});
+	});
+
+suppose i have api params as node, period, segment_id .. 5-6 params. how do i store the data in redis api
+---------------------------------------------------------------------------------------------------------
+
+Use a consistent namespace and stringify params into the key:
+	<namespace>:<param1>:<param2>:<param3>...
+Example:
+	report:node=us-east:period=2025-09:segment=123
+
+
+
+👉 Do you want me to show you how to handle multiple params dynamically (without hardcoding node, period, etc.) so the cache key is automatically built from whatever query params the request has?
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+🔧 Helper: Cache Key Builder
+// utils/cacheKey.js
+export function buildCacheKey(namespace, params) {
+  // Sort keys alphabetically to ensure consistency
+  const sortedKeys = Object.keys(params).sort();
+
+  const keyParts = sortedKeys.map((k) => `${k}=${params[k]}`);
+  return `${namespace}:` + keyParts.join(":");
+}
+
+
+✅ Example:
+
+buildCacheKey("report", { node: "us-east", segment_id: 123, period: "2025-09" });
+// "report:node=us-east:period=2025-09:segment_id=123"
+
+
+Even if query params are passed in different orders, the key will always be the same.
+
+🔧 Controller Example (reportController.js)
+import redis from "../services/redisClient.js";
+import { buildCacheKey } from "../utils/cacheKey.js";
+
+// Simulated DB/data fetch
+const fetchFromDB = async (params) => {
+  return {
+    ...params,
+    revenue: Math.floor(Math.random() * 10000), // demo value
+  };
+};
+
+export const getReport = async (req, res) => {
+  try {
+    const params = req.query; // node, period, segment_id, etc.
+
+    // Build unique key dynamically
+    const cacheKey = buildCacheKey("report", params);
+
+    // 1️⃣ Check cache
+    const cached = await redis.get(cacheKey);
+    if (cached) {
+      console.log("📦 Serving from cache:", cacheKey);
+      return res.json(JSON.parse(cached));
+    }
+
+    // 2️⃣ Fetch from DB/external service
+    console.log("🐢 Fetching from DB...");
+    const data = await fetchFromDB(params);
+
+    // 3️⃣ Save to Redis (TTL = 5 min)
+    await redis.set(cacheKey, JSON.stringify(data), "EX", 300);
+
+    res.json(data);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+🔧 Router (reportRoutes.js)
+---------------------------
+	import { Router } from "express";
+	import { getReport } from "../controllers/reportController.js";
+
+	const router = Router();
+	router.get("/", getReport);
+
+	export default router;
+
+✅ Example Usage
+------------------
+	Request
+	GET /api/report?node=us-east&period=2025-09&segment_id=123
+
+	Redis Key Stored
+	report:node=us-east:period=2025-09:segment_id=123
+
+
+	If you call with params in a different order:
+
+	/api/report?segment_id=123&period=2025-09&node=us-east
+
+
+	➡ Still resolves to the same cache key ✅.
+
+	⚡ Bonus: Cache Invalidation
+
+	When underlying data changes:
+
+	const cacheKey = buildCacheKey("report", { node: "us-east", period: "2025-09", segment_id: 123 });
+	await redis.del(cacheKey);
+
+
+	Or clear all reports cache:
+
+	await redis.keys("report:*").then(keys => {
+	if (keys.length) redis.del(keys);
+	});
+
+👉 Do you want me to also show you how to add a middleware-based caching system (where you can apply Redis caching to any API route without repeating logic in every controller)?
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Do you want me to also show you a generic cache invalidation utility (so when data changes you can easily clear related keys, like report:*)?
+---------------------------------------------------------------------------------------------------------------------------------------------

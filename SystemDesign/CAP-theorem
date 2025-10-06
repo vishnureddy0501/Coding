@@ -2,6 +2,11 @@ What is CAP theorem?
 	You can only guarantee two of the following three properties at the same time:
 	Consistency, Availability, Partition tolerance
 
+
+Consistency -> all nodes/users see the same data at the same time.
+Availability -> every request gets a response (successful or not).
+Partition Tolerance -> system works despite network failures between nodes.
+
 C — Consistency
 ---------------
 Every read receives the most recent write (or an error).
@@ -31,3 +36,57 @@ So you must choose between:
 AP (Availability + Partition tolerance) → Sacrifice consistency (may serve stale data).
 Example: DynamoDB, Cassandra.
 
+
+
+
+Why we can't guarantee all 3:
+-----------------------------
+userA -> writes data to some server in USA   ----------------
+															|   we need to replicate the same data in india server also.  (if this fails)
+userB -> reads data from India server.          <-------------
+
+
+if Network fails b/w them?
+--------------------------
+a. Stop serving the data (consistency)
+b. show stale data (availability)
+
+
+
+Examples where we need strong consistency:
+----------------------------------------
+1. Ticket Booking platform
+	if we sell a ticket everyone needs to see it as unavailable, without delay.
+
+2. Inventory System (Amazon)
+	Can't sell the same last item to multiple customers
+
+3. Financial Systems
+ - stock traders must be executed in strict order.
+
+
+
+ If you don't need strong consistency then choose availability:
+ -------------------------------------------------------------
+ 1. social media app
+	if personA in USA adds a post in twitter, it is fine if personB don't see it for some time
+
+2. Streaming service like netflix
+	if a movie added in USA service, it is find people in India server don't see it for some time.
+
+
+
+How does it influence my design?
+--------------------------------
+Strong consistency
+	-> implement distributed transactions
+	-> accept higher latency. (show loaders whey processing data)
+	-> Example tools
+			-> PostgreSQL
+			-> NoSQL with strong Consistency mode (DynamoDB)
+
+Availability
+	-> use multiple replicas
+	-> tools
+		-> DynamoDB (in multi-AZ mode)
+		-> Cassandra

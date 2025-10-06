@@ -1,0 +1,5 @@
+Redis: 
+	Inmemory Database.
+	stores data in RAM (very fast).
+	Traditional Databases stores data in DISC.
+	If the server crashes, then we loose all the data in redis. (Hence we cannot use depend entirely on redis)

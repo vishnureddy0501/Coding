@@ -1,0 +1,19 @@
+How do Microservices Communicates?
+----------------------------------
+1. Rest API Calls.
+2. Using message broker. (Apache Artemis, Active MQ, Rabbit MQ)
+3. Using Event streaming (Apache Kafka)
+
+
+
+1. Service Discovery & Registration Pattern
+--------------------------------------------
+	if service A wants to call service B then we need IP Address, Port number of Service B. 
+	SDRP helps us to get the Necessary Ip's, ports.
+
+
+
+
+
+Database design in Microservices:
+---------------------------------

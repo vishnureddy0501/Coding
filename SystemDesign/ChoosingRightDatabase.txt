@@ -1,0 +1,23 @@
+Types of Data:
+--------------
+	Structured → SQL (PostgreSQL, MySQL)
+	------------------------------------
+		Fixed schema
+		All records must have same fields.
+	
+	Semi-Structured → NoSQL (MongoDB, Elasticsearch):
+	-------------------------------------------------
+		it has some structure. but schema is not fixed like SQL Databases.
+		formats: JSON
+		Different records may have different fields.
+		eg:
+			{ "id": 1, "name": "Vishnu", "skills": ["React", "Node.js"] }
+			{ "id": 2, "name": "Priya", "location": "Hyderabad", "hobbies": ["Music"] }
+
+
+	Unstructured → File/object storage (S3, Hadoop, GCP Storage):
+	--------------------------------------------------------------
+		No Predefined fomat / model.
+		Hard to store in Relational Databases.
+
+		Images, files, videos

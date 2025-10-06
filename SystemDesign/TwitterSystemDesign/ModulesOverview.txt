@@ -1,0 +1,74 @@
+===========================================
+🐦 TWITTER SYSTEM DESIGN - MODULES OVERVIEW
+===========================================
+
+1. USER & AUTHENTICATION MODULE
+   - User Profiles (name, handle, bio, profile pic, followers count)
+   - Authentication (OAuth, sessions, password hashing)
+   - Authorization (who can see what, privacy settings)
+   - Account Management (signup, delete, block/mute users)
+
+2. TWEET MANAGEMENT MODULE
+   - Create Tweet (text, media, polls)
+   - Delete/Edit Tweet (new Twitter supports edit window)
+   - Thread Management (linking tweets as a chain)
+   - Media Uploads (images, videos → stored in object storage like S3/CDN)
+
+3. TIMELINE & FEED MODULE
+   - Home Timeline (tweets from people you follow + recommendations)
+   - User Timeline (all tweets from a user)
+   - Mentions & Replies
+   - Algorithmic Ranking (engagement-based ordering)
+
+4. FOLLOW & SOCIAL GRAPH MODULE
+   - Follow / Unfollow
+   - Followers List, Following List
+   - Recommendations ("Who to Follow")
+   - Graph Storage (maintain edges between users efficiently)
+
+5. ENGAGEMENT MODULE
+   - Likes, Retweets, Quotes
+   - Replies/Comments
+   - View Counts
+   - Bookmarks
+
+6. NOTIFICATION MODULE
+   - Push Notifications (likes, follows, replies)
+   - Email Notifications
+   - In-App Notifications Tab
+   - Real-time via WebSockets
+
+7. SEARCH & DISCOVERY MODULE
+   - Full-text search (tweets, hashtags, users)
+   - Trending Topics
+   - Hashtag Pages
+   - Explore Page (curated recommendations)
+
+8. DIRECT MESSAGING MODULE
+   - One-to-One Chat
+   - Group Chat
+   - Media in DMs
+   - End-to-End Encryption (newer feature)
+
+9. CONTENT MODERATION & SAFETY MODULE
+   - Spam detection
+   - Abuse reporting
+   - Shadow bans / account suspensions
+   - Rate Limiting (protect from spam & API abuse)
+
+10. INFRASTRUCTURE & BACKEND SERVICES
+    - Database (sharded user/tweet storage)
+    - Caching Layer (Redis/Memcache for timelines & counts)
+    - Message Queues (Kafka for fanout of tweets to followers)
+    - Media CDN (for fast image/video delivery)
+    - Background Jobs (indexing, analytics)
+
+11. ANALYTICS & OBSERVABILITY
+    - Tweet Analytics (views, impressions, engagement rate)
+    - User Analytics (profile visits, follower growth)
+    - Logging, Monitoring, Alerts for internal systems
+
+12. MONETIZATION MODULE
+    - Ads (promoted tweets)
+    - Subscriptions (Twitter Blue)
+    - Paid APIs (Enterprise access)

@@ -6,6 +6,3 @@ ANS: no coz in the queue we store the distance coming from a specific parent nod
 conclusion:
 ------------
 always store distance also in priority_queue.
-
-
-note: some of the algorithms in file is wrong. make the change.

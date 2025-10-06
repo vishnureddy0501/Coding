@@ -1,0 +1,46 @@
+
+important template if you have infinite supply.
+----------------------------------------------
+coin change.
+class Solution {
+public:
+    int coinChange(vector<int>& coins, int amount) {
+        int n = coins.size();
+        vector<int> prev(amount+1, INT_MAX), curr(amount+1, INT_MAX);
+        curr[0] = 0;
+        for (int j = 0; j <= amount; j++) {
+            curr[j] = ((j %coins[0]) == 0 )? (j / coins[0]) : INT_MAX;
+        }
+        prev = curr;
+        for (int i = 1; i < n; i++) {
+            for (int j = 0; j <= amount; j++) {
+                if (j - coins[i] >= 0 && curr[j-coins[i]] != INT_MAX) {
+                    curr[j] = min(prev[j], curr[j-coins[i]] + 1);
+                } else {
+                    curr[j] = prev[j];
+                }
+            }
+            prev = curr;
+        }
+        return curr[amount] == INT_MAX ? -1 : curr[amount];
+    }
+};
+
+Optimal:
+--------
+class Solution {
+public:
+    int coinChange(vector<int>& coins, int amount) {
+        const long long INF = 1e15;
+        vector<long long> dp(amount + 1, INF);
+        dp[0] = 0;
+
+        for (int coin : coins) {
+            for (int j = coin; j <= amount; j++) {
+                dp[j] = min(dp[j], dp[j - coin] + 1);
+            }
+        }
+
+        return dp[amount] == INF ? -1 : dp[amount];
+    }
+};

@@ -1,0 +1,52 @@
+⚡ Super-Simple Analogy
+   Typing URL = dialing a friend’s number.
+   DNS = phonebook that tells you their number.
+   TCP/TLS = saying hello and making sure the call is secure.
+   HTTP request = asking your friend a question.
+   HTTP response = your friend giving the answer.
+   Rendering = you writing down the answer neatly on paper so you can read it.
+
+
+
+🔗 What happens when you hit a URL in the browser (e.g., https://example.com)
+
+1. You type the URL & press Enter
+   - Browser says: "I need to go to example.com."
+
+2. DNS Lookup (finding the address)
+   - Browser asks: "What is the IP address of example.com?"
+   - DNS replies: "It’s at 93.184.216.34."
+
+3. Browser connects to the server (TCP + TLS)
+   - Browser knocks on that IP address (server).
+   - They shake hands → "Hi, let’s talk securely (HTTPS)."
+   - They agree on encryption (TLS/SSL).
+
+4. Browser sends an HTTP request
+   Example request:
+   GET / HTTP/1.1
+   Host: example.com
+   - It’s like saying: "Hey server, please give me the homepage."
+
+5. Server processes the request
+   - The server checks what you asked for.
+   - Runs backend code if needed (PHP, Node.js, Django, etc.).
+   - Collects data (maybe from a database).
+   - Prepares an HTTP response (HTML, JSON, etc.).
+
+6. Browser receives the response
+   Example response:
+   200 OK
+   Content-Type: text/html
+   - And the HTML page content.
+
+7. Browser renders the page
+   - Browser reads the HTML.
+   - Downloads extra stuff (CSS, JS, images).
+   - Builds the page step by step (DOM + CSSOM → Render Tree).
+   - Runs JavaScript.
+   - Displays the final page on your screen.
+
+
+Difference b/w HTTP and HTTPs:
+-----------------------------

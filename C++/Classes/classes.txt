@@ -1,0 +1,78 @@
+1. Declaring a Class
+	class MyClass {
+		public:       // access specifier
+			int x;    // variable (member)
+			void sayHello() {   // function (method)
+				cout << "Hello, CP!" << endl;
+			}
+	};
+
+2. Creating (Instantiating) Objects
+	You use the class to create objects:
+	MyClass obj;   // object instantiation
+	obj.x = 10;    // access public variable
+	obj.sayHello();  // call method
+3. Constructors
+	A constructor is a special function that runs when you create an object.
+	class Point {
+	public:
+		int x, y;
+
+		// Default constructor
+		Point() {
+			x = y = 0;
+		}
+
+		// Parameterized constructor
+		Point(int _x, int _y) {
+			x = _x;
+			y = _y;
+		}
+	};
+
+	Usage:
+		Point p1;        // calls default constructor
+		Point p2(3, 4);  // calls parameterized constructor
+
+4. Access Specifiers
+	public: accessible anywhere.
+	private: hidden (default in classes).
+	protected: like private, but visible in child classes.
+	Example:
+		class Demo {
+		private:
+			int secret;
+		public:
+			int val;
+
+			void setSecret(int s) { secret = s; }
+			int getSecret() { return secret; }
+		};
+
+	Usage:
+		Demo d;
+		d.val = 5;          // allowed
+		d.setSecret(10);    // allowed
+		// d.secret = 7;    // ❌ not allowed (private)
+
+5. References to Objects
+	You can use references (&) to avoid copying:
+	Demo d;
+	Demo &ref = d;    // ref refers to d
+	ref.val = 42;
+	cout << d.val;    // prints 42
+
+6. Static Members
+	Shared across all objects (only one copy exists).
+
+	class Counter {
+		public:
+			static int count;  // declaration
+			Counter() { count++; }
+	};
+
+	// definition outside class
+	int Counter::count = 0;
+	Usage:
+		Counter c1, c2;
+		cout << Counter::count;  // 2

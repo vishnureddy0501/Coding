@@ -9,6 +9,8 @@ DAG must have one or more nodes with outdegree 0.
 Longest path b/w 2 nodes in a DAG must be finite.
 
 
+Using Dfs:
+----------
 #include <bits/stdc++.h> 
 void dfs(vector<vector<int>>& graph, vector<int>& visited, vector<int>& st, int index) {
     visited[index] = 1;

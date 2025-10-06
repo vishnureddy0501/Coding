@@ -1,0 +1,172 @@
+// ============================================================
+// 🎭 THEATER SEATING SYSTEM DESIGN (BOOKMYSHOW-STYLE GRID)
+// ============================================================
+
+// 1. CORE COLLECTIONS & SCHEMA
+// ----------------------------
+// We need to represent:
+// - The theater & screen layout
+// - Seats with X/Y positions (for rendering grid)
+// - Seat type & pricing
+// - Status (OPEN, LOCKED, BOOKED)
+
+const TheaterSchema = {
+  theaterId: String,         // UUID
+  name: String,              // "PVR Koramangala"
+  city: String,
+  screens: [String],         // List of screenIds in this theater
+  createdAt: Date,
+  updatedAt: Date
+};
+
+const ScreenSchema = {
+  screenId: String,          // UUID
+  theaterId: String,         // FK → Theater
+  name: String,              // "Audi 1"
+  totalSeats: Number,
+  layoutConfig: Object,      // Store row arrangement, types, etc. (explained below)
+  createdAt: Date,
+  updatedAt: Date
+};
+
+const SeatSchema = {
+  seatId: String,            // UUID
+  screenId: String,          // FK → Screen
+  eventId: String,           // FK → Event (movie showtime)
+  row: String,               // e.g. "A", "B", "C"
+  col: Number,               // e.g. 1, 2, 3 (grid position)
+  type: String,              // REGULAR, PREMIUM, RECLINER
+  price: Number,             // Price for this seat
+  status: String,            // OPEN | LOCKED | BOOKED
+  lockedBy: String,          // Session/User ID
+  lockedAt: Date,
+  bookedAt: Date,
+  createdAt: Date,
+  updatedAt: Date
+};
+
+// layoutConfig example (for complex grid):
+// You can store seat map layout in ScreenSchema to render on frontend.
+// This allows you to handle irregular layouts like recliners or gaps.
+
+const layoutConfigExample = {
+  rows: [
+    { row: "A", seats: ["A1", "A2", "A3", "A4"], type: "REGULAR" },
+    { row: "B", seats: ["B1", "B2", null, "B4"], type: "PREMIUM" }, // null = no seat at this position
+    { row: "C", seats: ["C1", "C2"], type: "RECLINER" }
+  ]
+};
+
+// ============================================================
+// 2. DATA FLOW: BACKEND → FRONTEND (GRID FORMATION)
+// ============================================================
+
+// When user selects a showtime, backend does:
+//
+// 1. Fetch screen info (layoutConfig)
+// 2. Fetch seats for that screen+event
+// 3. Merge seat availability + layoutConfig → send structured response
+
+async function getSeatLayout(screenId, eventId) {
+  const screen = await Screen.findOne({ screenId });
+  const seats = await Seat.find({ screenId, eventId });
+
+  // Build a response grid
+  const grid = screen.layoutConfig.rows.map(row => {
+    return {
+      row: row.row,
+      type: row.type,
+      seats: row.seats.map(seatName => {
+        if (!seatName) return null; // empty space in layout
+        const seat = seats.find(s => s.row + s.col === seatName);
+        return {
+          seatId: seat?.seatId,
+          name: seatName,
+          type: seat?.type || row.type,
+          price: seat?.price,
+          status: isSeatAvailable(seat) ? "OPEN" : seat.status
+        };
+      })
+    };
+  });
+
+  return grid;
+}
+
+// Helper: Treat expired locks as OPEN
+function isSeatAvailable(seat) {
+  if (!seat) return false;
+  if (seat.status === "OPEN") return true;
+  if (seat.status === "LOCKED" && Date.now() - seat.lockedAt > 10 * 60 * 1000)
+    return true;
+  return false;
+}
+
+// ============================================================
+// 3. FRONTEND RENDERING
+// ============================================================
+//
+// The frontend will render grid row by row. Example JSON sent:
+//
+// [
+//   { row: "A", type: "REGULAR", seats: [
+//       { seatId: "xyz1", name: "A1", price: 200, status: "OPEN" },
+//       { seatId: "xyz2", name: "A2", price: 200, status: "LOCKED" },
+//       { seatId: "xyz3", name: "A3", price: 200, status: "BOOKED" },
+//       { seatId: "xyz4", name: "A4", price: 200, status: "OPEN" },
+//   ]},
+//   ...
+// ]
+//
+// The frontend uses this to build a visual grid UI (checkbox-like seats).
+
+// ============================================================
+// 4. LOCKING & BOOKING (SAME AS EARLIER)
+// ============================================================
+//
+// When user selects seats, call /lock-seats API.
+// On payment success, call /confirm-booking API (status → BOOKED).
+// Expired locks handled dynamically (no need to manually unlock).
+
+// ============================================================
+// 5. FLEXIBILITY FOR COMPLEX LAYOUTS
+// ============================================================
+//
+// BookMyShow handles theaters with different layouts by:
+// - Storing row-wise structure in layoutConfig
+// - Allowing null entries for gaps (no seat in that grid cell)
+// - Tagging seats with type → used for pricing tiers
+// - Attaching front/rear markers for better UX
+//
+// This allows the same code to work for:
+// ✅ Single-screen theaters
+// ✅ Multiplex with different layouts per screen
+// ✅ Recliner-only screens
+// ✅ Screens with gaps (pillars, aisles)
+
+// ============================================================
+// 6. OPTIMIZATIONS
+// ============================================================
+//
+// - Use MongoDB indexes on {screenId, eventId, row, col}
+// - Cache layoutConfig (rarely changes)
+// - Use Redis to cache seat availability for quick response
+// - Push seat updates via WebSocket / change streams for live updates
+
+
+Key Takeaways
+
+✅ Store X/Y position per seat → this allows perfect grid rendering.
+✅ Keep layoutConfig in DB → frontend just renders it dynamically.
+✅ Null values for gaps → handles irregular layouts.
+✅ Type + price stored per seat → enables different pricing per row or per seat.
+✅ Locks never deleted → just treated as expired when queried.
+✅ Real-time updates via sockets → to show instant lock/unlock.
+
+
+
+
+🏆 Best Practice
+	Store layoutConfig once per screen → ideal for rarely changing data.
+	Cache it in Redis / CDN for ultra-fast seat map rendering.
+	Store seat status (OPEN/LOCKED/BOOKED) separately in Seat collection — because that changes very frequently.

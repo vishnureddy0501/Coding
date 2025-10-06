@@ -1,0 +1,28 @@
+🎯 **Core Problem**
+
+When using **offset-based pagination** (`skip + limit`), adding/deleting records 
+shifts all subsequent records, which breaks paging:
+
+- Page 11 will either **miss one record** or **repeat one record** because the dataset changed 
+  after you fetched page 10.
+
+Even with **cursor-based pagination**, the new record will not show up in already 
+loaded pages — you must **refetch page 1** or **inject it manually** to see it in 
+the current session.
+
+
+✅ **Approaches (Solution Names)**
+
+1. **Offset-based Pagination (`skip/limit`)**
+   - Simple, but suffers from shifting issues when data changes.
+   - ❌ Not recommended for infinite scroll on large datasets.
+
+2. **Cursor-based Pagination (✅ Recommended)**
+   - Uses `cursor` or `search_after` (Mongo `_id`, `createdAt`, etc.).
+   - Stable even when data changes, avoids record duplication or skipping.
+   - ⚠️ Still won’t show new records unless page 1 is reloaded.
+
+3. **Manual UI Injection + Background Refresh**
+   - When you add a record, inject it into the UI immediately.
+   - Optionally trigger a silent refetch of the first page to stay in sync.
+   - Prevents scroll reset and gives instant feedback to the user.

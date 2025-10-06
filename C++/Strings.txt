@@ -92,3 +92,13 @@ logs[i].substr(j + 1, logs[i].size() - left.size())
         }
         return indices;
     }
+
+
+17.
+    bool checkSequenceMatch(const string &dict, const string &s)
+    & → Pass by reference: no copy is made, the function just refers to the original string.
+
+    const → Promise that you won’t modify the original string inside the function.
+
+    Result: faster (no copy) + safer (compiler enforces read-only).
+

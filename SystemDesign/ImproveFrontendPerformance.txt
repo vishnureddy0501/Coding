@@ -1,0 +1,9 @@
+| Technique            | Purpose                     | Example Tool / API |
+|---------------------|--------------------------|------------------|
+| **Lazy Loading**    | Load code only when needed | `React.lazy`, dynamic `import()` |
+| **Code Splitting**  | Split bundle per route     | Webpack, Vite, Next.js |
+| **Tree Shaking**    | Remove unused code         | Webpack, Rollup |
+| **Optimize Images** | Reduce image size & load   | WebP, AVIF, `<img loading="lazy" />` |
+| **CDN + Caching**   | Faster delivery & caching  | Cloudflare, Akamai |
+| **Avoid Re-renders**| Smooth UI performance      | `React.memo`, `useMemo`, `useCallback` |
+| **Remove Unused Libs** | Shrink bundle size       | `webpack-bundle-analyzer` |

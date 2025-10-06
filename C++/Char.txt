@@ -1,0 +1,3 @@
+Char to lowercase:
+----------------
+char ch = tolower('a');

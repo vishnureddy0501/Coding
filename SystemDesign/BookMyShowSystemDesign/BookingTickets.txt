@@ -1,0 +1,169 @@
+# Event Booking System (Production-Ready Design)
+
+## 1. Core Entities & Collections
+
+### **Events Collection**
+| Field       | Type          | Notes |
+|------------|--------------|-------|
+| `eventId`  | String (UUID) | Unique identifier for the event |
+| `name`     | String        | Event name |
+| `description` | String     | Event details |
+| `venue`    | String        | Location |
+| `startTime`| DateTime      | Event start time |
+| `endTime`  | DateTime      | Event end time |
+| `totalSeats` | Number      | Total number of seats available |
+| `createdAt`| DateTime      | Auditing |
+| `updatedAt`| DateTime      | Auditing |
+
+---
+
+### **Seats Collection**
+| Field       | Type          | Notes |
+|------------|--------------|-------|
+| `seatId`   | String (UUID) | Unique per seat |
+| `eventId`  | String        | FK → Events |
+| `section`  | String        | (Optional) for zones |
+| `row`      | String        | Row number (optional) |
+| `number`   | String        | Seat number |
+| `status`   | Enum: `OPEN`, `LOCKED`, `BOOKED` | State machine |
+| `lockedBy` | String        | (Optional) user/session who locked it |
+| `lockedAt` | DateTime      | When the seat was locked |
+| `bookedAt` | DateTime      | When the seat was booked |
+| `bookingRef`| String       | (Optional) booking reference |
+
+---
+
+### **Bookings Collection**
+| Field       | Type          | Notes |
+|------------|--------------|-------|
+| `bookingId`| String (UUID) | Unique booking reference |
+| `eventId`  | String        | FK → Events |
+| `userId`   | String        | User who made the booking |
+| `seatIds`  | Array[String] | All seats in this booking |
+| `status`   | Enum: `PENDING_PAYMENT`, `CONFIRMED`, `CANCELLED` | |
+| `paymentStatus` | Enum: `PENDING`, `SUCCESS`, `FAILED` | |
+| `createdAt`| DateTime      | |
+| `expiresAt`| DateTime      | For unpaid bookings |
+| `transactionId`| String    | Payment gateway reference |
+
+✅ **We never delete `lockedAt`** — it gives audit history and simplifies timeout handling.
+
+---
+
+## 2. Locking Logic (Seat Reservation)
+
+1. **User Selects Seats**
+   - Keep selection only on frontend (no DB writes yet).
+
+2. **User Clicks “Go to Payment” → Lock**
+   - Call backend `/lock-seats` with selected seat IDs.
+   - Backend starts a **transaction**:
+     - Check if seats are `OPEN` or `LOCKED` but expired.
+     - If available → set `status=LOCKED`, `lockedBy=user/session`, `lockedAt=now`.
+     - Return locked seats + `expiresAt = now + 10 mins`.
+
+3. **Frontend Countdown Timer**
+   - Show 10 min timer, warn at 2 min.
+   - If timer expires → redirect back to seat selection page.
+
+---
+
+## 3. Booking Workflow (After Lock)
+
+- **On Payment Success**
+  - Backend `/confirm-booking` verifies seats are still locked and not expired.
+  - Updates `status=BOOKED`, `bookedAt=now`, creates `Bookings` record with `status=CONFIRMED`.
+
+- **On Payment Failure/Timeout**
+  -  Don't update anything in seats collection. as time passes it will be in status = BOOKED and (time-lockedAt) > 10 mins. Hence it is treated as open only.
+
+---
+
+## 4. Handling Expired Locks
+
+```js
+if (seat.status === 'LOCKED' && (Date.now() - seat.lockedAt) > LOCK_TIMEOUT) {
+  // Treat as OPEN
+}
+
+
+// =====================================
+// EVENT BOOKING SYSTEM - SEAT LOGIC
+// =====================================
+
+// 5. Get API for Available Seats
+async function getAvailableSeats(eventId) {
+  const seats = await Seat.find({ eventId });
+  const now = Date.now();
+
+  const availableSeats = seats.filter(seat => {
+    if (seat.status === 'OPEN') return true;
+    if (seat.status === 'LOCKED' && now - seat.lockedAt > 10 * 60 * 1000) return true;
+    return false;
+  });
+
+  return availableSeats;
+}
+
+// 6. Concurrency & Race Conditions (Lock Seats)
+async function lockSeats(selectedSeats, userId) {
+  const now = Date.now();
+
+  const result = await db.seats.updateMany(
+    {
+      seatId: { $in: selectedSeats },
+      $or: [
+        { status: "OPEN" },
+        { status: "LOCKED", lockedAt: { $lt: now - 10 * 60 * 1000 } }
+      ]
+    },
+    { $set: { status: "LOCKED", lockedAt: now, lockedBy: userId } }
+  );
+
+  if (result.matchedCount !== selectedSeats.length) {
+    throw new Error("Some seats are already locked or booked. Please reselect.");
+  }
+
+  return { success: true, lockedUntil: new Date(now + 10 * 60 * 1000) };
+}
+
+// 7. Edge Cases Handling
+/*
+1. Partial Lock Failure:
+   - If not all selected seats can be locked, throw error & ask user to reselect.
+
+2. Payment Success but Seats Expired:
+   - Before confirming booking, re-check that lockedAt + 10 mins > now.
+
+3. Multiple Devices:
+   - Use lockedBy as sessionId to prevent same user from double-locking.
+
+4. Admin Cancels Event:
+   - Update all seats for that event => status: CANCELLED.
+   - Update all related bookings => status: CANCELLED.
+*/
+
+// 8. Performance Optimizations
+/*
+- Add indexes on eventId and status:
+  db.seats.createIndex({ eventId: 1, status: 1 });
+
+- Use Redis to cache seat availability for very large seat maps.
+
+- Use WebSockets or MongoDB Change Streams to push seat status updates
+  in real-time to connected clients.
+*/
+
+
+
+Important Blog to read:
+----------------------
+How can you handle requests that react the server same time:
+   https://interviewready.io/blog/ticket-booking-system-design
+
+
+in single queue approach if too many users cames it fails. Because we can't scale to lakhs of users in a single queue.
+
+
+if any server fails/crashes what will you do?
+---------------------------------------------

@@ -1,0 +1,62 @@
+# 🧠 Code Splitting in Frontend
+
+## What is Code Splitting
+Code splitting is the process of splitting your JavaScript bundle into smaller chunks so that the browser only downloads what it needs at that moment.
+
+- Without code splitting:
+  - Entire app bundled into **one large JS file**
+  - Slow first load → bad UX
+- With code splitting:
+  - Each route or feature is loaded **on demand**
+  - Smaller initial bundle → faster Time-to-Interactive (TTI)
+
+---
+
+## 1️⃣ Basic Code Splitting in React
+
+code splitting + smooth loading experience.
+```jsx
+import React, { lazy, Suspense } from "react";
+
+// Dynamically import component
+const ProductDetails = lazy(() => import("./ProductDetails"));
+
+function App() {
+  return (
+    <div>
+      <h1>Product List</h1>
+      {/* Load ProductDetails only when rendered */}
+      <Suspense fallback={<div>Loading product details...</div>}>
+        <ProductDetails />
+      </Suspense>
+    </div>
+  );
+}
+
+export default App;
+
+
+Route Based Code Splitting:
+--------------------------
+import React, { lazy, Suspense } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+const HomePage = lazy(() => import("./pages/HomePage"));
+const ProductPage = lazy(() => import("./pages/ProductPage"));
+const CartPage = lazy(() => import("./pages/CartPage"));
+
+function App() {
+  return (
+    <Router>
+      <Suspense fallback={<div>Loading page...</div>}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/products/:id" element={<ProductPage />} />
+          <Route path="/cart" element={<CartPage />} />
+        </Routes>
+      </Suspense>
+    </Router>
+  );
+}
+
+export default App;
