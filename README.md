@@ -6,7 +6,7 @@ g++ -o main Revision.cpp
 ./main
 
 
-## very important Questions
+## very important Question(s)
 
 1. Next Greater Element
 
