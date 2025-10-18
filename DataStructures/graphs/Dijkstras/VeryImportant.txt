@@ -6,3 +6,31 @@ ANS: no coz in the queue we store the distance coming from a specific parent nod
 conclusion:
 ------------
 always store distance also in priority_queue.
+
+
+confusion:
+---------🔹 
+
+You see two patterns: Both versions are correct. use Version A(Cost from priority queue)
+
+✅ Version A – uses cost from the priority queue
+	auto [d, u] = pq.top();
+	pq.pop();
+
+	for (auto [v, w] : graph[u]) {
+		if (dist[v] > d + w) {
+			dist[v] = d + w;
+			pq.push({dist[v], v});
+		}
+	}
+
+✅ Version B – uses dist[u] from the distance array
+	auto [d, u] = pq.top();
+	pq.pop();
+
+	for (auto [v, w] : graph[u]) {
+		if (dist[v] > dist[u] + w) {
+			dist[v] = dist[u] + w;
+			pq.push({dist[v], v});
+		}
+	}

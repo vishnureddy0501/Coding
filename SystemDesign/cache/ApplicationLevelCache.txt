@@ -1,0 +1,66 @@
+application level cache:
+-----------------------
+⚙️ What does “Application-Level” mean?
+
+It means the cache lives inside your application’s memory —
+not in the database, not in Redis, not in the browser.
+
+💡 In simpler terms:
+Application-level cache = variables or data stored in your backend’s memory (like Node.js memory) to avoid recomputation or refetching.
+
+❌ Without caching:
+-------------------
+	app.get("/users", async (req, res) => {
+	const users = await db.query("SELECT * FROM users");
+	res.json(users);
+	});
+
+Every time a request comes in → you hit the DB.
+
+✅ With Application-Level Cache:
+--------------------------------
+	let userCache = null;
+
+	app.get("/users", async (req, res) => {
+	if (userCache) {
+		console.log("Returning from cache");
+		return res.json(userCache);
+	}
+
+	const users = await db.query("SELECT * FROM users");
+	userCache = users; // save result in app memory
+	console.log("Fetched from DB and cached");
+
+	res.json(users);
+	});
+
+Now:
+	The first request hits the DB.
+	Later requests return data from userCache (memory).
+	Faster, fewer DB calls.
+
+🔁 You can also add expiration (TTL):
+-------------------------------------
+	let userCache = null;
+	let cacheTime = 0;
+
+	app.get("/users", async (req, res) => {
+	const now = Date.now();
+
+	// Cache valid for 1 minute
+	if (userCache && now - cacheTime < 60000) {
+		return res.json(userCache);
+	}
+
+	const users = await db.query("SELECT * FROM users");
+	userCache = users;
+	cacheTime = now;
+	res.json(users);
+	});
+
+🚫 Limitations of Application-Level Cache
+-------------------------------------------
+Problem								Why it matters
+Lost on restart						When server restarts, memory is cleared.
+Not shared across instances			If you scale to multiple servers, each has its own cache.
+Memory growth						Storing too much can cause memory leaks.

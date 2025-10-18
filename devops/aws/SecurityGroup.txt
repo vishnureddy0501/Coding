@@ -1,0 +1,24 @@
+🧱 What is a Security Group?
+	A Security Group is just like a firewall for your AWS EC2 instance.
+	It decides who can talk to your server and who your server can talk to.
+
+🚪 Inbound Rules → “Who can enter?”
+----------------------------------
+	These rules control traffic coming into your EC2.
+Example:
+	Allow port 22 (SSH) only from your laptop IP → only you can log in.
+	Allow port 8080 from anyone (0.0.0.0/0) → anyone can open your web app.
+👉 Think of this as doors for incoming visitors.
+
+🏃 Outbound Rules → “Where can it go?”
+-------------------------------------
+These rules control traffic leaving your EC2.
+Example:
+	Allow your EC2 to access a database or an external API.
+	Block everything else if you want it more secure.
+👉 Think of this as doors for outgoing connections.
+
+🎯 In simple terms
+Type		Meaning						Example
+Inbound		Who can access your EC2		Allow only your IP to SSH
+Outbound	Where EC2 can connect		Allow EC2 to call your DB

@@ -1,0 +1,18 @@
+without indexing:
+----------------
+Before indexing, the database checks each row in the table to find your data. This is called a full table scan, and it can be slow for large tables. It takes O(N) time to check each id.
+
+with indexing:
+---------------
+search time O(logN)
+If you want to enable indexing in any column, then you just need to add one line of syntax, and all the overhead of creating b-trees, etc, is handled by DB. You don’t need to worry about anything.
+
+
+
+partitioning: (use PostgreSQL for partitioning)
+-------------
+What is the benefit of this partitioning?
+
+When your index file becomes very big, then it also starts showing some performance issues when searching on that large index file. Now, after partitioning, each table has its own index, so searching on smaller tables is faster.
+
+You may be wondering how we know which table to query from. Since before that, we can hit SELECT * FROM users where ID=4 . Don’t worry, you can again hit the same query. Behind the scenes, PostgreSQL is smart. It will find the appropriate table and give you the result. But you can also write this configuration on the application level as well if you want.

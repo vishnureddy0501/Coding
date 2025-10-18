@@ -1,31 +1,31 @@
 Dijakstras algorithm doesn't work for a graph with negative weight cycles.
-if a graph contains atleast 1 negative weight edge, dijkstra algorithm doesn't work.
+if a graph contains atleast 1 negative weight edge involving in a cycle, then dijkstra algorithm doesn't work.
 
 why do we need to use priority_queue in dijkstra?
 --------------------------------------------------
-sortin the queue based on the cost will decrease the number of operations.
+sorting the queue based on the cost will decrease the number of operations.
 Hence store {cost, node} in priority_queue. 
 
+Standard Code:
+--------------
 
-#include <bits/stdc++.h> 
-int shortestPath(vector<vector<pair<int, int>>> &graph, vector<int>& dict, int source) {
-    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> q;
+void dijkstra(int n, vector<vector<pair<int,int>>>& graph, vector<int>& dict, int src) {
+    priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
+    pq.push({0, src});
 
-	// cost first, node second. to sort it based on cost.
-    q.push({0, source});
-    while(q.size() > 0) {
-        auto it = q.top();
-        q.pop();
-        int x = it.second, cost = it.first;
-        for (int i = 0; i < graph[x].size(); i++) {
-            if (dict[graph[x][i].first] > cost + graph[x][i].second) {
-                dict[graph[x][i].first] = cost + graph[x][i].second;
-                q.push({cost + graph[x][i].second, graph[x][i].first}); // cost first, node second
+    while(!pq.empty()) {
+        auto [d, u] = pq.top(); pq.pop();
+        if (d > dist[u]) continue; // skip outdated entries. optional. It improves time complexity
+
+        for (auto [v, w] : graph[u]) {
+            if (dist[v] > d + w) {
+                dist[v] = d + w;
+                pq.push({dist[v], v});
             }
         }
     }
-    return 0;
 }
+
 vector<int> dijkstra(vector<vector<int>> &vec, int n, int edges, int source) {
     vector<vector<pair<int, int>>> graph(n);
     for (int i = 0; i<vec.size(); i++) {

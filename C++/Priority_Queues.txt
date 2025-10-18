@@ -116,8 +116,8 @@ Summary
     std::priority_queue is a powerful tool for managing heaps efficiently.
 
 
-Example of sandy's code:
-------------------------
+Example of sandy's code: (best approach for minHeap)
+----------------------------------------------------
 indirect way of using minHeap
 
 class Solution {
@@ -138,3 +138,17 @@ public:
         return a;
     }
 };
+
+
+
+Custom Sort:
+------------
+    struct queueCustomComparator {
+        bool operator()(const vector<int>& a, const vector<int>& b) {
+            return a[0] < b[0];  // Max-heap (Largest value at top)
+        }
+    };
+
+	priority_queue<vector<int>, vector<vector<int>>, queueCustomComparator> q;
+
+	q.push({ 10, 20});

@@ -1,0 +1,8 @@
+Distributed Systems: for solving a task we need multiple systems. then these group of systems are called distributed systems. 
+
+
+Distributed System means data is stored in multiple servers instead of one, as we saw in horizontal scaling.
+
+
+
+Horizontal scaling is also an example of a distributed system because multiple servers handle requests. But in horizontal scaling one request will complete by one server but in distributed system multiple server will combine to complete one request.

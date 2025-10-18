@@ -1,1 +1,5 @@
 Strivers videos 16 to 27
+
+
+Revision:
+https://leetcode.com/problems/kth-missing-positive-number/description/

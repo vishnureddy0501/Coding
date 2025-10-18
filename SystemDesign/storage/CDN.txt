@@ -1,0 +1,3 @@
+content delivery network:
+------------------------
+examples: AWS CloudFront, Cloudflare CDN

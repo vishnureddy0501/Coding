@@ -1,0 +1,14 @@
+
+
+Machine Learning Research Assistant
+
+Jawaharlal Nehru Technological University, Kakinada
+
+Jul 2022 - May 2023 · 11 mos
+
+Kakinada, Andhra Pradesh, India
+
+● Developed an intelligent traffic signal control system that dynamically adjusts signal timings to optimize traffic flow.
+● Implemented a reinforcement learning-based algorithm that learns from real-time traffic patterns to minimize vehicle wait times.
+● Simulated and evaluated performance in a virtual traffic environment, demonstrating reduced congestion and improved efficiency.
+● Conducted hyperparameter tuning and validation to optimize model performance, prioritizing learning curves and multiple classification metrics to select the best model.

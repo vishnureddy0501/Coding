@@ -1,5 +1,6 @@
     Example Push:
     ------------
+    priority_queue<T, vector<T>, greater<T>> minHeap;
     
     priority_queue< pair<double, vector<int>>, vector<pair<double, vector<int>> >, CustomCompare> minHeap;
 
