@@ -1,0 +1,60 @@
+🔹 What is a Closure?
+	function along with it's lexical Scope is called Closure. (interview definition)
+
+🔹 Example 1: Basic Closure
+function outer() {
+    let name = "Vishnu"; // variable in outer function
+    function inner() {
+        console.log("Hello " + name); // inner function remembers 'name'
+    }
+    return inner;
+}
+
+const greet = outer(); // outer runs and returns inner
+greet();               // inner still remembers 'name'
+
+
+Output:
+	Hello Vishnu
+
+
+✅ Here, inner has a closure over name from outer.
+
+🔹 Example 2: Counter using Closure
+function createCounter() {
+    let count = 0; // private variable
+	function inner () {
+		count++;
+        console.log(count);
+	}
+	return inner;
+}
+
+const counter = createCounter();
+
+counter(); // 1
+counter(); // 2
+counter(); // 3
+
+
+🔹 Key Points
+	Closure:
+	---------
+		function along with it's lexical Scope is called Closure.
+		b has access to lexical Environment of it's parent(a). This is called closure. 
+
+When a function is returned from another function, they still maintains their lexical scope.
+
+
+Uses of Closures:
+------------------
+Currying
+settimeout
+
+	eg: 
+		var i = 10;
+		setTimeout(() => {
+			console.log(i);
+		}, 100);
+
+		callback function in setTimeout is a closure. because it is carrying i value with it. i is from lexical scope of settimeout.

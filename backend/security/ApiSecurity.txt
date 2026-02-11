@@ -1,0 +1,68 @@
+1. Always use Https (If your API is accessible over HTTP → it is already insecure.)
+2. Authentication
+	Most common: JWT token
+		Login → JWT issued → JWT sent with every request
+
+		Header: 
+			Authorization: Bearer <token>
+		JWT should contain:
+			userId, role, expiry (exp)
+			❌ Don’t store sensitive data in JWT
+			❌ Don’t use very long expiry
+		
+		secure cookies:
+		---------------
+			Set-Cookie: token=abc;
+			HttpOnly;
+			Secure;
+			SameSite=Strict;
+
+3. google login, github login etc
+4. autherization
+	role based accesses.
+		function authorize(roles = []) {
+			return (req, res, next) => {
+				if (!roles.includes(req.user.role)) {
+				return res.status(403).json({ message: "Forbidden" });
+				}
+				next();
+			};
+			}
+
+		app.delete("/user/:id", authMiddleware, authorize(["admin"]), deleteUser);
+	
+4. input validation
+5. Rate Limiting & Throttling
+6. refresh tokens, store tokens in http cookies
+7. cors
+	app.use(cors({ origin: "*" })); (it is dangerous)
+
+	muse use: 
+		app.use(cors({
+		origin: ["https://yourdomain.com"],
+		credentials: true
+		}));
+8. logging and monitoring
+	check Failed logins, Authorization failures, Rate limit hits
+	Tools: Datadog / New Relic
+
+9. secrets management
+	never hard code keys. use .env file
+
+10. api versioning
+	/api/v1/users
+	/api/v2/users
+
+
+1️⃣3️⃣ Production-Grade API Security Checklist ✅
+	Must-have (Non-negotiable)
+		✔ HTTPS
+		✔ Auth (JWT / Cookies)
+		✔ Authorization checks
+		✔ Input validation
+		✔ Rate limiting
+		✔ Secure cookies
+		✔ CORS properly configured
+	Advanced (As you scale)
+		✔ OAuth
+		✔ API Gateway

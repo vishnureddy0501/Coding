@@ -1,0 +1,91 @@
+<router-view /> (matched component renders using this)
+
+Navigation without reload:
+--------------------------
+<router-link to="/profile">Profile</router-link>
+
+Navigation with params:
+-----------------------
+<router-link :to="{ name: 'user', params: { id: 10 } }">
+
+example:
+--------
+{
+  path: '/users/:id/:name?', // id is requied param. name is optional param.
+  name: 'user',
+  component: UserView
+}
+
+children	----> Nested routes
+props	---------> Pass route data as props
+meta	 ---------> Custom route data
+
+
+Route params:
+-------------
+path: '/users/:id'
+
+URL:
+	/users/42
+
+Access:
+	this.$route.params.id
+
+When to use params:
+	✔ Required
+	✔ Identify a specific resource
+	✔ SEO-friendly
+
+Examples:
+	/users/42
+	/orders/9821
+	/posts/hello-world
+🚫 Don’t use for filters, sorting, pagination
+
+
+Query Params (query) – Optional / filtering data
+------------------------------------------------
+/users?role=admin&page=2
+
+Access:
+	this.$route.query.role
+
+When to use query params:
+	✔ Optional data
+	✔ Filtering / searching
+	✔ Pagination / sorting
+	✔ UI state
+
+Examples:
+	/products?category=shoes
+	/reports?from=2024&to=2025
+	🚫 Don’t use for required identity
+
+
+Rule of thumb
+-------------
+If the page doesn’t make sense without it → params
+If the page still works without it → query
+
+
+Nested Routes (Layouts & Sections)
+---------------------------------
+Example structure
+{
+  path: '/dashboard',
+  component: DashboardLayout,
+  children: [
+    { path: '', component: DashboardHome },
+    { path: 'users', component: Users },
+    { path: 'settings', component: Settings }
+  ]
+}
+
+URLs:
+	/dashboard
+	/dashboard/users
+	/dashboard/settings
+
+DashboardLayout.vue:
+	<Sidebar />
+	<router-view />

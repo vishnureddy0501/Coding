@@ -1,0 +1,212 @@
+important features:
+-------------------
+Cancel previous requests with AbortController
+Restore scroll position on back navigation
+SSR-safe infinite scroll
+Prefetch next page
+SEO pagination fallback
+
+products.js
+===========
+const state = () => ({
+  items: [],              // accumulated products
+  page: 1,
+  pageSize: 20,
+  hasMore: true,
+  loading: false,
+
+  // query params
+  search: "",
+  filters: {},
+
+  // used to prevent race conditions
+  currentRequestKey: null
+});
+
+
+Why this structure works
+	items → append-only list
+	page → infinite scroll cursor
+	hasMore → stop fetching
+	currentRequestKey → ignore stale responses
+
+getters:
+--------
+const getters = {
+  products: state => state.items,
+  isLoading: state => state.loading,
+  hasMore: state => state.hasMore
+};
+
+
+mutations:
+----------
+const mutations = {
+  RESET_LIST(state) {
+    state.items = [];
+    state.page = 1;
+    state.hasMore = true;
+  },
+
+  FETCH_START(state, requestKey) {
+    state.loading = true;
+    state.currentRequestKey = requestKey;
+  },
+
+  FETCH_SUCCESS(state, { products, hasMore, requestKey }) {
+    if (state.currentRequestKey !== requestKey) return;
+
+    state.items.push(...products);
+    state.hasMore = hasMore;
+    state.page += 1;
+    state.loading = false;
+  },
+
+  FETCH_ERROR(state) {
+    state.loading = false;
+  },
+
+  SET_SEARCH(state, search) {
+    state.search = search;
+  },
+
+  SET_FILTERS(state, filters) {
+    state.filters = filters;
+  }
+};
+
+
+actions:
+--------
+import api from "@/api/products";
+
+const actions = {
+  async fetchProducts({ state, commit }) {
+    if (state.loading || !state.hasMore) return;
+
+    const requestKey = `${state.search}-${JSON.stringify(state.filters)}-${state.page}`;
+
+    commit("FETCH_START", requestKey);
+
+    try {
+      const res = await api.fetchProducts({
+        page: state.page,
+        limit: state.pageSize,
+        search: state.search,
+        filters: state.filters
+      });
+
+      commit("FETCH_SUCCESS", {
+        products: res.items,
+        hasMore: res.items.length === state.pageSize,
+        requestKey
+      });
+
+    } catch (e) {
+      commit("FETCH_ERROR");
+    }
+  },
+
+  updateSearch({ commit, dispatch }, search) {
+    commit("SET_SEARCH", search);
+    commit("RESET_LIST");
+    dispatch("fetchProducts");
+  },
+
+  updateFilters({ commit, dispatch }, filters) {
+    commit("SET_FILTERS", filters);
+    commit("RESET_LIST");
+    dispatch("fetchProducts");
+  }
+};
+
+api calls:
+---------
+// api/products.js
+import axios from "axios";
+
+export default {
+  fetchProducts(params) {
+    return axios.get("/api/products", { params })
+      .then(res => res.data);
+  }
+};
+
+
+
+productlist.vue:
+----------------
+<template>
+  <div ref="scrollContainer" class="list">
+    <virtual-list
+      :data-key="'id'"
+      :data-sources="products"
+      :data-component="ProductCard"
+      :keeps="20"
+    />
+    <div v-if="loading">Loading...</div>
+  </div>
+</template>
+
+<script>
+import { mapGetters } from "vuex";
+import VirtualList from "vue-virtual-scroll-list";
+import ProductCard from "./ProductCard.vue";
+
+export default {
+  components: { VirtualList, ProductCard },
+
+  computed: {
+    ...mapGetters("products", ["products", "isLoading", "hasMore"]),
+    loading() {
+      return this.isLoading;
+    }
+  },
+
+  mounted() {
+    this.$store.dispatch("products/fetchProducts");
+    this.initScroll();
+  },
+
+  methods: {
+    initScroll() {
+      const el = this.$refs.scrollContainer;
+
+      el.addEventListener("scroll", () => {
+        if (
+          el.scrollTop + el.clientHeight >= el.scrollHeight - 200
+        ) {
+          this.$store.dispatch("products/fetchProducts");
+        }
+      });
+    }
+  }
+};
+</script>
+
+
+searchWithDebounce:
+------------------
+<input
+  v-model="search"
+  @input="onSearch"
+/>
+
+<script>
+export default {
+  data() {
+    return {
+      search: "",
+      timer: null
+    };
+  },
+  methods: {
+    onSearch() {
+      clearTimeout(this.timer);
+      this.timer = setTimeout(() => {
+        this.$store.dispatch("products/updateSearch", this.search);
+      }, 400);
+    }
+  }
+};
+</script>

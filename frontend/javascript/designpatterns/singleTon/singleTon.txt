@@ -1,0 +1,38 @@
+A singleton means: only ONE instance exists in the entire app.
+
+example: 
+-------
+const config = {
+  apiUrl: "https://api.example.com",
+  timeout: 5000
+};
+
+export default config;
+
+use the same endpoint through out the api. single source of truth. 
+above code is mutable.
+
+if some one comes and changes config.apiUrl = 'evil.com'; then it will cause issues.
+
+
+solution:
+--------
+const config = Object.freeze({
+  API_BASE_URL: "https://api.myapp.com",
+  TIMEOUT: 5000,
+  ENV: "production"
+});
+
+export default config;
+
+usage:
+-----
+import config from "./config";
+
+fetch(`${config.API_BASE_URL}/users`);
+
+Why freeze here?
+-------------------
+	Config should never change at runtime
+	Prevents accidental override
+	Safer for teams

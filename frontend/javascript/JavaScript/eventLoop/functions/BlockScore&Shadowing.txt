@@ -1,0 +1,27 @@
+let, const has block scope.
+
+shadowing:
+----------
+shadowed a with a using let. (***below examples are blocks)
+	let a = 10;
+	{
+		let a = 20;
+		console.log(a); // 20 prints;
+	}
+	console.log(a); // 20 prints;
+
+
+	var a = 10;
+	{
+		var a = 20;
+		console.log(a); // 20 prints;
+	}
+	console.log(a); // 20 prints;
+
+	var a = 10;
+	{
+		let a = 20;
+		console.log(a); // 20 prints;
+	}
+	console.log(a); // 10 prints;
+

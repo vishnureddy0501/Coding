@@ -1,0 +1,43 @@
+Optimizing Third party resources:
+--------------------------------
+
+1️⃣ What Are Third-Party Resources?
+	Any resource not served from your main origin:
+		Analytics (GA, GTM, Segment)
+		Ads (Google Ads, Facebook)
+		Chat widgets (Intercom, Drift)
+		A/B testing (Optimizely)
+		Heatmaps (Hotjar)
+		Payment SDKs
+		Social widgets
+🧠 Browser treats them as untrusted and expensive.
+
+Why Third-Party Scripts Are Dangerous:
+--------------------------------------
+	Run on main thread
+	Block rendering
+	Add network latency
+	Execute unknown JS
+	Can inject DOM dynamically
+
+
+Golden Rule
+-----------
+Your code must never wait for third-party code.
+
+
+Load Third-Party Scripts Properly:
+-----------------------------------
+Use async Always
+<script async src="https://analytics.js"></script>
+
+Doesn’t block HTML parsing
+
+Executes when ready
+
+Lazy Load Based on User Action:
+-----------------------------
+Example: Chat widget
+
+button.onclick = () => loadChat();
+User didn’t ask → don’t load.

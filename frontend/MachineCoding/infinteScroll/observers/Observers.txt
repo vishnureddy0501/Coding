@@ -1,0 +1,10 @@
+1️⃣ IntersectionObserver
+	Watches:
+		👉 Visibility of an element
+	Fires when:
+		Element enters/exits viewport or container
+	Use cases:
+		Infinite scroll
+		Lazy loading images
+
+

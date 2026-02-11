@@ -1,0 +1,46 @@
+Architecture:
+-------------
+Video File
+   ↓
+HLS Transcoding
+   ↓
+.m3u8 playlist
+   ↓
+.ts chunks (2–6 sec)
+   ↓
+CDN / Server
+   ↓
+hls.js (Vue 2)
+   ↓
+<video> tag
+
+
+Why HLS gives “NO BUFFERING” (when done right)
+----------------------------------------------
+Video is split into small chunks
+Browser downloads chunks ahead of time
+Supports adaptive bitrate
+Player auto-switches quality on slow internet
+Seek = jump to chunk (instant)
+Buffering happens only if:
+	Chunk size too big
+	Server slow
+	No adaptive bitrate
+	We’ll fix all of that 👇
+
+
+Core Concepts You MUST understand:
+--------------------------------
+1️⃣ Chunk-based streaming
+	Video split into 2–6 sec chunks
+	Each chunk is .ts
+	Playlist .m3u8 tells browser which chunk next
+
+2️⃣ Adaptive Bitrate (ABR)
+	Multiple qualities:
+		360p.m3u8
+		720p.m3u8
+		1080p.m3u8
+		master.m3u8
+	Browser switches quality automatically.
+

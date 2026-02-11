@@ -1,0 +1,95 @@
+image optimizations:
+-------------------
+webp is more optimized. if it is not available use png.
+
+how to make the code more optimized using cdn. (what is the use of cdn)?
+------------------------------------------------------------------------
+CDN (Content Delivery Network) =
+A global network of servers that store cached copies of your static files (images, videos, fonts).
+
+without cdn:
+------------
+User → Your Server → Image
+
+with cdn:
+---------
+User → Nearest CDN Edge → Image
+
+
+2️⃣ Why images should NEVER be served from your backend
+	❌ If you serve images from your Node/Express server
+	Problems:
+		CPU wasted on static files
+		Memory pressure
+		Slow for users far from server
+		Difficult to scale
+		Expensive bandwidth
+	Your API should:
+		✔ Handle auth
+		✔ Handle business logic
+		✔ Handle DB
+
+
+3️⃣ Why CDNs are insanely efficient
+----------------------------------
+DN serves images from nearest data center (less network latency)
+	eg: 
+		India user → Mumbai CDN (20ms)
+		India user → US server (300ms)
+
+cdns caches images in RAM, SSD
+Browsers can download from CDN in parallel
+
+
+how cdn's work internally:
+----------------------------
+first request: (First request (Cache Miss))
+	User → CDN → Origin Server (S3)
+                  ↓
+               Image stored in CDN cache
+
+next request: (cache hit)
+	User → CDN (served instantly)
+
+Where images are actually stored?
+---------------------------------
+CDN ≠ Storage
+
+	You need:
+		Object storage (origin)
+		CDN in front of it
+	
+	common setup:
+		User
+ 			↓
+		CDN (CloudFront)
+ 			↓
+		Storage (S3)
+
+
+how to store images:
+--------------------
+Frontend → API → Storage (S3/R2)
+                       ↓
+                    CDN URL saved in DB
+
+DB stores:
+-----------
+{
+  "imageUrl": "https://cdn.yourapp.com/pins/abc123.webp"
+}
+
+frontend:
+---------
+<Image src={imageUrl} />
+
+configure allowed domains:
+--------------------------
+// next.config.js
+module.exports = {
+  images: {
+    domains: ["cdn.yourapp.com"],
+  },
+};
+
+

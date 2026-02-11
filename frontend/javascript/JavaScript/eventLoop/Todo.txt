@@ -1,0 +1,11 @@
+Lexical Scope
+
+4️⃣ Functions (Deep Dive)
+	Closures 🔥
+	Pure vs impure functions
+	Currying, partial application
+	Function composition
+
+6️⃣ Asynchronous JavaScript
+	Promise.all, Promise.race, Promise.any, Promise.allSettled
+	fetch API, AJAX (XMLHttpRequest basics)

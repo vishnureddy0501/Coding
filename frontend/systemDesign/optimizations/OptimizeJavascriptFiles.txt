@@ -1,0 +1,23 @@
+Reduce JavaScript Bundle Size (MOST IMPORTANT)
+
+❌ Common mistake
+import _ from "lodash";
+
+✅ Tree-shaking
+import debounce from "lodash/debounce";
+
+
+Remove unused code:
+-----------------
+	Dead components
+	Old utilities
+	Debug logs
+Use:
+	webpack-bundle-analyzer
+	source-map-explorer
+
+code splitting:
+---------------
+	split routes, lazy loading.
+
+avoid rerenders

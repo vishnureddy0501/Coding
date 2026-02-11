@@ -1,0 +1,81 @@
+
+🔹 Why Promises go into Microtask Queue?
+
+    • JavaScript has two main queues:
+        1. Macro-task queue (setTimeout, setInterval, DOM events)
+        2. Micro-task queue (Promises, MutationObserver, queueMicrotask)
+	
+	1️⃣ What goes into microtask & macrotask queue?
+		👉 the callback function (or continuation) that should run later.
+
+    • Microtasks are designed to run immediately 
+      after the current synchronous code finishes,
+      and before the Event Loop picks tasks from the macro-task queue.
+
+    • This ensures Promises (.then, async/await) 
+      are handled with higher priority than setTimeout or other callbacks.
+
+
+
+🔹 Example 1: Promise vs setTimeout
+
+    console.log("Start");
+
+    setTimeout(() => console.log("Timeout"), 0);
+
+    Promise.resolve().then(() => console.log("Microtask"));
+
+    console.log("End");
+
+👉 Execution Steps:
+
+    1. "Start" → logged.
+    2. setTimeout → moved to macro-task queue.
+    3. Promise.then → moved to micro-task queue.
+    4. "End" → logged.
+    5. Event loop checks micro-task queue first → runs "Microtask".
+    6. Then it checks macro-task queue → runs "Timeout".
+
+
+🔹 Important Rule
+
+    • Microtasks (Promises) DO NOT interrupt the current running code.
+    • They wait until the call stack is empty.
+    • But they run BEFORE macro-tasks (like setTimeout).
+
+    Example:
+
+        console.log("A");
+
+        Promise.resolve().then(() => console.log("B"));
+
+        console.log("C");
+
+    👉 Output:
+
+        A
+        C
+        B
+
+✅ Key Takeaway
+
+    • Promises are put into the microtask queue.
+    • Microtasks run as soon as the call stack is empty,
+      BEFORE any macro-tasks are executed.
+    • That’s why .then / async/await callbacks run faster than setTimeout.
+
+
+
+🔄 Event Loop Cycle
+	Run synchronous code (everything in the call stack right now).
+	Empty the microtask queue (run all microtask callbacks in order).
+	Take 1 macrotask callback from the macrotask queue and put it on the call stack → execute it.
+	Go back to step 2 (check microtask queue again).
+	Keep looping forever → this is the event loop.
+
+When does the Event Loop start?
+	The moment your program starts running (e.g. when the browser loads your JS file, or when you run node app.js).
+
+when does event loop ends?
+-------------------------
+	when you closes the tab.

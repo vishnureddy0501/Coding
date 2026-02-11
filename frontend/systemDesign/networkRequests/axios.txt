@@ -1,0 +1,15 @@
+axios has less boilerplate code when compared to fetch.
+auto json transform
+request cancellation is easier
+easy to write & understand.
+
+
+
+what is XMLHttpRequest?
+-----------------------
+it is similar to axios/fetch. it is not used anymore. no need to learn.
+
+
+what is fetch?
+--------------
+similar to axios. no need to learn.

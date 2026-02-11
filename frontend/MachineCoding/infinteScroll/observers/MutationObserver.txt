@@ -1,0 +1,23 @@
+tell me when DOM structure changes.
+
+Watches:
+	Elements added/removed
+	Attribute changes
+	Text changes
+
+
+const observer = new MutationObserver(mutations => {
+  mutations.forEach(mutation => {
+    console.log(mutation.type);
+  });
+});
+
+observer.observe(document.body, {
+  childList: true,
+  subtree: true
+});
+
+applications:
+--------------
+check if an element contains a particular class or not.
+check if an element has display visible or not. (checking visibility of an element in dom)

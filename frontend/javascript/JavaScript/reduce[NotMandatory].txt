@@ -1,0 +1,91 @@
+reducer:
+------------
+usage: summation, transforming array to object
+The reduce method in JavaScript is a powerful array method that executes a reducer function on each element of the array, resulting in a single output value.
+
+
+array.reduce((accumulator, currentValue, currentIndex, array) => {
+  // reducer function logic
+}, initialValue);
+
+    accumulator: The accumulator accumulates the callback's return values. It is the accumulated value previously returned in the last invocation of the callback, or initialValue, if supplied.
+    currentValue: The current element being processed in the array.
+    currentIndex: The index of the current element being processed in the array (optional).
+    array: The array reduce was called upon (optional).
+    initialValue: A value to use as the first argument to the first call of the callback. If no initialValue is supplied, the first element in the array will be used as the initial accumulator value and currentValue will start from the second element.
+
+Example 1: Sum of Numbers
+
+const numbers = [1, 2, 3, 4, 5];
+const sum = numbers.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+
+Output
+
+javascript
+
+console.log(sum); // 15
+
+Example 2: Transforming an Array into an Object
+
+Let's revisit your example where we transform an array of strings into an object with those strings as keys, all initialized to 0.
+Input
+
+javascript
+
+const displayOrder = ['key1', 'key2', 'key3'];
+const conData = displayOrder.reduce((accumulator, currentValue) => {
+  accumulator[currentValue] = 0;
+  return accumulator;
+}, {});
+
+Output
+
+javascript
+
+console.log(conData); // { 'key1': 0, 'key2': 0, 'key3': 0 }
+
+Step-by-Step Breakdown of the Example
+
+    Initial State:
+        accumulator = {}
+        currentValue = 'key1' (first element of displayOrder)
+
+    First Iteration:
+        Update accumulator with currentValue as key and 0 as value:
+
+        javascript
+
+    accumulator['key1'] = 0;
+
+    accumulator becomes { 'key1': 0 }
+
+Second Iteration:
+
+    currentValue = 'key2'
+    Update accumulator:
+
+    javascript
+
+    accumulator['key2'] = 0;
+
+    accumulator becomes { 'key1': 0, 'key2': 0 }
+
+Third Iteration:
+
+    currentValue = 'key3'
+    Update accumulator:
+
+    javascript
+
+        accumulator['key3'] = 0;
+
+        accumulator becomes { 'key1': 0, 'key2': 0, 'key3': 0 }
+
+    Final Output:
+        accumulator is returned as { 'key1': 0, 'key2': 0, 'key3': 0 }
+
+Key Points
+
+    Initial Value: Providing an initial value ({} in this case) is crucial for setting the starting point of the accumulation.
+    Reducer Function: The reducer function updates the accumulator (accumulator[currentValue] = 0) and returns it for the next iteration.
+    Return Value: The final value of the accumulator after all iterations is the result of the reduce method.

@@ -1,0 +1,53 @@
+key points:
+----------
+I prefer factory functions over classes because they avoid this, support closures, and compose better
+
+✅ Factory = function returning object
+✅ Use closures for private state
+✅ Prefer factories over classes in JS
+
+utils.js
+--------
+const createUser = ({ id, name, role }) => {
+  return {
+    id,
+    name,
+    role,
+    canEdit() {
+      return role === "admin";
+    }
+  };
+};
+
+usage: 
+------
+const user = createUser({ id: 1, name: "Vishnu", role: "admin" });
+
+
+Factory + Closure (Private state):
+----------------------------------
+const createCounter = () => {
+  let count = 0;
+
+  return {
+    increment() {
+      count++;
+    },
+    getCount() {
+      return count;
+    }
+  };
+};
+
+
+factory + Object.freeze:
+------------------------------
+const createConfig = () => {
+  const config = {
+    api: "/api",
+    timeout: 5000
+  };
+
+  return Object.freeze(config);
+};
+

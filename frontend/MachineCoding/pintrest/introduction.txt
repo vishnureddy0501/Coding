@@ -1,0 +1,17 @@
+folder structure:
+----------------
+app/
+ ├─ layout.tsx
+ ├─ page.tsx
+ ├─ globals.css
+components/
+ ├─ MasonryGrid.tsx
+ ├─ PinCard.tsx
+ ├─ PinModal.tsx
+ ├─ SkeletonPin.tsx
+store/
+ └─ pins.store.ts
+hooks/
+ └─ useInfiniteScroll.ts
+lib/
+ └─ mockPins.ts

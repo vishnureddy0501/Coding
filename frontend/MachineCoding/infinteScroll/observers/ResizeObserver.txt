@@ -1,0 +1,99 @@
+Resize Observer:
+	ResizeObserver tells you when the size of an element changes — not the window.
+	Key point:
+		It fires when width / height of an element changes
+		Even if window size did NOT change
+	watches:
+		flex box changes, grid changes, content expansion, sidebar collapse, responsive components.
+
+
+	applications: 
+		Charts	(Redraw on container resize)
+		Responsive cards	(Adjust layout)
+		Sidebar toggle	(Recalculate widths)
+		Text expansion	(Detect overflow)
+		Dashboards	(Dynamic grid items)
+
+When NOT to Use ResizeObserver
+	❌ Don’t use if:
+		Size never changes
+		You only care about window size
+
+
+Why Charts NEED ResizeObserver
+------------------------------
+Charts depend on:
+	Container width
+	Container height
+But containers can change due to:
+	Sidebar collapse
+	Flexbox reflow
+	Tabs switching
+	Parent resize
+	Dynamic content
+❌ window.onresize cannot detect these
+✅ ResizeObserver can.
+
+<div ref="box" class="box"></div>
+
+mounted() {
+  this.observer = new ResizeObserver(entries => {
+    const { width, height } = entries[0].contentRect;
+    console.log("New size:", width, height);
+  });
+
+  this.observer.observe(this.$refs.box);
+}
+
+
+vue2 example for chart + ResizeObserver:
+---------------------------------------
+<template>
+  <div ref="chartContainer" class="chart-wrapper">
+    <svg ref="svg"></svg>
+  </div>
+</template>
+
+export default {
+  data() {
+    return {
+      width: 0,
+      height: 0,
+      resizeObserver: null
+    };
+  },
+
+  mounted() {
+    this.initResizeObserver();
+  },
+
+  beforeDestroy() {
+    this.resizeObserver.disconnect();
+  },
+
+  methods: {
+    initResizeObserver() {
+      this.resizeObserver = new ResizeObserver(entries => {
+        const { width, height } = entries[0].contentRect;
+
+        this.width = width;
+        this.height = height;
+
+        this.renderChart();
+      });
+
+      this.resizeObserver.observe(this.$refs.chartContainer);
+    },
+
+    renderChart() {
+      if (!this.width || !this.height) return;
+
+      const svg = this.$refs.svg;
+
+      svg.setAttribute("width", this.width);
+      svg.setAttribute("height", this.height);
+
+      // redraw chart here
+    }
+  }
+};

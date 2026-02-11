@@ -1,0 +1,24 @@
+Everything in javascript happens inside "Global Execution Context".
+it has 2 components
+		-> memory creation phase
+		-> code Execution phase
+
+Call Stack: Maintails the order of Execution Context
+
+
+console.log(this);
+console.log(window);
+
+both give same result. 
+window, this refers to the global Execution Context
+
+
+is javascript single threaded?
+-------------------------------
+JavaScript is a single threaded synchronous language.
+
+🔹 Event Loop = Concept
+	The event loop itself is just a mechanism inside JS runtime (browser or Node.js).
+	It defines how synchronous code, microtasks, and macrotasks are scheduled and executed.
+
+Promises, settimeout, setinterval, async-await are a way to handle asynchronous events.

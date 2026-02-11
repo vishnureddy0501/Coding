@@ -1,0 +1,26 @@
+AuthStore.js
+------------
+let token = null;
+
+const AuthStore = Object.freeze({
+  setToken(t) {
+    token = t;
+  },
+  getToken() {
+    return token;
+  },
+  clearToken() {
+    token = null;
+  }
+});
+
+export default AuthStore;
+
+
+Key insight
+	Methods are frozen
+	Internal state is private
+	Token is controlled only via methods
+	✔️ This is a safe mutable singleton
+
+	

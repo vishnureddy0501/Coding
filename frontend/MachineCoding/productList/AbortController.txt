@@ -1,0 +1,113 @@
+for cancelling outdated requests, we use AbortController.
+
+important point:
+---------------
+With Axios, I use AbortController and pass its signal to cancel in-flight requests so outdated responses don’t update state, which is critical for search, filters, and infinite scroll.
+
+example:
+--------
+// api/products.js
+import axios from "axios";
+
+let controller = null;
+
+export async function fetchProducts(params) {
+  // cancel previous request
+  if (controller) {
+    controller.abort();
+  }
+
+  controller = new AbortController();
+
+  try {
+    const res = await axios.get("/api/products", {
+      params,
+      signal: controller.signal
+    });
+
+    return res.data;
+  } catch (err) {
+    if (err.code === "ERR_CANCELED") {
+      // silently ignore
+      return;
+    }
+    throw err;
+  }
+}
+
+
+vuex actions file: 
+------------------
+async fetchProducts({ commit, state }) {
+  if (state.isFetching || !state.hasMore) return;
+
+  commit("FETCH_LOCK");
+
+  try {
+    const data = await fetchProducts({
+      page: state.page,
+      filters: state.filters
+    });
+
+    if (!data) return; // aborted request
+
+    commit("FETCH_SUCCESS", data);
+  } catch (err) {
+    commit("FETCH_ERROR");
+  }
+}
+
+
+
+Multiple APIs? Use Multiple Controllers
+----------------------------------------
+const controllers = {
+  products: null,
+  recommendations: null
+};
+
+export function fetchProducts(params) {
+  controllers.products?.abort();
+  controllers.products = new AbortController();
+
+  return axios.get("/products", {
+    params,
+    signal: controllers.products.signal
+  });
+}
+
+
+interview questions:
+--------------------
+Q: Does axios cancel backend execution?
+	❌ No. It only cancels browser request.
+  Axios / AbortController does NOT stop backend execution once the request has reached the server.
+  It only:
+    Stops the browser from waiting
+    Closes the network connection
+
+
+  Case 1: Request is aborted before reaching backend (rare, but possible)
+    Browser cancels network request
+    Backend never receives it
+    Nothing executes on server
+
+
+  Case 2: Request already reached backend (most common)
+      Browser  ───────►  Backend
+              ❌ abort()
+      What happens now?
+        Backend continues executing
+        Database queries run
+        Business logic runs
+        CPU time is used
+        But…
+        Backend tries to send response
+        Connection is already closed
+        Response is discarded
+
+
+two situations where we need AbortController:
+-----------------------------------------------
+The component querying for this data in unmounted from the DOM.
+The data is not relevant anymore.

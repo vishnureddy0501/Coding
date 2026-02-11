@@ -1,0 +1,22 @@
+Object.freeze is shallow means it won't freeze nested items.
+----------------------------------------------------------
+const obj = Object.freeze({
+  user: {
+    name: "Vishnu"
+  }
+});
+
+obj.user.name = "Hacker"; // ✅ STILL changes!
+
+obj.user = {name: 'hacker 1'}; // not allowed.
+
+deep freeze solution for nested objects:
+---------------------------------------
+function deepFreeze(obj) {
+  Object.values(obj).forEach(value => {
+    if (typeof value === "object" && value !== null) {
+      deepFreeze(value);
+    }
+  });
+  return Object.freeze(obj);
+}

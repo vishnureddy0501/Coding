@@ -1,0 +1,88 @@
+How normal HTTP works
+----------------------
+Browser sends a request → server responds → connection closes
+If the browser wants new data → it must send another request
+
+
+
+The real-time problem
+--------------------
+What if:
+	You’re building chat
+	Notifications
+	Live order status
+	Stock prices
+	Job progress updates
+
+❌ Client doesn’t know when new data arrives
+❌ Polling every second wastes network & battery
+❌ Polling every minute feels slow
+
+👉 We need something near real-time, but HTTP is request–response only.
+
+
+polling:
+---------
+
+short polling: (bad but common)
+--------------
+Client asks the server repeatedly:
+	Client: "Any new data?"
+	Server: "No"
+	Client: "Any new data?"
+	Server: "No"
+	Client: "Any new data?"
+	Server: "Yes!"
+
+Problems:
+	Too many useless requests
+	Wastes bandwidth & CPU
+	Still not instant
+
+
+
+Long Polling:
+------------
+Long polling is a technique where the server holds the request open until new data is available (or a timeout occurs).
+
+Instead of replying immediately with “no data”, the server waits.
+
+
+Client  ────────▶ Server (request)
+Client  ◀──────── Server (waits... waits...) if new data comes then return it. else wait till timeout.
+Client  ◀──────── Server (responds with data)
+Client  ────────▶ Server (new request immediately)
+
+
+
+🔁 Continuous loop
+⚡ Near real-time
+📉 Far fewer requests than short polling
+
+
+
+applications of long polling:
+-----------------------------
+Notifications
+job or task status.
+
+
+Drawbacks of Long Polling:
+-------------------------
+❌ Scalability limits
+	Thousands of users = thousands of open connections
+
+❌ Not true real-time
+	Still request–response
+	Client must re-request after every response
+
+
+When NOT to use long polling?
+------------------------------
+❌ High-frequency updates (gaming, trading)
+❌ Massive concurrency (100k+ users)
+❌ Bi-directional real-time communication
+
+Use:
+	WebSockets
+	Server-Sent Events (SSE)

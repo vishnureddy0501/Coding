@@ -1,0 +1,138 @@
+webFonts: Web fonts are custom fonts that are downloaded by the browser from the web instead of relying on fonts installed on the user’s device.
+
+Make sure the website font stays same across all the devices.
+
+we can use CDN for fonts also (****MOST IMPORTANT)
+
+example:
+-------
+	@font-face {
+		font-family: "Inter";
+		src: url("/fonts/inter.woff2") format("woff2");
+	}
+
+If the user doesn’t have “Inter” installed, the browser downloads it.
+
+
+Why Do We Need Web Fonts?
+--------------------
+Without web fonts
+
+You are limited to system fonts:
+	Arial
+	Times New Roman
+	Helvetica
+
+Your site looks different on different devices.
+
+
+How browsers load webfonts:
+---------------------------
+HTML
+ ↓
+CSS
+ ↓
+@font-face found
+ ↓
+Font file requested
+ ↓
+Font downloaded
+ ↓
+Text rendered
+
+
+Problems with Web Fonts (Why Optimization is Needed):
+----------------------------------------------------
+
+❌ Fonts are large
+❌ Fonts are render-blocking
+❌ Fonts cause CLS
+❌ Fonts affect FCP & LCP
+
+So:
+	Web fonts improve design but hurt performance unless optimized
+
+
+important things:
+----------------
+
+Preload Critical Fonts. ⚠️ Don’t preload everything.
+	<link
+		rel="preload"
+		href="/fonts/inter-regular.woff2"
+		as="font"
+		type="font/woff2"
+		crossorigin
+	/>
+
+
+Self-Host Fonts:
+----------------
+
+❌ Third-party font CDNs
+	Extra DNS
+	Privacy issues
+
+✅ Self-host fonts
+	Faster
+	Better caching
+
+
+
+Avoid Layout Shift (CLS)
+Use System Fonts Where Possible. (extra downloads not required)
+
+
+
+vue.js example:
+---------------
+/* 1️⃣ Define custom font */
+@font-face {
+  font-family: "AppFont";
+  src: url("../assets/fonts/Inter-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap; /* VERY VERY IMPORTANT */
+}
+
+/* 2️⃣ Global font stack */
+:root {
+  --app-font: "AppFont",
+              system-ui,
+              -apple-system,
+              BlinkMacSystemFont,
+              "Segoe UI",
+              Roboto,
+              Helvetica,
+              Arial,
+              sans-serif;
+}
+
+/* 3️⃣ Apply globally */
+html, body {
+  font-family: var(--app-font);
+  margin: 0;
+  padding: 0;
+}
+
+
+what happens with font-display: swap: (we need to use it for good UX)
+---------------------------------------------------------------------
+Page loads
+ ↓
+Text rendered with fallback font  ✅
+ ↓
+Custom font downloads
+ ↓
+Font swaps in (visual change)
+
+
+without font-display: swap:
+---------------------------
+Page loads
+ ↓
+Text is invisible ❌
+ ↓
+Font downloads
+ ↓
+Text suddenly appears

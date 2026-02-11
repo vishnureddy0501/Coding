@@ -1,0 +1,59 @@
+Interaction To Next Paint:
+-------------------------
+INP measures how long the page takes to respond visually after a user interaction.
+
+🧠 INP = delay + work + paint
+
+INP considers almost all user interactions:
+-------------------------------------------
+Click
+Tap
+Key press
+Form input
+
+❌ Excludes:
+	Scroll
+	Hover
+	Pinch/zoom
+
+
+What Causes Poor INP?
+----------------------
+Long tasks running on main thread.
+
+| Cause               | Example               |
+| ------------------- | --------------------- |
+| Long JS tasks       | Heavy loops           |
+| Re-renders          | Large React/Vue trees |
+| Synchronous work    | JSON parsing          |
+| Third-party scripts | Ads, analytics        |
+| Layout thrashing    | Forced reflows        |
+| Expensive paints    | Large DOM updates     |
+
+
+How to improve INP:
+-------------------
+1. Reduce Re-renders (React / Vue)
+		Memoize components
+		Avoid deep reactive trees
+		Virtualize long lists
+		📌 Charts & tables are frequent offenders.
+
+
+2. Defer Non-Visual Work
+	Move:
+		Logging
+		Analytics
+		Data prep
+
+	After paint:
+		requestAnimationFrame(() => {
+				updateUI();
+		});
+
+		requestIdleCallback(() => {
+			doNonCriticalWork();
+		});
+
+3. use webworkers
+4. 

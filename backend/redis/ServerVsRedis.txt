@@ -1,0 +1,17 @@
+server:
+-------
+if you do like for video1 -> a thread 1 starts in server -> cpu executes that thread.
+
+if you do like for video2 -> a thread 2 starts in server -> context switch happens (thread 1 context information is stored in other place) -> thread 2 executes.
+
+context switch happens depends on the priority.
+
+for changing the context, storing the context at other place around 200 cpu cycles gets wasted.
+
+
+for efficient performance, redis decided to go with single threaded approach
+
+redis:
+------
+single threaded.
+if a instruction 

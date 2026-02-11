@@ -1,0 +1,103 @@
+Interview Definition:
+----------------------
+First Input Delay measures how quickly a page responds to the user’s first interaction.
+High FID occurs when the main thread is blocked by heavy JavaScript execution.
+Improving FID involves reducing long tasks, code splitting, and deferring non-critical scripts.
+
+
+First Input Delay:
+-------------------
+FID measures the delay between a user’s first interaction and the browser’s ability to respond.
+
+Example:
+	User clicks a button
+	Browser is busy
+	Click handler runs late
+	That delay = FID
+
+
+What Causes High FID? (ROOT CAUSE)
+	The main thread is blocked.
+
+
+
+🔥 Why main thread blocking happens
+------------------------------------
+JavaScript is:
+	Single-threaded (mostly)
+	Event-driven
+
+If the main thread is busy:
+	Clicks
+	Taps
+	Keypresses
+	…must wait in the event queue
+
+common blockers:
+-----------------
+
+| Cause               | Example            |
+| ------------------- | ------------------ |
+| Heavy JS            | Large bundles      |
+| Long tasks          | >50ms JS execution |
+| Synchronous loops   | `for (1000000)`    |
+| JSON parsing        | Big payloads       |
+| Third-party scripts | Analytics, ads     |
+
+
+How FID works internally:
+------------------------
+User clicks
+     ↓
+Event queued
+     ↓  (main thread busy)
+Browser waits
+     ↓
+Main thread free
+     ↓
+Event handler starts
+
+📌 FID = wait time, not handler runtime.
+
+
+
+6️⃣ FID vs INP (IMPORTANT – MODERN WEB)
+---------------------------------------
+🚨 FID is being replaced by INP
+Google is moving from:
+	FID → INP (Interaction to Next Paint)
+
+
+| Metric | Measures                   |
+| ------ | -------------------------- |
+| FID    | Delay before handler       |
+| INP    | Delay + processing + paint |
+
+
+how to fix high FID?
+---------------------
+1. code spliting. (load only when needed)
+2. Remove or Delay Third-Party Scripts
+	Biggest hidden killer.
+	Examples:
+		Analytics
+		Heatmaps
+		Chat widgets
+	Load after interaction or idle.
+
+3. Web Workers(main thread stays free. the other threads does the task)
+4. Reduce JS Bundle Size
+		Tree shaking
+		Remove unused deps
+		Use modern builds
+		Smaller JS → faster parse → less blocking.
+
+
+how to debug FID:
+----------------
+FID Debugging Strategy
+Check long tasks (>50ms)
+Identify blocking JS
+Reduce bundle
+Delay non-critical scripts
+Re-measure

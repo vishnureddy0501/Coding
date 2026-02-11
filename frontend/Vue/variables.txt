@@ -1,0 +1,7 @@
+if you declare something inside data then it is reactive variable.
+
+don't declare a variable inside data. and if you write like this.
+created () {
+	this.myname = "vishnu"; // variable attached to this keyword.
+		// can be used within the component. it is not reactive.
+}

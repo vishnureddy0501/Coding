@@ -1,0 +1,56 @@
+Websockets:
+-----------
+WebSocket is a protocol that provides a persistent, full-duplex connection between client and server over a single TCP connection.
+
+Key words:
+	Persistent → connection stays open
+	Full-duplex → both sides can send anytime
+	Single connection → no repeated HTTP requests
+
+how websockets works:
+----------------------
+1. HTTP Handshake
+	WebSocket starts as HTTP
+	server responds
+	HTTP is gone. connection becomes websocket protocol.
+
+	Now client can send messages to server. or server can send messages to client. 
+
+
+
+authentication in websockets: (VERY Important)
+-----------------------------
+❌ No cookies automatically like HTTP
+	WebSocket handshake is HTTP, but after that:
+		No headers per message
+
+common patterns:
+----------------
+1. Token in query string
+	new WebSocket("wss://example.com?token=JWT")
+
+2. Token as first message (best)
+	socket.send({ type: "auth", token })
+
+
+Common WebSocket mistakes:
+	🚫 No auth validation
+	🚫 No heartbeat handling
+	🚫 Broadcasting everything to everyone
+	🚫 Blocking operations in message handlers
+	🚫 Assuming connections live forever
+
+
+
+Scaling WebSockets (real production stuff)
+------------------------------------------
+Problem:
+
+	WebSocket connections are:
+		Stateful
+		Tied to one server instance
+	Cannot just scale horizontally without help
+
+
+solution: (ask chatgpt)
+-----------------------

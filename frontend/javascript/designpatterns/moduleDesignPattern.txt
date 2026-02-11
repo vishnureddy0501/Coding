@@ -1,0 +1,29 @@
+keep related things in a module/file.
+
+Module pattern = encapsulation + public API + no globals.
+
+authmodule.js (authentication related things here)
+-------------
+// auth.js
+let token = null;
+
+export function setToken(t) {
+  token = t;
+}
+
+export function getToken() {
+  return token;
+}
+
+apimodule.js (api related things here)
+--------------
+// api.js
+import { getToken } from './auth';
+
+export async function request(url) {
+  return fetch(url, {
+    headers: {
+      Authorization: `Bearer ${getToken()}`
+    }
+  });
+}

@@ -1,0 +1,80 @@
+cumulative layout shift:
+------------------------
+CLS measures how much visible content unexpectedly moves on the screen.
+
+
+What Exactly Counts as a Layout Shift?
+-------------------------------------
+A layout shift happens when:
+	✔️ A visible element changes position
+	✔️ The change is not triggered by user interaction
+
+Examples that COUNT
+	Image loads and pushes text down
+	Ad banner appears late
+	Dynamic content injected at top
+
+Examples that DO NOT count
+	User clicks → accordion opens
+	User types → input expands
+
+
+causes of CLS:
+--------------
+1. images without fixed dimensions (Browser doesn’t know height → text jumps.)
+	fix: 	<img src="image.jpg" width="400" height="300">
+				or
+			aspect-ratio: 4 / 3;
+
+2. add banners injected late.
+	<div id="ad"></div>
+	<!-- ad loads later and pushes content -->
+
+	fix: // reserve space upfront.
+		#ad {
+  			min-height: 250px;
+		}
+
+
+3. Charts / canvas rendered after mount
+	Common in dashboards.
+	Container starts at height 0
+	Chart renders → pushes content
+	✅ Fix
+		.chart-container {
+  			min-height: 300px;
+		}
+
+	Or render skeleton.
+
+CLS in React / Vue / Next.js Apps:
+----------------------------------
+❌ Common mistake
+{data && <Chart />}
+Nothing → suddenly chart → layout shift.
+
+
+better:
+------
+<div style={{ minHeight: 300 }}>
+  {data ? <Chart /> : <Skeleton />}
+</div>
+
+
+
+CLS & Skeleton Loaders (Why They Matter)
+---------------------------------------
+Skeletons are not just UX candy.
+
+They:
+	Reserve layout space
+	Prevent layout jumps
+	Improve CLS score
+
+
+
+How to Measure CLS:
+-------------------
+Chrome DevTools:
+	Performance tab
+	Layout Shift events

@@ -1,0 +1,23 @@
+Time To First Bite:
+-------------------
+TTFB measures the time from a navigation request until the browser receives the first byte of the response from the server.
+
+🧠 TTFB happens before rendering starts
+	No HTML parsing
+	No CSS
+	No JS
+	Just network + server
+
+What Does TTFB Include?
+--------------------------
+TTFB = 3 phases
+
+Client → Server → Client
+
+Breakdown:
+	1️⃣ DNS lookup
+	2️⃣ TCP / TLS connection
+	3️⃣ Server processing time
+
+TTFB ends when:
+	First byte of response arrives at browser

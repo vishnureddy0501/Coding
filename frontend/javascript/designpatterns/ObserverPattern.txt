@@ -1,0 +1,19 @@
+Observers subscribe to a subject, and the subject notifies them when state changes.
+
+Observer pattern = reactive updates without tight coupling.
+Observer Pattern = Subscribe → Notify → React
+
+examples: RXJS, websockets
+
+Role		Meaning
+Subject		Holds state
+Observers	React to changes
+Notify		Broadcast updates
+
+
+
+When SHOULD you use Observer?
+	✅ State management
+	✅ UI updates
+	✅ Real-time data
+	✅ Event handling

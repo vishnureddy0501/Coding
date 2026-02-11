@@ -1,0 +1,5 @@
+https://medium.com/@raazthemystery273/shadowdom-a-dom-you-might-be-unaware-of-dc5697f28345
+
+https://eisenbergeffect.medium.com/sharing-styles-in-declarative-shadow-dom-c5bf84ffd311
+
+https://webkit.org/blog/13851/declarative-shadow-dom/

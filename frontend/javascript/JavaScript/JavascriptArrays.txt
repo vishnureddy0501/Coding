@@ -1,0 +1,109 @@
+spread operator on arrays: (deepCopy vs shallowCopy)
+--------------------------
+Using the spread operator on arrays also creates a shallow copy. This means that while the elements of the array are copied into a new array, if any of those elements are objects or arrays themselves, the references to those nested objects/arrays are copied, not the objects/arrays themselves.
+
+const originalArray = [1, 2, { a: 3 }, [4, 5]];
+const shallowCopyArray = [...originalArray];
+
+shallowCopyArray[0] = 10;
+shallowCopyArray[2].a = 100;
+shallowCopyArray[3][0] = 400;
+
+console.log(originalArray[0]); // 1 (unchanged)
+console.log(originalArray[2].a); // 100 (changed)
+console.log(originalArray[3][0]); // 400 (changed)
+
+In the example above:
+
+    shallowCopyArray[0] is a primitive value, so when it's changed, the originalArray[0] remains unaffected.
+        if a primitive value is changes then it occupies fresh memory.
+    shallowCopyArray[2] and shallowCopyArray[3] are references to the objects and arrays inside originalArray, so changes to them affect the originalArray.
+Deepcopy:
+----------
+1. Using JSON.parse and JSON.stringify:
+        const deepCopyArray = JSON.parse(JSON.stringify(originalArray));
+2. using structuredClone
+
+
+operations on arrays:
+---------------------
+1. indexOf:
+// takes element of array as parameter
+syntax: arr.indexOf(value_you_are_searching_for); // this will work good or comparision of primitive types.
+ const arr = [{name:"vish", age: 20}];
+
+ // for indexOf don't use arrows like this. 
+ arr.indexOf(item => item.age == 20 ); // you cannot use indexOf like this. you have to give whole element as input.
+
+ eg: 
+  const arr = [{name:"vish", age: 20}];
+    const value = {name:"vish", age: 20};
+
+   // arr[0], value not equal in strict comparision. because memory location is different.
+  arr.indexOf(value); // returns -1. 
+
+  eg: 
+    const arr [{name: "vish", age: 20}];
+    const value = arr[0];
+    arr.indexOf(value); // returns 0. because value, arr[0] passes string comparision
+
+2.push: insert at last.
+    arr.push(value);
+3. pop: remove from last.
+    arr.pop();
+4. insert at start:
+    eg: const arr = [10,20];
+    arr.unshift(30);
+5. remove first element:
+    eg: const arr = [10, 20];
+    arr.shift();
+6. slice: get some continuous subset from array.
+    syntax: arr.slice(startIndex, endIndex); // startIndex Inclusive and endIndex exclusive.
+
+7. splice: add, remove, replace elements in the array.
+    we can use splice only when we have start index.
+    syntax: arr.splice(startIndex, deleteCount, ....itemsToAdd);
+
+    using splice to remove elements from array.
+    ------------------------------------------
+    const arr = [1, 2, 3, 4];
+    arr.splice(1, 2);
+    console.log(arr); // output: [1,4]// started at index1 and removing 2 elements
+
+    using splice to add elements to array:
+    ---------------------------------------
+    const arr = [1,2, 3,4];
+    arr.splice(1, 0, 10, 20, 30).//start at index 1. 0 elements to remove. 10, 20 , 30 we have to add.
+    console.log(arr); //[1, 10, 20, 30,2, 3 4];
+
+    (or)
+
+    const arr = [1,2, 3,4];
+    const elementsToAdd = [10,20, 30];
+    arr.splice(1, 0, ...elementsToAdd).//start at index 1. 0 elements to remove. 10, 20 , 30 we have to add.
+    console.log(arr); //[1, 10, 20, 30,2, 3 4];
+
+    using splice to replace elements in array:
+    ------------------------------------------
+    arr[index] = element_to_replace // directly you can do this as well.
+
+    const arr = [1, 2, 3, 4];
+    arr.splice(1, 1, 10,);
+    console.log(arr); // [1,10, 3, 4] 1 is deleted from index1 and 10 is placed at index1
+
+difference between forEach vs map:
+---------------------------------
+    map: creates a new array by performing some operations with the elements of array.
+    forEach: similar to for loop. just for iteration. 
+
+    const res = arr.map(item => item*2); // map need to have return something.
+
+    arr.forEach((item) => {
+        console.log(item*2);
+        // it does not have return type. iterate and perform the operation you want.
+    })
+
+8. reverse array:
+    eg: arr.reverse();
+9. sort array:
+    arr.sort(); // sort works with array of strings, array of characters. it don't work with numbers directly.

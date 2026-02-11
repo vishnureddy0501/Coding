@@ -1,0 +1,112 @@
+AbortController is a browser API that lets you cancel an ongoing async operation like fetch or Axios.
+
+It works using:
+	A controller
+	A signal
+
+
+Core Mental Model 🧠
+	Controller → signal → request
+	Controller.abort() → request stops
+
+	You don’t cancel the promise
+	You abort the operation behind it
+
+
+example:
+--------
+const controller = new AbortController();
+
+axios.get("/api/data", {
+  signal: controller.signal
+});
+
+// cancel request
+controller.abort();
+
+
+
+vue.js example:
+--------------
+<input v-model="query" @input="search" />
+
+export default {
+  data() {
+    return {
+      query: "",
+      controller: null,
+      results: []
+    };
+  },
+
+  methods: {
+    async search() {
+      // cancel previous request
+      if (this.controller) {
+        this.controller.abort();
+      }
+
+      // create new controller
+      this.controller = new AbortController();
+
+      try {
+        const res = await axios.get("/api/search", {
+          params: { q: this.query },
+          signal: this.controller.signal
+        });
+
+        this.results = res.data;
+      } catch (err) {
+        if (err.name === "CanceledError") {
+          console.log("Request canceled");
+        } else {
+          console.error(err);
+        }
+      }
+    }
+  },
+
+  beforeDestroy() {
+    if (this.controller) {
+      this.controller.abort();
+    }
+  }
+};
+
+How to detect cancellation:
+---------------------------
+if (err.name === "CanceledError") {
+  // safe to ignore
+}
+
+
+
+abort controller with Multiple requests:
+----------------------------------------
+this.controller = new AbortController();
+
+axios.get("/api/a", { signal: this.controller.signal });
+axios.get("/api/b", { signal: this.controller.signal });
+
+// aborts both
+this.controller.abort();
+
+
+on route change cancell the requests:
+-----------------------------------
+beforeRouteLeave(to, from, next) {
+  if (this.controller) {
+    this.controller.abort();
+  }
+  next();
+}
+
+
+
+Common Mistakes:
+-----------------
+
+❌ Creating new controller but not aborting old one
+❌ Reusing aborted controller
+❌ Treating cancel as error
+❌ Forgetting cleanup on destroy

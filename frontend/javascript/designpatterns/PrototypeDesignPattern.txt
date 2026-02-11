@@ -1,0 +1,62 @@
+Prototype Pattern creates new objects by copying an existing object instead of creating from scratch.
+
+using Object.create is best practice.
+
+example 1:
+---------
+const userPrototype = {
+  init(name, role) {
+    this.name = name;
+    this.role = role;
+    return this;
+  },
+  canEdit() {
+    return this.role === "admin";
+  }
+};
+
+const user1 = Object.create(userPrototype).init("Vishnu", "admin");
+const user2 = Object.create(userPrototype).init("Rahul", "viewer");
+
+user1.canEdit(); // true
+user2.canEdit(); // false
+
+
+example 2:
+----------
+const buttonPrototype = {
+  render() {
+    console.log(`Render ${this.label} button`);
+  }
+};
+
+const saveButton = Object.create(buttonPrototype);
+saveButton.label = "Save";
+
+const deleteButton = Object.create(buttonPrototype);
+deleteButton.label = "Delete";
+
+
+example 3:
+----------
+const apiRequestPrototype = {
+  method: "GET",
+  timeout: 5000,
+  send(url) {
+    console.log(`${this.method} ${url} (${this.timeout})`);
+  }
+};
+
+const getUsers = Object.create(apiRequestPrototype);
+getUsers.send("/users");
+
+const postUser = Object.create(apiRequestPrototype);
+postUser.method = "POST";
+postUser.send("/users");
+
+
+
+5️⃣ Prototype 	vs 			Factory (IMPORTANT)
+Clone existing object		Create new object
+Shared methods				New methods per instance
+Good for performance		Good for flexibility

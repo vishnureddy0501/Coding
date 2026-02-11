@@ -1,0 +1,147 @@
+implementing infinite scroll using IntersectionObserver is the best approach.
+
+old approach:
+------------
+	window.addEventListener("scroll", ...)
+
+	problems:
+	---------
+		event fires so many times.
+		Hard to debounce correctly
+		performance issues.
+
+best approach:
+-----------------
+	IntersectionObserver
+		browser optimized.
+		event fires only when needed.
+
+
+
+vue implementation:
+--------------------
+<template>
+  <div class="list-container">
+    <div
+      v-for="item in items"
+      :key="item.id"
+      class="item"
+    >
+      {{ item.title }}
+    </div>
+
+    <!-- Sentinel Element -->
+    <div ref="loadMoreTrigger"></div>
+
+    <div v-if="loading" class="loader">Loading...</div>
+    <div v-if="!hasMore" class="end">No more items</div>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      items: [],
+      page: 1,
+      limit: 10,
+      loading: false,
+      hasMore: true,
+      observer: null
+    };
+  },
+
+  mounted() {
+    this.fetchData();
+    this.createObserver();
+  },
+
+  beforeDestroy() {
+    if (this.observer) {
+      this.observer.disconnect();
+    }
+  },
+
+  methods: {
+    async fetchData() {
+      if (this.loading || !this.hasMore) return;
+
+      this.loading = true;
+
+      try {
+        const res = await fetch(
+          `/api/posts?page=${this.page}&limit=${this.limit}`
+        );
+        const result = await res.json();
+
+        this.items.push(...result.data);
+        this.hasMore = result.hasMore;
+        this.page++;
+      } catch (error) {
+        console.error("Failed to load data", error);
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    createObserver() {
+      const options = {
+        root: null,           // viewport
+        rootMargin: "200px",  // preload early.
+        threshold: 0
+      };
+
+      this.observer = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting) {
+            this.fetchData();
+          }
+        },
+        options
+      );
+
+      this.observer.observe(this.$refs.loadMoreTrigger);
+    }
+  }
+};
+</script>
+
+<style scoped>
+.list-container {
+  max-width: 600px;
+  margin: auto;
+}
+
+.item {
+  padding: 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.loader {
+  text-align: center;
+  padding: 16px;
+}
+
+.end {
+  text-align: center;
+  color: #888;
+  padding: 16px;
+}
+</style>
+
+
+
+
+
+Preloading with rootMargin:
+---------------------------
+	rootMargin: "200px"
+	Loads data before user reaches bottom
+	Smooth experience
+
+
+optional enhancements for production:
+-------------------------------------
+vue-virtual-scroller
+error retry (this.retryCount++)
+AbortController(Cancel old requests when navigating)

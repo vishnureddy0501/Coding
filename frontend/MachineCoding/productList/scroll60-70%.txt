@@ -1,0 +1,25 @@
+scrolled percentage formula:
+----------------------------
+scrollPercent = (scrollTop + clientHeight) / scrollHeight
+
+
+
+<div ref="list" class="scroll-container" @scroll="onScroll">
+  <ProductCard v-for="p in products" :key="p.id" />
+</div>
+methods: {
+  onScroll() {
+    const el = this.$refs.list;
+
+    const scrollPercent =
+      (el.scrollTop + el.clientHeight) / el.scrollHeight;
+
+    if (scrollPercent >= 0.6) {
+      this.$store.dispatch("prefetchNextPage");
+    }
+
+    if (scrollPercent >= 0.95) {
+      this.$store.dispatch("fetchNextPage");
+    }
+  }
+}

@@ -1,0 +1,24 @@
+Each new incognito session (window) is like a fresh browser install.
+
+Normal window
+--------------
+	local storage persists even after closing browser and come back.
+	localStorage persists even after:
+		Closing the tab
+		Closing the browser
+		Restarting the system
+
+Incognito / Private window
+--------------------------
+	if you create new private window, then it will start fresh.
+	Data exists only for that incognito window.
+	Deleted automatically when you close all incognito tabs.
+
+usecase: 
+	opened a url. added some local storage. that data persists till you close the window.
+	if you close the tabs. still until window close data persists.
+
+open a incognito window:
+-----------------------
+across different tabs in the same window, local storage persists.
+if 2 tabs in 2 different window’s, localStorage not persists.

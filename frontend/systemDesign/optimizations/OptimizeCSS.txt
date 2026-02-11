@@ -1,0 +1,17 @@
+1. split css based on routes.
+2. don't keep all the css in a single file and load once. (lazy load)
+3. remove unused css
+4. don't use long css selectors
+	.a .b .c .d {} (❌ Bad)
+	.d {} (keep it simple)
+5. Prevent Cumulative Layout Shift (CLS)
+
+6. Media Queries Optimization
+	❌ Bad
+		@media (max-width: 400px) {
+  			/* large styles */
+		}
+
+	✅ Mobile-first
+		/* base mobile */
+		@media (min-width: 768px) {}

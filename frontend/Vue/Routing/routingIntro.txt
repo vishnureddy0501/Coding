@@ -1,0 +1,84 @@
+Route Meta (Custom Data)
+------------------------
+{
+  path: '/admin',
+  component: Admin,
+  meta: {
+    requiresAuth: true,
+    role: 'admin'
+  }
+}
+
+
+Access:
+	route.meta.requiresAuth
+
+Common uses:
+✔ Auth
+✔ Permissions
+✔ Page titles
+✔ Analytics
+
+
+Navigation Guards:
+------------------
+Global guard
+	router.beforeEach((to, from, next) => {
+	if (to.meta.requiresAuth && !isLoggedIn()) {
+		next('/login')
+	} else {
+		next()
+	}
+	})
+
+Route-level guard
+	{
+		path: '/admin',
+		beforeEnter: (to, from) => {
+			if (!isAdmin()) return '/403'
+		}
+	}
+
+
+Lazy Loading Routes (⚡ Performance)
+-----------------------------------
+❌ Eager
+import Admin from '@/views/Admin.vue'
+
+✅ Lazy
+{
+  path: '/admin',
+  component: () => import('@/views/Admin.vue')
+}
+
+
+Redirects & Aliases
+-------------------
+Redirect
+	{ path: '/', redirect: '/home' }
+
+Alias
+	{ path: '/home', alias: '/', component: Home }
+
+Use redirect when:
+	✔ Old URLs
+	✔ Default routes
+
+Use alias when:
+	✔ Same page, multiple URLs
+
+
+Catch-All / 404 Route
+----------------------
+{
+  path: '/:pathMatch(.*)*',
+  component: NotFound
+}
+Must be last.
+
+programatic navigation:
+----------------------
+	router.push('/login')
+	router.push({ name: 'user', params: { id: 1 } })
+	router.replace('/home')
+	router.back()

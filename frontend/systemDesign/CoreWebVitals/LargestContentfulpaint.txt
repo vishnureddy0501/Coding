@@ -1,0 +1,78 @@
+Largest Contentful paint:
+-------------------------
+LCP measures how long it takes for the main content of the page to become visible.
+
+What Elements Can Be LCP?
+--------------------------
+The browser tracks largest visible element in the viewport.
+Eligible LCP elements:
+	<img>
+	<video poster>
+	<svg image>
+	Block-level text (<h1>, <p>)
+	Background images (newer browsers)
+
+causes of poor LCP:
+------------------
+1. slower server responsive
+	If HTML arrives late → nothing can render.
+
+	fix: CDN, server-side rendering, faster backend.
+
+2. Large hero images
+	<img src="hero.jpg">
+	Problems:	Big size, No preload, No priority
+
+	fix: 
+		keep this code in index.html:
+			too many preloads will hurt performance. Becareful.
+			<link rel="preload" as="image" href="/hero.jpg">
+
+		keep this code in vue file:
+			<img
+				src="/hero.jpg"
+				width="1200"
+				height="600"
+				fetchpriority="high"
+			/>
+			📌 fetchpriority="high" is HUGE for LCP.
+
+3. CSS blocking rendering
+		fix:
+			use inline css
+			defer non-critical css.
+
+4. client side rendering
+		fix: use server side rendering if possible
+
+8. lazy loading LCP images is bad.
+		never lazy load LCP elements.
+
+
+
+9. LCP & JavaScript (Hidden Killer)
+	Heavy JS blocks rendering:
+		JS parse
+		JS execute
+		JS blocks main thread
+
+	Fix:
+		Code split
+		Defer non-critical JS
+		Reduce bundle size
+
+
+
+
+Debugging LCP (Step-by-Step)
+------------------------------
+Identify LCP element (DevTools)
+Check:
+	Size
+	Load time
+	Priority
+Optimize:
+	Preload
+	Compress
+	CDN
+Re-measure

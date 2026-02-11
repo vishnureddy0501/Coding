@@ -1,0 +1,140 @@
+🧠 What “Prefetch Next Page” REALLY Means
+	Fetch page N+1 quietly in advance
+	without rendering it
+	and use it instantly when user reaches bottom.
+
+vuex stage design:
+-----------------
+state: () => ({
+  items: [],
+  page: 1,
+
+  prefetchedItems: [], // 🔥 buffer
+  hasMore: true,
+
+  isPaginating: false,
+  isPrefetching: false,
+
+  queryKey: "",
+
+  aborter: {
+    fetch: null,
+    prefetch: null
+  }
+});
+
+prefetch action:
+----------------
+async prefetchNextPage({ state, commit }) {
+  if (
+    state.isPrefetching ||
+    !state.hasMore ||
+    state.prefetchedItems.length
+  ) return;
+
+  commit("PREFETCH_START");
+
+  try {
+    const data = await fetchProducts(
+      {
+        page: state.page + 1,
+        queryKey: state.queryKey
+      },
+      "prefetch"
+    );
+
+    commit("PREFETCH_SUCCESS", data);
+  } catch (e) {
+    commit("PREFETCH_END");
+  }
+}
+
+prefetch state:
+--------------
+PREFETCH_START(state) {
+  state.isPrefetching = true;
+},
+
+PREFETCH_SUCCESS(state, items) {
+  state.prefetchedItems = items;
+  state.isPrefetching = false;
+}
+
+fetch next page action:
+-----------------------
+async fetchNextPage({ state, commit, dispatch }) {
+  if (state.isPaginating || !state.hasMore) return;
+
+  commit("PAGINATION_START");
+
+  // ✅ Use prefetched data if available
+  if (state.prefetchedItems.length) {
+    commit("APPEND_ITEMS", state.prefetchedItems);
+    commit("CLEAR_PREFETCH");
+    commit("PAGINATION_END");
+
+    dispatch("prefetchNextPage"); // prefetch next again
+    return;
+  }
+
+  // ❌ fallback if prefetch not ready
+  try {
+    const data = await fetchProducts(
+      {
+        page: state.page + 1,
+        queryKey: state.queryKey
+      },
+      "fetch"
+    );
+
+    commit("APPEND_ITEMS", data);
+  } finally {
+    commit("PAGINATION_END");
+  }
+}
+
+
+backend api call with abort controllers:
+----------------------------------------
+let controllers = {
+  fetch: null,
+  prefetch: null
+};
+
+export function fetchProducts(params, type = "fetch") {
+  controllers[type]?.abort();
+  controllers[type] = new AbortController();
+
+  return axios.get("/products", {
+    params,
+    signal: controllers[type].signal
+  }).then(r => r.data);
+}
+
+
+reset list:
+---------------
+RESET_LIST(state) {
+  state.items = [];
+  state.prefetchedItems = [];
+  state.page = 1;
+  state.hasMore = true;
+
+  controllers.fetch?.abort();
+  controllers.prefetch?.abort();
+}
+
+prefetch the data on mounted:
+-------------------------------
+mounted() {
+  this.$store.dispatch("prefetchNextPage");
+}
+
+when user scrolls 60-70%. prefetch the data:
+--------------------------------------------
+onScroll() {
+  if (scrollRatio > 0.6) {
+    this.$store.dispatch("prefetchNextPage");
+  }
+}
+

@@ -1,0 +1,7 @@
+console.log(this);
+console.log(window);
+
+both give same result. 
+window, this refers to the global Execution Context
+
+this, window both  are global object

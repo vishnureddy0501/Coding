@@ -1,0 +1,10 @@
+// app/blog/[slug]/page.jsx
+
+export async function generateMetadata({ params }) {
+  const { slug } = params;
+
+  return {
+    title: `Blog on ${slug} | MySite`,
+    description: `Read detailed article about ${slug}`,
+  };
+}

@@ -1,0 +1,41 @@
+❌ CORS does NOT stop requests
+✅ CORS stops JavaScript from reading the response
+
+The request always goes to the server.
+
+
+Important Thing to Remember
+---------------------------
+If your API works in Postman but fails in browser → it is CORS.
+
+Postman is not a browser.
+CORS only exists in browsers.
+CORS errors doesn't come if you call other microservice/url from backend. because backend code don't run in browser.
+
+
+
+
+Does CORS block requests?
+	No, it blocks JavaScript from reading responses.
+
+Q: Can CORS be bypassed?
+	Yes, using server-side requests or proxies.
+
+
+
+cors({
+  origin: "https://frontend.example.com",
+  credentials: true
+})
+
+credentials: true
+------------------
+with this cookies are allowed to sent along with headers. (for allowing cookies to come to backend we need it)
+
+Why Is credentials: true Needed?
+--------------------------------
+By default:
+	❌ Browser does NOT send cookies in cross-origin requests
+	❌ Browser does NOT allow JS to read cookie-based responses
+So you must explicitly allow it.
+

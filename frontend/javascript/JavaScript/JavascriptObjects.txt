@@ -1,0 +1,47 @@
+Delete a key:
+----------------
+const data = {name: "vishnu", age: 20};
+delete data.age;
+
+deep copy vs shallow copy:
+-----------------------------
+The spread operator (...) in JavaScript creates a shallow copy of objects and arrays.
+This means that while the top-level properties are copied to a new object or array, any nested objects or arrays within them are still referenced, not copied.
+eg:
+---
+const original = { name: "John", address: { city: "New York" } };
+const shallowCopy = { ...original };
+
+shallowCopy.name = "Doe";
+shallowCopy.address.city = "San Francisco";
+
+console.log(original.name); // "John" (unchanged)
+console.log(original.address.city); // "San Francisco" (changed)
+
+In the example above, the address object is shared between original and shallowCopy. Changes to shallowCopy.address.city affect the original object as well.
+
+creating deep copy:
+---------------------
+These methods ensure that changes to the deep copy won't affect the original object because every level of the structure is duplicated with a different memory allocation.
+
+   1. Use JSON.parse and JSON.stringify:
+
+const deepCopy = JSON.parse(JSON.stringify(original));
+    2. Using structuredClone
+
+    const deepCopy = structuredClone(original);
+    
+
+
+iterating in objects:
+---------------------
+1. for in loop
+   for (key in obj) {
+      console.log(key, obj[key]);
+   }
+
+2. using object.keys
+   Object.keys(obj).forEach((key) => {
+      conosle.log(key, obj[key]);
+   })
+

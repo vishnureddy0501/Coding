@@ -1,0 +1,4 @@
+Frequent DOM manipulations are expensive and performance heavy.
+Virtual DOM is a virtual representation of the real DOM.
+When state changes occur, the virtual DOM is updated and the previous and current version of virtual DOM is compared. This is called “diffing”.
+It then makes sure that batched updates are sent to the real DOM for repainting or re-rendering of the UI.

@@ -1,0 +1,29 @@
+First Contentful Paint:
+-----------------------
+FCP measures the time from navigation until the browser renders the first piece of content.
+
+That “content” can be:
+	Text
+	Image
+	SVG
+	Canvas
+	Background image
+
+📌 It does NOT include:
+	White background
+	Spinner without content
+	Empty layout
+
+
+What Causes Poor FCP?
+🧠 Core reason:
+	The browser cannot paint until critical resources are ready.
+
+
+| Metric | Focus          |
+| ------ | -------------- |
+| FCP    | First paint    |
+| LCP    | Main paint     |
+| CLS    | Stability      |
+| INP    | Responsiveness |
+

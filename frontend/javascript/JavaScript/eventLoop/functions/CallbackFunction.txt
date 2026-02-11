@@ -1,0 +1,23 @@
+callback function:
+-------------------
+A  callback function is a function that is passed as an argument to another
+function and is intended to be executed after some operation has been completed
+
+const add = (x, y) => return x+y;
+const multiply = (x,y) => return x*y;
+const display = (x, y, operation) => {
+    const result = operation(x,y);
+    console.log(result);
+    return result;
+}
+display(10, 20, add);
+display(10, 20, multiply);
+
+applications of callback function:
+----------------------------------
+1. promises, fetch, settimeout, setinterval
+
+eg: 
+setTimeout(()=> {
+    // this is a call back function because we passed whole function as argument to function settimeout
+}, 1000);

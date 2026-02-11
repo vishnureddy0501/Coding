@@ -1,0 +1,89 @@
+What if:
+	Server only needs to push updates
+	Client never sends messages
+	Updates are occasional or streaming
+	We want simple HTTP, no socket management
+👉 That’s SSE
+
+
+Server-Sent Events (SSE) is an HTTP-based mechanism that allows a server to push a continuous stream of updates to the client over a single, long-lived connection.
+
+Key traits:
+	One-way: Server → Client
+	Uses normal HTTP
+	Text-based stream
+	Built-in reconnection
+
+
+flow diagram:
+------------
+Client ──(HTTP request)──▶ Server
+Client ◀──(event stream)── Server
+Client ◀──(event stream)── Server
+Client ◀──(event stream)── Server
+
+
+How SSE works under the hood:
+------------------------------
+1. Client makes HTTP request
+	GET /events
+	Accept: text/event-stream
+2. Server responds and NEVER closes connection
+3. Server sends messages as text
+
+
+
+Real-world use cases:
+	Perfect use cases
+	Notifications
+	Live feeds
+	Activity logs
+	Build/deployment status
+	Analytics dashboards
+	Progress updates
+	chatgpt like streaming.
+
+
+Authentication in SSE:
+-----------------------
+1. Cookies (best)
+	Uses normal HTTP
+	Cookies automatically sent
+
+
+SSE limitations (be honest)
+	❌ One-way only
+	❌ Text only (no binary)
+	❌ Max ~6 connections per browser per domain
+
+
+When SHOULD you use SSE?
+--------------------------
+Server → client only
+Need real-time updates
+Want simple & reliable
+Don’t need binary data
+
+
+When NOT to use SSE?
+--------------------
+Avoid when:
+	Client must send frequent messages
+	Gaming or chat
+	Binary streaming
+	Extremely high-frequency updates
+
+Use:
+	WebSockets
+
+
+
+applications:
+---------------
+| Need                | Choose    |
+| ------------------- | --------- |
+| Notifications       | SSE       |
+| Chat                | WebSocket |
+| Streaming logs      | SSE       |
+| Multiplayer game    | WebSocket |
+| Simple real-time UI | SSE       |

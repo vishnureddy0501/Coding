@@ -1,0 +1,76 @@
+🔹 The Problem
+    JavaScript is single-threaded → it can do one thing at a time.
+    But… we still want things like:
+        • Delays (setTimeout), Fetching data (fetch)
+
+    How can JS handle all this without blocking?
+
+    👉 Answer: Event Loop
+
+🔹 How it works (step by step)
+
+1. Call Stack: Maintails the order of Execution Context
+    • Where your code runs line by line.
+    • If a function is called, it goes on the stack.
+    • When it finishes, it’s removed.
+    Example:
+        function greet() { console.log("Hello"); }
+        greet(); // goes on stack → runs → removed
+
+2. Web APIs (Browser features)
+    • Things like setTimeout, fetch, DOM events live outside JS.
+    • When you call them, the browser takes over.
+    Example:
+        setTimeout(() => console.log("Timeout!"), 1000);
+    • setTimeout is given to browser’s timer API, not JS itself.
+
+
+3. Callback Queue (a.k.a. Task Queue / Message Queue)
+    • When the timer (or fetch, or click) finishes,
+      the callback is sent to the queue, waiting for its turn.
+
+
+4. Event Loop
+    • The traffic cop 🚦
+    • Keeps checking: “Is the call stack empty?”
+    • If yes, it takes the next callback from the queue 
+      and pushes it onto the call stack.
+
+
+🔹 Example Walkthrough
+
+    console.log("Start");
+
+    setTimeout(() => console.log("Timeout!"), 1000);
+
+    console.log("End");
+
+Execution:
+
+    "Start" → printed.
+    setTimeout → timer set in browser, callback saved for later.
+    "End" → printed.
+    After 1s, browser moves callback → queue.
+    Event loop sees stack is empty → runs "Timeout!".
+
+👉 Output:
+
+    Start
+    End
+    Timeout!
+
+
+
+✅ Simple Definition
+
+    The event loop is the mechanism that makes JavaScript appear asynchronous, by:
+
+        • Running your code in the call stack.
+        • Offloading async tasks to Web APIs.
+        • Pushing their callbacks into a queue.
+        • Pulling tasks back into the stack when it’s empty.
+
+⚡ In one line:
+
+    The event loop is what lets JavaScript handle asynchronous code 
+    without blocking the main thread.

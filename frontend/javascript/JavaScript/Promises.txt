@@ -1,0 +1,31 @@
+Promises provide a way to handle asynchronous operations.
+
+    Pending: The initial state of a promise.
+    Fulfilled: The promise is resolved successfully.
+    Rejected: The promise has failed.
+
+A promise represents the result of an asynchronous operation and provides .then() and .catch() methods to handle the result or error.
+
+allSettled:
+------------
+    The Promise.allSettled method is used to handle multiple promises concurrently, allowing you to wait for all of them to settle (either resolved or rejected) without immediately rejecting if one of the promises fails.
+    In Promise.allSettled, the then block always executes once all the promises have settled, regardless of whether they resolved or rejected. The catch block does not execute because Promise.allSettled never rejects; it always fulfills with an array of results that indicate the status of each promise (either "fulfilled" or "rejected").
+    eg: 
+    const paramsArray = [{ node: "APAC", "path": "APAC"}, { node: "EPAC", "path": "EPAC"}]
+    const dataPromise = Promise.allSettled(paramsArray.map(params => API.get('url', { params })));
+    dataPromise.then(resp => {
+        // resp is an array. resp[0] contains response of first promise, resp[1] contains response of 2nd promise
+    }).catch(() => {
+        This will not execute because allSettled never rejects
+    });
+
+promise.all:
+---------------
+    Promise.all is a method in JavaScript that takes an iterable (usually an array) of promises and returns a single promise that resolves when all the promises in the iterable have resolved, or rejects if any of the promises in the iterable reject.
+    The returned promise resolves with an array of the resolved values of the input promises in the same order as the input.
+    const promises = [this.fetchOrgChartData(), this.fetchAccInsightsMap(), this.fetchDefaultConfigForInsight()];
+    Promise.all(promises).then(() => {
+        // then code
+    }).catch(() => {
+        // if any of the promise rejected, then it won't check for other promises. directly catch block executes
+    })

@@ -1,0 +1,77 @@
+⚡ Static Generation (BEST for SEO)
+	Pre-build pages at build time
+
+react -> not seo friendly
+-------------------------
+client side rendering
+browser might see empty html tag.
+
+	index.html:
+	----------
+		<div id="root"></div>
+		<script src="bundle.js"></script>
+
+	App.jsx:
+	-------
+		function App() {
+		return <h1>SEO Friendly App</h1>;
+		}
+
+	when browser loads, it can see:
+	-------------------------------
+	<div id="root"></div>
+
+	Content appears only after JavaScript executes.
+	🔴 Search engines may see:
+		Empty HTML
+		No meaningful meta tags
+		Slower indexing
+
+
+seo friendly react app: (next.js)
+---------------------------------
+server side rendering -> when you load url in the browser, it can see whole html.
+
+-> better seo.
+
+🔍 View Page Source (Right click → View Source)
+
+✅ HTML already contains content
+✅ Google sees everything
+✅ No JS execution required to read tex
+
+
+layout.jsx:
+-----------
+	// google can read title, description, keywords and helps to improve seo.
+	export const metadata = {
+		title: "SEO Friendly React App",
+		description: "A modern SEO friendly React application using Next.js",
+		keywords: ["React SEO", "Next.js", "SEO Friendly App"],
+	};
+
+	export default function RootLayout({ children }) {
+	return (
+		<html lang="en">
+		<body>{children}</body>
+		</html>
+	);
+	}
+
+
+Q: How do you handle SEO in React?
+	“By using server-side rendering or static generation with Next.js so search engines receive fully rendered HTML and metadata.”
+
+Q: How do you handle SEO for dynamic pages?
+	“Using dynamic routes with generateMetadata and static params for pre-rendering.”
+
+
+🔍 Technical SEO Checklist (2025)
+
+✅ SSR / SSG
+✅ Unique title & description, keywords
+✅ Open Graph tags
+✅ Image optimization
+✅ Mobile friendly
+✅ Clean URLs
+✅ secure urls has better seo

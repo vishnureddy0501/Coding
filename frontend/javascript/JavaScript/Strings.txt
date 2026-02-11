@@ -1,0 +1,12 @@
+String Manipulation Operations:
+--------------------------------
+string concatenation: string str = st1 + str2;
+substring: str.substr(startIndex, endIndex); // startIndex inclusive and endIndex exclusive.
+length: str.length
+split: str.split(","); // returns an array.
+toLowerCase: str.toLowerCase();
+replace: str.replace("hello", "world"); // when ever hello is occured. it will get replaced with world.
+
+join: it is used for string concatenation.
+eg: let data = ["abc", "def"];
+    let result = data.join("#");

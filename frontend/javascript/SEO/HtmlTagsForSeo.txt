@@ -1,0 +1,16 @@
+HTML Tags You Need to Know for Better SEO with code:
+----------------------------------------------------------
+meta tag
+title tag
+alt tag for images
+header tags. eg: h1 (headings), h2 (sub headings), h3 (sub-sub headings)
+anchor tag. 
+footer tag:
+-----------
+	This is important for SEO because it provides additional information about the website and its content. It can contain links to related pages and social media profiles.
+	<footer> 
+		<p>Copyright © YourWebsite.com</p> 
+		<a href="https://www.facebook.com/YourWebsite">Facebook</a> 
+		<a href="https://twitter.com/YourWebsite">Twitter</a> 
+	</footer>
+list tag. 

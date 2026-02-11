@@ -1,0 +1,43 @@
+A watcher that keeps checking whether a target element enters or exits a visible area.
+
+Term	Meaning
+Target	Element you are watching
+Root	The viewport or scroll container
+Intersection	When target overlaps with root
+Callback	Function called when visibility changes
+
+
+	threshold:
+	---------
+	threshold: 0 means callback fires even when 1px is visible.
+	threshold: 1     // fully visible
+	threshold: 0.5   // 50% visible
+
+	For infinite scroll:  ✅ Always use 0
+
+
+
+key points:
+------------
+Use IntersectionObserver when you care about element visibility, not scroll position.
+
+1. Observer ≠ Scroll Listener
+	Browser handles visibility detection
+
+2. Sentinel pattern
+	Invisible element at bottom
+	Cleaner than scroll math
+
+3. Preloading with rootMargin
+	preloads early before element reaches the intersection point. (rootMargin: "200px")
+	Professional UX trick
+
+4. Visibility-based logic
+	Reacts to what user sees, not scroll position
+
+
+applications of IntersectionObserver:
+--------------------------------------
+Infinite Scroll
+lazy image loads. (loads the image when this section is visible)
+analytics. (to identify weather this section is viewed or not)

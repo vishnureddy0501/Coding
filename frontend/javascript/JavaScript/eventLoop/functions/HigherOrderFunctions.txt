@@ -1,0 +1,5 @@
+A Higher-Order Function (HOF) is a function that either:
+	Takes another function as an argument, OR
+	Returns a function.
+
+Example: settimeout, setInterval

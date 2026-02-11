@@ -1,0 +1,108 @@
+Without props:
+	const route = useRoute()
+	const id = route.params.id
+Problems:
+	Component is tightly coupled to router
+	Harder to test
+	Harder to reuse
+	Hidden dependencies
+
+props: true (Auto-mapping params)
+----------------------------------
+	{
+		path: '/users/:id',
+		component: UserDetails,
+		props: true
+	}
+
+
+What happens:
+-------------
+props: ['id']
+
+So instead of:
+	route.params.id
+
+You do:
+	props: {
+		id: Sring
+	}
+
+When to use
+	✔ Simple required params
+	✔ ID-based pages
+	✔ CRUD pages
+
+Limitations
+	❌ Only passes params, not query
+
+
+
+Function Props: (Most important******)
+---------------
+using function props you can pass params, query params also, you can pass keys of your wish.
+{
+  path: '/users/:id',
+  component: UserDetails,
+  props: route => ({
+    id: Number(route.params.id),
+    tab: route.query.tab || 'overview'
+  })
+}
+
+
+in you compoenent:
+-------------------
+define like this and use.
+props: {
+  id: Number,
+  tab: String
+}
+
+
+Props for Queries (Clean UI State)
+------------------------------------
+
+Instead of:
+	route.query.page
+
+Use:
+	props: route => ({
+		page: Number(route.query.page || 1),
+		search: route.query.search || ''
+	})
+
+
+Benefits:
+	Pagination stays clean
+	Component becomes reusable
+	URL reflects UI state
+
+
+Props for Nested Routes
+------------------------
+{
+  path: '/projects/:projectId',
+  component: ProjectLayout,
+  props: true,
+  children: [
+    {
+      path: 'settings',
+      component: ProjectSettings,
+      props: true
+    }
+  ]
+}
+
+
+URL:
+	/projects/7/settings
+
+Both components receive:
+	projectId
+
+
+Key Points:
+----------
+Child routes inherit params automatically.
+Routing props are for URL-derived data only.

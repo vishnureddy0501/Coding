@@ -1,0 +1,7 @@
+What Is Resource Delivery?
+
+Resources = HTML, CSS, JavaScript, Images, Fonts, Videos, API responses
+
+Resource delivery optimization =
+
+Getting the right resource to the right device at the right time in the smallest possible form.

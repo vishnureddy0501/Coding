@@ -1,0 +1,70 @@
+1️⃣ setTimeout
+	Runs a function once after a delay (in ms).
+	Returns a timer ID which can be used to cancel it.
+
+	code:
+	-----
+		console.log("Start");
+		const timerId = setTimeout(() => {
+			console.log("Hello after 2 seconds");
+		}, 2000);
+		console.log("End");
+	👉 Output:
+	----------
+		Start
+		End
+		Hello after 2 seconds
+
+2️⃣ setInterval
+	Runs a function repeatedly after every given interval (in ms).
+	Keeps going until you stop it with clearInterval.
+	code:
+	-------
+		let count = 1;
+		const intervalId = setInterval(() => {
+			console.log("Count:", count);
+			count++;
+		}, 1000);
+	👉 Output (every 1s):
+	----------------------
+		Count: 1
+		Count: 2
+		Count: 3
+		...
+
+3️⃣ clearTimeout
+	Cancels a setTimeout before it runs.
+
+	code:
+	------
+	const timerId = setTimeout(() => {
+		console.log("This will never run");
+	}, 2000);
+
+	clearTimeout(timerId);  // cancel it immediately
+
+👉 Nothing will print.
+
+4️⃣ clearInterval
+
+	Stops a setInterval from running.
+	code:
+	-----
+		let count = 1;
+
+		const intervalId = setInterval(() => {
+			console.log("Count:", count);
+			count++;
+
+			if (count > 3) {
+				clearInterval(intervalId);  // stop after 3 runs
+				console.log("Interval stopped");
+			}
+		}, 1000);
+
+	👉 Output:
+	----------
+		Count: 1
+		Count: 2
+		Count: 3
+		Interval stopped

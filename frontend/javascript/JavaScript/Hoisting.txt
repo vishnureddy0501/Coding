@@ -1,0 +1,110 @@
+🔹 What is Hoisting?
+---------------------
+	JavaScript moves declarations (not initializations) to the top of their scope (function scope or global scope) during compilation.
+
+	🔹 Variables
+		1. var
+			Declaration is hoisted, initialized with undefined.
+			Can be used before declaration (but value = undefined).
+			Function-scoped.
+			code:
+				console.log(a); // undefined
+				var a = 10;
+
+				// Internally
+				var a;          // hoisted
+				console.log(a); // undefined
+				a = 10;
+
+		2. let
+			Declaration hoisted, but kept in the Temporal Dead Zone (TDZ) until actual line of declaration.
+			Accessing before declaration → ReferenceError.
+			Block-scoped.
+			console.log(b); // ❌ ReferenceError
+			let b = 20;
+
+		3. const
+			Same hoisting behavior as let (hoisted but TDZ).
+			Must be initialized at the time of declaration.
+			Block-scoped.
+			console.log(c); // ❌ ReferenceError
+			const c = 30;
+
+	🔹 Functions
+		4. Function Declarations
+			Fully hoisted (declaration + definition).
+			Can be called before definition.
+			code:
+				greet();  // ✅ "Hello"
+				function greet() {
+					console.log("Hello");
+				}
+
+		5. Function Expressions (const, let, var)
+			Only the variable declaration is hoisted, not the function assignment.
+			With var: variable is undefined before assignment → calling gives TypeError.
+			With let/const: in TDZ → calling gives ReferenceError.
+			code:
+				sayHi();  // ❌ TypeError / ReferenceError
+
+				var sayHi = function() {
+				console.log("Hi");
+				};
+
+				// Internally:
+				var sayHi;   // hoisted as undefined
+				sayHi();     // ❌ TypeError: sayHi is not a function
+				sayHi = function() {...}
+
+		🔹 Special Case: Arrow Functions
+			Arrow functions are just function expressions.
+			Hoisting rules = same as var, let, or const.
+			add(2, 3); // ❌ ReferenceError
+			const add = (a, b) => a + b;
+
+
+	eg: 
+		console.log(myfunc);
+		var myfunc = function () {
+
+		} // this also treated as function declaration with var. 
+	
+		Output: undefined
+
+Temporal Deal Zone:
+-------------------
+	The time between hoisting of a variable and its actual initialization in code is called the Temporal Dead Zone.
+	During this time, the variable exists (it’s hoisted), but you cannot access it → doing so throws a ReferenceError.
+	
+	**TDZ applies only to let and const (not var).
+
+	🔹 Example 1: let in TDZ
+		console.log(x);  // ❌ ReferenceError (TDZ)
+		let x = 5;
+		console.log(x);  // ✅ 5
+
+
+		Internally:
+
+		// x is hoisted but uninitialized → TDZ
+		console.log(x);  // ReferenceError
+		x = 5;           // initialization ends TDZ
+		console.log(x);  // 5
+
+	🔹 Example 2: const in TDZ
+			console.log(y);  // ❌ ReferenceError (TDZ)
+			const y = 10;
+			console.log(y);  // ✅ 10
+
+🔹 Why TDZ exists?
+
+	To prevent accidental use of variables before they are declared.
+
+	To make let and const safer than var, which auto-initializes to undefined.
+
+	🔹 var vs let/const difference
+		console.log(m);  // ✅ undefined (no TDZ)
+		var m = 50;
+
+		console.log(n);  // ❌ ReferenceError (TDZ)
+		let n = 60;

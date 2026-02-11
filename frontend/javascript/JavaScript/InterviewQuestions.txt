@@ -1,0 +1,117 @@
+what is HTML(Hyper Text Markup language)?
+-------------
+used for creating Web pages
+(or)
+Used to display static content on webpage.
+
+memory allocation:
+--------------------
+    var a = "abc";
+    if you modify above variable then new memory gets created for it. // this is applicable for all primitive types.
+
+eg: 
+    var a = {name: "vish"};
+    a.name = "vardhan";
+    if you modify above object then new memory won't gets created. the value gets updated in the same memory location.
+ 
+ what is javascript?
+ -------------------
+ Browser understands HTML, CSS, JavaScript. Every browser contains javascript engine in it.
+ JavaScript -> JavaScript is a programming language that is used to make webpages dynamic and interactive.
+
+ what is javascript engine?
+ -----------------------------
+ Every browser contains javascript engine. it is responsible for executing javascript code.
+ javascript engine is a program that execute javascript code in the browser.
+ 
+ what is DOM? // nothing but accessing the HTML elements, updating and applying styles to elements from javascript code itself.
+ ------------
+ DOM (document Object model) is a tree like structure that allows javascript to dynamically access, manipulate the content and styles of webpage.
+
+
+ synchronous vs asynchronous:
+ ----------------------------
+ synchronous -> sequential execution
+ asynchronous -> Non-sequential execution
+
+ asynchronous operations: asynchronous operations are the operations that do not block the execution of code.
+ eg: settimeout
+
+ what are promises in javascript
+ --------------------------------
+ promises is a way in javascript to handle asynchronous operations.
+ A promise represents a value that is not available now, but it is available at some point of time in future.
+ syntax: 
+ const newpromise = new Promise((resolve, reject) => {
+    // perform asynchronous operation
+    // if successful call resolve(value)
+    // if failed call reject(error)
+ })
+ 
+ example usage of promise: 
+ ------------------------
+ const promise = new Promise((resolve, reject) => {
+    setTimeout(()=>{
+        const value = Math.floor(Math.random()*10);
+        console.log(value);
+        if(value < 5) {
+            resolve({success: true, value: value}); // one argument you can pass anything you want
+        } else {
+            reject({success: false, value: value}); // one argument you can pass anything you want
+        }
+    }, 1000);
+ })
+ promise.then((res)=>{
+    console.log(res);
+ }).catch((err)=>{
+    console.error(err);
+ })
+
+scope of variable:
+--------------------
+var -> function scope. (hoisting allowed)
+let -> block scope. (hoisting not allowed)
+const -> block scope. (hoisting not allowed)
+
+eg: 
+const add = () => {
+    if(true) {
+        var name = "vish"; // even through var is declared inside block. because of hoisting it is available across whole function.
+    } 
+    console.log(name);
+}
+
+ Explain the difference between == and === in JavaScript.
+ --------------------------------------------------------
+    == is the loose equality operator that performs type conversion before comparing.
+    === is the strict equality operator that does not perform type coercion, meaning the values and types must be the same.
+
+Data Types:
+-----------
+primitive: String, Number, null, undefined, boolean
+eg:
+    let val; // undefined assigned to it by default;
+    let myVal = null; // null is assigned. null means nothing
+non-primitive: Object, array, function, Date, Regular expression
+
+undefined vs null:
+-------------------
+undefined: Represents variables that have been declared but not yet assigned a value.
+             It's automatically assigned by JavaScript in certain scenarios.
+
+            (or)
+            undefined can be used when we dont have value right now. but you will get it after some logic or operation.
+null:  intentional assignment to a variable. (if you don't want to store anything in variable then you can assign null).
+        (or)
+        Represents an intentional absence of value and is explicitly assigned by developers.
+
+what is the type of variable when it is declared without var, let, const?
+------------------------------------------------------------------------
+eg: name = "vishnu" // now the default type if "var" 
+
+event handling in javascript:
+-----------------------------
+<button id='mybutton'></button>
+document.getElementById.addEventListener('click', ()=>{
+    // this is a call back function because we passed whole function as argument
+});

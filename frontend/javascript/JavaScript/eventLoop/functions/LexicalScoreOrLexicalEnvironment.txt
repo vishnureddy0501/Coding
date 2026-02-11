@@ -1,0 +1,42 @@
+function a () {
+	const x = 10;
+	function b () {
+		const y = 20;
+		console.log(x, y);
+	}
+}
+
+a();
+
+
+lexical means in-hierarchy.
+b is lexically sitting inside a.
+a is lexically inside "Global Scope".
+
+Lexical Environment:
+--------------------
+ Local memory + reference to Execution Context of Parent
+
+
+
+Lexical Scope Chain:  Chain of Lexical Environments
+------------------
+Lexical scope means the scope of a variable is determined by its placement in the source code, and inner functions can access variables from their outer functions.
+
+search in current score, parent scope .....
+
+eg:
+---
+console.log(x, y);
+
+first control searches for x, y in local memory of b. if it don't find, using reference of Execution Context of "a",  goto "a".
+Now we are in "a". search in Local memory of "a".
+... and so on
+
+
+This porcess is called scope chain.
+
+
+Closure:
+---------
+b has access to lexical Environment of it's parent(a). This is called closure. 
