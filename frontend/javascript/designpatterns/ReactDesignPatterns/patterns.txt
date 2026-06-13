@@ -1,0 +1,77 @@
+Must Know
+    Component Composition
+    Custom Hooks
+    Context Pattern
+    Provider Pattern
+    Container/Presentational
+    Controlled Components
+    useReducer Pattern
+    Lazy Loading
+Good To Know
+    HOC
+    Render Props
+    Compound Components
+    Factory Pattern
+    Singleton Pattern
+    Observer Pattern
+
+1. Component Composition Pattern
+    Instead of creating huge components, combine small components.
+    function Header() {
+        return <header>Header</header>;
+    }
+    function Sidebar() {
+        return <nav>Sidebar</nav>;
+    }
+    function Content() {
+        return <main>Content</main>;
+    }
+    function Dashboard() {
+    return (
+        <>
+        <Header />
+        <Sidebar />
+        <Content />
+        </>
+    );
+    }
+
+2. Container / Presentational Pattern
+
+Presentational Component: Only displays UI.
+
+function UserList({ users }) {
+  return (
+    <ul>
+      {users.map(user => (
+        <li key={user.id}>{user.name}</li>
+      ))}
+    </ul>
+  );
+}
+
+Container Component: Handles API calls and business logic.
+
+function UserContainer() {
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    fetchUsers().then(setUsers);
+  }, []);
+
+  return <UserList users={users} />;
+}
+
+
+3. CustomHook Pattern
+4.  Render Props Pattern
+        passing function as a prop to child.
+
+7. Context Pattern
+    use react context context api to avoid prop dirlling.
+
+11. State Reducer Pattern
+        using useReducer for complex state.
+
+12. Singleton Pattern
+        One shared instance across app.

@@ -1,5 +1,48 @@
+How Search Engines Work
+----------------------
+	Step 1: Crawling
+		Search engine bots visit pages.
+			Google Bot
+    			↓
+			website.com
+    			↓
+			all pages
+	Step 2: Indexing
+		Google stores page information in its database.
+			URL
+			Title
+			Description
+			Keywords
+			Content
+			Images
+	Step 3: Ranking
+		When a user searches:
+			Google finds matching pages and ranks them.
+		Factors include:
+			Content quality
+			Page speed
+			Mobile friendliness
+			Backlinks
+			User experience
+
 ⚡ Static Generation (BEST for SEO)
 	Pre-build pages at build time
+
+3. Why React Has SEO Problems
+
+React Apps: Client Side Rendering (CSR)
+
+Initial HTML:
+	<body>
+		<div id="root"></div>
+	</body>
+
+Content appears only after JavaScript executes.
+
+Google can execute JavaScript, but:
+	Crawling becomes slower
+	Some crawlers cannot execute JS
+	SEO suffers
 
 react -> not seo friendly
 -------------------------
@@ -38,7 +81,7 @@ server side rendering -> when you load url in the browser, it can see whole html
 
 ✅ HTML already contains content
 ✅ Google sees everything
-✅ No JS execution required to read tex
+✅ No JS execution required to read text
 
 
 layout.jsx:
@@ -75,3 +118,20 @@ Q: How do you handle SEO for dynamic pages?
 ✅ Mobile friendly
 ✅ Clean URLs
 ✅ secure urls has better seo
+
+
+11. Image SEO
+<Image
+ src="/laptop.png"
+ alt="Dell Inspiron 15 Laptop"
+/>
+
+Always provide:
+	alt=""
+
+12. URL Structure
+	Bad:
+		/page?id=1234
+	Good:
+		/blog/react-hooks-guide
+Search engines understand keywords.

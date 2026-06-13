@@ -1,0 +1,111 @@
+call, apply, bind
+higher order functions
+prototype, prototype chain, polyfills
+
+Rest Operator
+------------
+function sum(...nums) {
+  return nums;
+}
+
+
+lexical scope
+scope chain
+closures
+
+
+Lexical Scope:
+-------------
+the ability of a function scope to access variables from the parent scope.
+When there is lexical scope, the innermost, inner and outermost functions may access all variables from their parent scopes all the way up to the global scope.
+
+
+Rule that determines where variables are accessible.
+
+const name = "Global";
+
+function outer() {
+  const name = "Outer";
+
+  function inner() {
+    console.log(name);
+  }
+
+  inner();
+}
+
+outer();
+
+output: "outer"
+
+
+Scope Chain:
+------------
+JavaScript searching for a variable:
+
+Current Scope
+      ↓
+Parent Scope
+      ↓
+Global Scope
+
+This is called the Scope Chain.
+
+
+
+
+3. What is a Closure?
+----------------------
+A function is defined inside another function
+The inner function remembers variables from the outer function
+Even after the outer function has finished executing
+
+
+Closure: function + it's lexical environment.
+
+Closure: Mechanism that preserves variables after outer function returns.
+
+function outer() {
+  const name = "Vishnu";
+
+  function inner() {
+    console.log(name);
+  }
+
+  return inner;
+}
+
+const fn = outer();
+
+fn();
+
+Lexical Environment: nothing but variable storage.
+--------------------
+A lexical environment is an internal JavaScript structure that stores variables and references to its parent environment during execution.
+
+When JavaScript executes the code, it creates environments.
+
+For the above example:
+
+Global Lexical Environment
+--------------------------------
+a = 10
+outer = function
+--------------------------------
+
+When outer() runs:
+
+Outer Lexical Environment
+--------------------------------
+b = 20
+inner = function
+--------------------------------
+
+When inner() runs:
+
+Inner Lexical Environment
+--------------------------------
+c = 30
+--------------------------------
+
+These environments actually hold the variables.

@@ -1,0 +1,106 @@
+What is Function Currying?
+
+Converting a function that takes multiple arguments into a sequence of functions that take one argument at a time.
+
+Without currying:
+
+function add(a, b, c) {
+  return a + b + c;
+}
+
+console.log(add(1, 2, 3));
+
+Output:
+
+6
+
+With currying:
+
+function add(a) {
+  return function (b) {
+    return function (c) {
+      return a + b + c;
+    };
+  };
+}
+
+console.log(add(1)(2)(3));
+
+Output:
+
+6
+
+Notice:
+
+add(1, 2, 3);
+
+became:
+
+add(1)(2)(3);
+
+Why Do We Need Currying?
+
+Partial Application
+    You can pre-fill some arguments and reuse the function.
+
+function multiply(a) {
+  return function (b) {
+    return a * b;
+  };
+}
+
+Create reusable functions:
+
+const double = multiply(2);
+
+console.log(double(5));
+console.log(double(10));
+console.log(double(20));
+
+Output:
+
+10
+20
+40
+
+Without currying:
+
+multiply(2, 5);
+multiply(2, 10);
+multiply(2, 20);
+
+You keep repeating 2.
+
+Currying lets you configure once and reuse.
+
+Real-World Example: Discounts
+function createDiscount(percent) {
+  return function (price) {
+    return price - (price * percent) / 100;
+  };
+}
+
+Real Frontend Example
+
+Suppose you want logging.
+
+function logger(level) {
+  return function (message) {
+    console.log(`[${level}] ${message}`);
+  };
+}
+
+Create loggers:
+
+const info = logger("INFO");
+const error = logger("ERROR");
+
+Usage:
+
+info("User logged in");
+error("API failed");
+
+Output:
+
+[INFO] User logged in
+[ERROR] API failed

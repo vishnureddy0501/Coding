@@ -1,7 +1,5 @@
 key points:
 ----------
-I prefer factory functions over classes because they avoid this, support closures, and compose better
-
 ✅ Factory = function returning object
 ✅ Use closures for private state
 ✅ Prefer factories over classes in JS
@@ -51,3 +49,31 @@ const createConfig = () => {
   return Object.freeze(config);
 };
 
+frontend example:
+-----------------
+deals grid -> we are mentioning type in config. 
+based on type we are resolving components in utils file using switch case.
+
+
+Frontend Example
+----------------
+Dynamic Form Fields
+
+function createField(type) {
+  switch (type) {
+    case "text":
+      return TextInput;
+
+    case "select":
+      return SelectInput;
+
+    case "checkbox":
+      return CheckboxInput;
+  }
+}
+
+Usage:
+
+const Field = createField(field.type);
+
+return <Field />;

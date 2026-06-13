@@ -1,4 +1,4 @@
-A singleton means: only ONE instance exists in the entire app.
+A singleton means: only ONE instance of class/object exists in the entire app.
 
 example: 
 -------

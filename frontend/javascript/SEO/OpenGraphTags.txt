@@ -1,0 +1,37 @@
+8. Open Graph Tags:
+    Open Graph metadata controls how your page looks when shared on social platforms.
+
+Used when sharing links on:
+
+Facebook
+LinkedIn
+Twitter/X
+
+Example:
+
+export const metadata = {
+  openGraph: {
+    title: "React Guide",
+    description: "Learn React",
+    images: ["/react.png"],
+  },
+};
+
+
+
+Without Open Graph
+--------------------
+Suppose your page is:
+    https://mysite.com/react-guide
+
+When someone pastes this link into WhatsApp, Facebook, LinkedIn, or Twitter/X, the platform tries to guess:
+    What title should appear?
+    What description should appear?
+    What image should appear?
+    Sometimes it guesses incorrectly or shows a poor preview.
+
+With Open Graph
+-----------------
+https://mysite.com/react-guide
+You explicitly tell the platform what to show.
+Now the shared preview becomes predictable.
