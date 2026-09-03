@@ -3,3 +3,8 @@ https://medium.com/@raazthemystery273/shadowdom-a-dom-you-might-be-unaware-of-dc
 https://eisenbergeffect.medium.com/sharing-styles-in-declarative-shadow-dom-c5bf84ffd311
 
 https://webkit.org/blog/13851/declarative-shadow-dom/
+
+shadown dom:
+----------
+browsers feature that hides the html, css, js for some elements.
+eg: input, button, textarea

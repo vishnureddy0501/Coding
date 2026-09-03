@@ -19,6 +19,35 @@ allSettled:
         This will not execute because allSettled never rejects
     });
 
+    Then why have a try...catch?
+    ----------------------------
+    It only catches unexpected errors, such as:
+    const promises = null;
+        try {
+            await Promise.allSettled(promises);
+        } catch (err) {
+            console.log(err);
+        }
+
+    Output:
+        TypeError: object is not iterable
+    
+    Or if you accidentally write:
+
+        try {
+        const result = await Promise.allSettled([
+            Promise.resolve(1)
+        ]);
+
+        console.log(result.value.name); // result.value is undefined
+        } catch (err) {
+            console.log(err);
+        }
+
+    Output:
+        TypeError: Cannot read properties of undefined
+
+The error comes from your code, not from the promises.
 promise.all:
 ---------------
     Promise.all is a method in JavaScript that takes an iterable (usually an array) of promises and returns a single promise that resolves when all the promises in the iterable have resolved, or rejects if any of the promises in the iterable reject.
