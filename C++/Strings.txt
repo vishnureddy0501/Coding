@@ -66,12 +66,6 @@ logs[i].substr(j + 1, logs[i].size() - left.size())
 10. Length
     size() or length(): Returns the number of characters in the string.
 
-11. insert a character at position k, n times.
-    str.insert(k, n, ch);
-
-12. Appending a character n times at the last.
-    str.append(n, ch);
-
 13. isalnum(ch) // to find if ch is of type alphabet or digit.
 
 
@@ -102,3 +96,12 @@ logs[i].substr(j + 1, logs[i].size() - left.size())
 
     Result: faster (no copy) + safer (compiler enforces read-only).
 
+
+
+Not needed:
+-----------
+11. insert a character at position k, n times.
+    str.insert(k, n, ch);
+
+12. Appending a character n times at the last.
+    str.append(n, ch);

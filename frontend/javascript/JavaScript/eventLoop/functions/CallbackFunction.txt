@@ -1,7 +1,9 @@
 callback function:
 -------------------
 A  callback function is a function that is passed as an argument to another
-function and is intended to be executed after some operation has been completed
+function and it will be called later by that fuction.
+
+Passed as an argument + called later = callback function.
 
 const add = (x, y) => return x+y;
 const multiply = (x,y) => return x*y;

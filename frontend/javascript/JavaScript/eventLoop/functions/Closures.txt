@@ -1,6 +1,8 @@
 🔹 What is a Closure?
 	function along with it's lexical Scope is called Closure. (interview definition)
 
+	let's say there is outer function, which returns inner function. the inner function has the access to lexical score of outer function even after the outer function completes it's execution.
+
 🔹 Example 1: Basic Closure
 function outer() {
     let name = "Vishnu"; // variable in outer function
@@ -43,9 +45,6 @@ counter(); // 3
 		function along with it's lexical Scope is called Closure.
 		b has access to lexical Environment of it's parent(a). This is called closure. 
 
-When a function is returned from another function, they still maintains their lexical scope.
-
-
 Uses of Closures:
 ------------------
 Currying
@@ -58,3 +57,8 @@ settimeout
 		}, 100);
 
 		callback function in setTimeout is a closure. because it is carrying i value with it. i is from lexical scope of settimeout.
+
+
+Currying:
+---------
+transforming a function that takes multiple arguments to  sequence of nesting functions, each taking exactly one argument at a time.

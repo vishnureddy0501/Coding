@@ -1,7 +1,6 @@
 Lexical Scope
 
 4️⃣ Functions (Deep Dive)
-	Closures 🔥
 	Pure vs impure functions
 	Currying, partial application
 	Function composition

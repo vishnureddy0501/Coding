@@ -19,6 +19,9 @@ Lexical Scope:
 the ability of a function scope to access variables from the parent scope.
 When there is lexical scope, the innermost, inner and outermost functions may access all variables from their parent scopes all the way up to the global scope.
 
+lexical scope:
+  outer function cannot access the variables inside inner function.
+  inner function can access the variables of outer function.
 
 Rule that determines where variables are accessible.
 
