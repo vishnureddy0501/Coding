@@ -65,23 +65,32 @@ Execution:
 
     The event loop is the mechanism that makes JavaScript appear asynchronous, by:
 
-        • Running your code in the call stack.
+        • Running your code in the call stack. [Javacript engine executes the code in callstack]
         • Offloading async tasks to Web APIs.
         • Pushing their callbacks into a queue.
         • Pulling tasks back into the stack when it’s empty.
-
 ⚡ In one line:
 
     The event loop is what lets JavaScript handle asynchronous code 
     without blocking the main thread.
 
 
+### The JavaScript engine executes JavaScript code using the call stack.
+
+series of events:
+-----------------
+1. Global code enters the call stack.
+2. JavaScript engine executes console.log("Start").
+3. JavaScript engine encounters setTimeout().
+4. The browser runtime starts the timer.
+5. JavaScript engine executes console.log("End").
+6. Global code finishes and the call stack becomes empty.
+7. The timer callback is placed in the task queue.
+8. Event loop checks whether the call stack is empty.
+9. Event loop moves the callback to the call stack.
+10. JavaScript engine executes the callback.
+
+
 is javascript single threaded?
 -------------------------------
 JavaScript is a single threaded synchronous language.
-
-🔹 Event Loop = Concept
-	The event loop itself is just a mechanism inside JS runtime (browser or Node.js).
-	It defines how synchronous code, microtasks, and macrotasks are scheduled and executed.
-
-Promises, settimeout, setinterval, async-await are a way to handle asynchronous events.

@@ -32,12 +32,8 @@ Standard code (adj is an adjacency list):
 
 Common mistakes (I made all of these):
 ---------------------------------------
-1. Forgetting q.push(nb)  -> only the start node and its direct neighbours get visited.
-2. Marking visited when POPPING instead of when pushing
+1. Marking visited when POPPING instead of when pushing
     -> the same node gets pushed many times and appears twice in the result.
-3. Treating an adjacency list as an edge list (see 01-GraphRepresentation.txt).
-4. Looping over all nodes when the problem says "start from node 0"
-    -> extra nodes from other components get added.
 
 
 Level-wise BFS (when you need distance / number of steps):

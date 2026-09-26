@@ -87,8 +87,7 @@ export default {
   data() {
     return {
       search: "",
-      timer: null,
-      latestValue: ""
+      timer: null
     };
   },
 
@@ -103,15 +102,13 @@ export default {
   },
 
   methods: {
-    throttledSearch(value) {
-      this.latestValue = value;
-
+    throttledSearch() {
       if (this.timer) {
         return;
       }
 
       this.timer = setTimeout(() => {
-        console.log("API called:", this.latestValue);
+        console.log("API called:", this.search);
 
         this.timer = null;
       }, 1000);

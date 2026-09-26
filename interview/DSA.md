@@ -1,249 +1,229 @@
-⭐ Maximum Subarray — Kadane's Algorithm
-⭐ Best Time to Buy and Sell Stock
-⭐ Majority Element
-⭐ Missing Number
-Find the Duplicate Number
-Set Matrix Zeroes
-Rotate Image
-Spiral Matrix
-Non-overlapping Intervals
-Sort Colors
-Subarray Sum Equals K
-2. Strings
-⭐ Longest Substring Without Repeating Characters
-⭐ Longest Repeating Character Replacement
-⭐ Longest Palindromic Substring
-⭐ String Compression
-⭐ Reverse Words in a String
-⭐ First Unique Character in a String
-Implement strStr() / Find the Index of the First Occurrence
-Encode and Decode Strings
-Minimum Window Substring
-Isomorphic Strings
-Word Pattern
-3. Two Pointers
-⭐ 3Sum
-⭐ Container With Most Water
-⭐ Trapping Rain Water
-Backspace String Compare
-Four Sum
-Sort Colors
-4. Sliding Window
+# DSA Interview Questions
 
-This is very important for interviews.
+Each section contains 10 high-value interview questions. Difficulty follows the commonly used LeetCode rating where applicable.
 
-⭐ Longest Repeating Character Replacement
-⭐ Minimum Window Substring
-⭐ Minimum Size Subarray Sum
-Longest Subarray of 1's After Deleting One Element
-Max Consecutive Ones III
-Sliding Window Maximum
-Fruit Into Baskets
-5. Binary Search
-⭐ Search Insert Position
-⭐ Find First and Last Position of Element
-⭐ Search a 2D Matrix
-⭐ Koko Eating Bananas
-⭐ Find Peak Element
-⭐ Sqrt(x)
-⭐ Time Based Key-Value Store
-Find Minimum in Rotated Sorted Array II
-Median of Two Sorted Arrays
-6. Stack
-⭐ Min Stack
-⭐ Evaluate Reverse Polish Notation
-⭐ Daily Temperatures
-⭐ Next Greater Element
-⭐ Largest Rectangle in Histogram
-⭐ Decode String
-⭐ Asteroid Collision
-⭐ Car Fleet
-Implement Stack Using Queues
-Implement Queue Using Stacks
-Simplify Path
-Basic Calculator
-7. Queue / Deque
-⭐ Sliding Window Maximum
-⭐ Number of Recent Calls
-⭐ Design Circular Queue
-⭐ Implement Queue Using Stacks
-⭐ Rotting Oranges
-First Negative Integer in Every Window
-Moving Average from Data Stream
+## 1. Arrays and Hashing
 
+1. Two Sum — **Easy**
+2. Best Time to Buy and Sell Stock — **Easy**
+3. Contains Duplicate — **Easy**
+4. Product of Array Except Self — **Medium**
+5. Maximum Subarray — **Medium**
+6. Subarray Sum Equals K — **Medium**
+7. Group Anagrams — **Medium**
+8. Top K Frequent Elements — **Medium**
+9. Set Matrix Zeroes — **Medium**
+10. First Missing Positive — **Hard**
 
+## 2. Strings
 
-13. Dynamic Programming
+1. Valid Anagram — **Easy**
+2. Valid Palindrome — **Easy**
+3. Longest Common Prefix — **Easy**
+4. Find the Index of the First Occurrence in a String — **Easy**
+5. String Compression — **Medium**
+6. Reverse Words in a String — **Medium**
+7. Longest Palindromic Substring — **Medium**
+8. Encode and Decode Strings — **Medium**
+9. Minimum Window Substring — **Hard**
+10. Edit Distance — **Medium**
 
-Don't start here. Learn the previous patterns first.
+## 3. Two Pointers
 
-Basic DP
-⭐ Climbing Stairs
-⭐ House Robber
-⭐ House Robber II
-⭐ Maximum Subarray
-⭐ Coin Change
-⭐ Min Cost Climbing Stairs
-⭐ Decode Ways
-⭐ Longest Increasing Subsequence
-⭐ Word Break
-⭐ Partition Equal Subset Sum
-⭐ Unique Paths
-⭐ Longest Common Subsequence
-⭐ Edit Distance
-⭐ Maximum Product Subarray
-More advanced
-Target Sum
-Combination Sum IV
-Longest Palindromic Subsequence
-Distinct Subsequences
-Interleaving String
-Regular Expression Matching
-14. Greedy
+1. Valid Palindrome — **Easy**
+2. Move Zeroes — **Easy**
+3. Remove Duplicates from Sorted Array — **Easy**
+4. Two Sum II: Input Array Is Sorted — **Medium**
+5. Container With Most Water — **Medium**
+6. 3Sum — **Medium**
+7. Sort Colors — **Medium**
+8. Backspace String Compare — **Easy**
+9. 4Sum — **Medium**
+10. Trapping Rain Water — **Hard**
 
-This is particularly worth knowing because you've already seen greedy + sliding window mentioned in recent FactSet reports.
+## 4. Sliding Window
 
-⭐ Best Time to Buy and Sell Stock
-⭐ Maximum Subarray
-⭐ Jump Game
-⭐ Jump Game II
-⭐ Gas Station
-⭐ Hand of Straights
-⭐ Merge Triplets to Form Target Triplet
-⭐ Partition Labels
-⭐ Valid Parenthesis String
-⭐ Assign Cookies
-⭐ Meeting Rooms
-⭐ Non-overlapping Intervals
-Task Scheduler
-Candy
-15. Intervals
+1. Maximum Average Subarray I — **Easy**
+2. Best Time to Buy and Sell Stock — **Easy**
+3. Longest Substring Without Repeating Characters — **Medium**
+4. Longest Repeating Character Replacement — **Medium**
+5. Minimum Size Subarray Sum — **Medium**
+6. Permutation in String — **Medium**
+7. Max Consecutive Ones III — **Medium**
+8. Fruit Into Baskets — **Medium**
+9. Minimum Window Substring — **Hard**
+10. Sliding Window Maximum — **Hard**
 
-These are extremely common interview questions.
+## 5. Binary Search
 
-⭐ Insert Interval (learn optimal)
-⭐ Non-overlapping Intervals
-⭐ Meeting Rooms
-⭐ Meeting Rooms II
-⭐ Minimum Number of Arrows to Burst Balloons
-⭐ Interval List Intersections
-Employee Free Time
-16. Bit Manipulation
+1. Binary Search — **Easy**
+2. Search Insert Position — **Easy**
+3. Sqrt(x) — **Easy**
+4. Find First and Last Position of Element in Sorted Array — **Medium**
+5. Search a 2D Matrix — **Medium**
+6. Find Minimum in Rotated Sorted Array — **Medium**
+7. Search in Rotated Sorted Array — **Medium**
+8. Koko Eating Bananas — **Medium**
+9. Time Based Key-Value Store — **Medium**
+10. Median of Two Sorted Arrays — **Hard**
 
-You don't need dozens.
+## 6. Stack
 
-⭐ Single Number
-⭐ Number of 1 Bits
-⭐ Counting Bits
-⭐ Reverse Bits
-⭐ Missing Number
-⭐ Power of Two
-Sum of Two Integers
-Subsets using Bitmask
-17. Math / Miscellaneous
-⭐ Fizz Buzz
-⭐ Happy Number
-⭐ Pow(x, n)
-⭐ Sqrt(x)
-⭐ Plus One
-⭐ Excel Sheet Column Number
-Count Primes
+1. Valid Parentheses — **Easy**
+2. Min Stack — **Medium**
+3. Evaluate Reverse Polish Notation — **Medium**
+4. Daily Temperatures — **Medium**
+5. Next Greater Element II — **Medium**
+6. Decode String — **Medium**
+7. Asteroid Collision — **Medium**
+8. Car Fleet — **Medium**
+9. Largest Rectangle in Histogram — **Hard**
+10. Basic Calculator — **Hard**
 
+## 7. Queue and Deque
 
-If you're specifically targeting the FactSet frontend round, I'd pay extra attention to Arrays + Hashing + Sliding Window + Two Pointers + Strings + Greedy, because those patterns are especially relevant to the recent coding reports.
+1. Number of Recent Calls — **Easy**
+2. Implement Queue Using Stacks — **Easy**
+3. Moving Average from Data Stream — **Easy**
+4. Design Circular Queue — **Medium**
+5. Design Circular Deque — **Medium**
+6. Rotting Oranges — **Medium**
+7. Dota2 Senate — **Medium**
+8. First Negative Integer in Every Window — **Medium**
+9. Shortest Subarray with Sum at Least K — **Hard**
+10. Sliding Window Maximum — **Hard**
 
+## 8. Linked List
 
+1. Reverse Linked List — **Easy**
+2. Merge Two Sorted Lists — **Easy**
+3. Linked List Cycle — **Easy**
+4. Middle of the Linked List — **Easy**
+5. Remove Nth Node From End of List — **Medium**
+6. Reorder List — **Medium**
+7. Add Two Numbers — **Medium**
+8. Copy List with Random Pointer — **Medium**
+9. LRU Cache — **Medium**
+10. Merge K Sorted Lists — **Hard**
 
+## 9. Trees
 
+1. Maximum Depth of Binary Tree — **Easy**
+2. Invert Binary Tree — **Easy**
+3. Diameter of Binary Tree — **Easy**
+4. Binary Tree Level Order Traversal — **Medium**
+5. Validate Binary Search Tree — **Medium**
+6. Lowest Common Ancestor of a Binary Tree — **Medium**
+7. Kth Smallest Element in a BST — **Medium**
+8. Construct Binary Tree from Preorder and Inorder Traversal — **Medium**
+9. Binary Tree Maximum Path Sum — **Hard**
+10. Serialize and Deserialize Binary Tree — **Hard**
 
+## 10. Graphs
 
+1. Find if Path Exists in Graph — **Easy**
+2. Flood Fill — **Easy**
+3. Number of Islands — **Medium**
+4. Clone Graph — **Medium**
+5. Course Schedule — **Medium**
+6. Rotting Oranges — **Medium**
+7. Pacific Atlantic Water Flow — **Medium**
+8. Graph Valid Tree — **Medium**
+9. Network Delay Time — **Medium**
+10. Word Ladder — **Hard**
+BFS, DFs, Cycle detection, topological sort, dijkstras algorithm, word ladder, word ladder 2, 
 
+## 11. Heap and Priority Queue
 
+1. Last Stone Weight — **Easy**
+2. Kth Largest Element in an Array — **Medium**
+3. Top K Frequent Elements — **Medium**
+4. K Closest Points to Origin — **Medium**
+5. Task Scheduler — **Medium**
+6. Kth Smallest Element in a Sorted Matrix — **Medium**
+7. Reorganize String — **Medium**
+8. Find K Pairs with Smallest Sums — **Medium**
+9. Merge K Sorted Lists — **Hard**
+10. Find Median from Data Stream — **Hard**
 
-Later:
-----
-8. Linked List
-⭐ Reverse Linked List
-⭐ Merge Two Sorted Lists
-⭐ Linked List Cycle
-⭐ Remove Nth Node From End
-⭐ Middle of the Linked List
-⭐ Reorder List
-⭐ Add Two Numbers
-⭐ Intersection of Two Linked Lists
-⭐ Copy List With Random Pointer
-⭐ LRU Cache
-Palindrome Linked List
-Swap Nodes in Pairs
-Reverse Linked List II
-Merge K Sorted Lists
-Sort List
-9. Trees
+## 12. Recursion and Backtracking
 
-Very common interview territory.
+1. Subsets — **Medium**
+2. Permutations — **Medium**
+3. Combination Sum — **Medium**
+4. Combination Sum II — **Medium**
+5. Letter Combinations of a Phone Number — **Medium**
+6. Generate Parentheses — **Medium**
+7. Word Search — **Medium**
+8. Palindrome Partitioning — **Medium**
+9. N-Queens — **Hard**
+10. Sudoku Solver — **Hard**
 
-⭐ Maximum Depth of Binary Tree
-⭐ Invert Binary Tree
-⭐ Same Tree
-⭐ Subtree of Another Tree
-⭐ Binary Tree Level Order Traversal
-⭐ Binary Tree Right Side View
-⭐ Diameter of Binary Tree
-⭐ Balanced Binary Tree
-⭐ Lowest Common Ancestor of a BST
-⭐ Validate Binary Search Tree
-⭐ Kth Smallest Element in a BST
-⭐ Binary Tree Maximum Path Sum
-⭐ Construct Binary Tree from Preorder and Inorder
-⭐ Serialize and Deserialize Binary Tree
-⭐ Path Sum
-⭐ Symmetric Tree
-⭐ Count Good Nodes in Binary Tree
-Binary Tree Zigzag Level Order Traversal
-Flatten Binary Tree to Linked List
-10. Graphs
+## 13. Dynamic Programming
 
-For your frontend interview, don't go too crazy here initially.
+1. Climbing Stairs — **Easy**
+2. Min Cost Climbing Stairs — **Easy**
+3. House Robber — **Medium**
+4. Coin Change — **Medium**
+5. Longest Increasing Subsequence — **Medium**
+6. Word Break — **Medium**
+7. Partition Equal Subset Sum — **Medium**
+8. Longest Common Subsequence — **Medium**
+9. Decode Ways — **Medium**
+10. Edit Distance — **Medium**
 
-⭐ Number of Islands
-⭐ Clone Graph
-⭐ Flood Fill
-⭐ Rotting Oranges
-⭐ Course Schedule
-⭐ Course Schedule II
-⭐ Pacific Atlantic Water Flow
-⭐ Number of Connected Components
-⭐ Graph Valid Tree
-⭐ Word Ladder
-⭐ Surrounded Regions
-⭐ Shortest Path in Binary Matrix
-⭐ Network Delay Time
-Find if Path Exists in Graph
-Walls and Gates
-Accounts Merge
-11. Heap / Priority Queue
-⭐ Kth Largest Element in an Array
-⭐ Top K Frequent Elements
-⭐ Merge K Sorted Lists
-⭐ Find Median from Data Stream
-⭐ K Closest Points to Origin
-⭐ Task Scheduler
-⭐ Last Stone Weight
-⭐ Kth Smallest Element in a Sorted Matrix
-⭐ Meeting Rooms II
-Find K Pairs with Smallest Sums
-Reorganize String
-12. Recursion / Backtracking
-⭐ Subsets
-⭐ Permutations
-⭐ Combination Sum
-⭐ Combination Sum II
-⭐ Letter Combinations of a Phone Number
-⭐ Generate Parentheses
-⭐ Word Search
-⭐ N-Queens
-⭐ Palindrome Partitioning
-⭐ Subsets II
-⭐ Permutations II
-Combinations
-Sudoku Solver
+## 14. Greedy
+
+1. Best Time to Buy and Sell Stock — **Easy**
+2. Maximum Subarray — **Medium**
+3. Jump Game — **Medium**
+4. Jump Game II — **Medium**
+5. Gas Station — **Medium**
+6. Partition Labels — **Medium**
+7. Hand of Straights — **Medium**
+8. Merge Triplets to Form Target Triplet — **Medium**
+9. Valid Parenthesis String — **Medium**
+10. Candy — **Hard**
+
+## 15. Intervals
+
+1. Summary Ranges — **Easy**
+2. Merge Intervals — **Medium**
+3. Insert Interval — **Medium**
+4. Non-overlapping Intervals — **Medium**
+5. Meeting Rooms — **Easy**
+6. Meeting Rooms II — **Medium**
+7. Minimum Number of Arrows to Burst Balloons — **Medium**
+8. Interval List Intersections — **Medium**
+9. Remove Covered Intervals — **Medium**
+10. Employee Free Time — **Hard**
+
+## 16. Bit Manipulation
+
+1. Single Number — **Easy**
+2. Number of 1 Bits — **Easy**
+3. Counting Bits — **Easy**
+4. Reverse Bits — **Easy**
+5. Missing Number — **Easy**
+6. Power of Two — **Easy**
+7. Add Binary — **Easy**
+8. Bitwise AND of Numbers Range — **Medium**
+9. Sum of Two Integers — **Medium**
+10. Maximum XOR of Two Numbers in an Array — **Medium**
+
+## 17. Math and Miscellaneous
+
+1. Fizz Buzz — **Easy**
+2. Plus One — **Easy**
+3. Palindrome Number — **Easy**
+4. Happy Number — **Easy**
+5. Excel Sheet Column Number — **Easy**
+6. Roman to Integer — **Easy**
+7. Pow(x, n) — **Medium**
+8. Rotate Image — **Medium**
+9. Spiral Matrix — **Medium**
+10. Count Primes — **Medium**
+
+## Suggested Priority
+
+For frontend-focused interviews, prioritize Arrays and Hashing, Strings, Two Pointers, Sliding Window, Stack, and Greedy. Then cover Binary Search, Linked Lists, Trees, and the remaining sections.

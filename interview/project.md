@@ -64,87 +64,80 @@ Independent datasets can be loaded in parallel. Each dashboard section should ha
 
 ## What is measured?
 
-Product usage measures how actively and successfully a customer uses the product. Typical signals include:
+Product usage tells a Customer Success Manager whether a customer is actively using the product.
 
-- Daily, weekly, and monthly active users
-- Login frequency
-- Licensed users versus active users
-- Adoption of important features
-- Actions or workflows completed
+We mainly track:
+
+- Number of active users
+- Number of logins
+- Important features used
+- Number of actions completed
 - Last activity date
-- Usage growth or decline
-- Adoption across teams or departments
-- Consumption against purchased limits
-- Errors, failed operations, and abandoned workflows
+- Whether usage is increasing or decreasing
 
-## Usage-event example
+## How is it tracked?
 
-When a user performs an important action, the frontend or backend generates a usage event:
+When a user performs an important action, the frontend or backend records an event.
+
+For example, when a user submits a forecast:
 
 ```json
 {
-  "eventId": "evt_78321",
-  "tenantId": "tenant_1007",
   "accountId": "account_245",
   "userId": "user_891",
   "eventName": "forecast_submitted",
-  "timestamp": "2026-09-21T08:30:00Z",
-  "properties": {
-    "module": "forecasting",
-    "source": "web"
-  }
+  "timestamp": "2026-09-21T08:30:00Z"
 }
 ```
 
-## Processing flow
+The `accountId` tells us which customer performed the action. The `userId` tells us which user performed it.
+
+## Simple flow
 
 ```text
 User performs an action
         ↓
-Frontend or backend creates a usage event
+Application records the event
         ↓
-Event collector, queue, or analytics service
+Backend stores and processes usage events
         ↓
-Validation and deduplication
+Events are grouped by customer account
         ↓
-Daily or weekly account-level aggregation
+Daily or weekly metrics are calculated
         ↓
-Customer Success Intelligence API
-        ↓
-Account dashboard and health-score calculation
+Customer Success dashboard displays the metrics
 ```
 
-Raw events can be aggregated into an account summary:
+For example, the backend can calculate this account summary:
 
 ```json
 {
   "accountId": "account_245",
   "weeklyActiveUsers": 84,
-  "licensedUsers": 120,
-  "weeklyActiveUserRate": 70,
-  "keyFeatureAdoptionRate": 62,
-  "usageTrendPercentage": -8,
+  "totalLogins": 310,
+  "forecastsSubmitted": 46,
+  "usageTrend": "decreasing",
   "lastActivityAt": "2026-09-21T08:30:00Z"
 }
 ```
 
-The dashboard reads aggregated metrics rather than processing millions of raw events in the browser. This keeps API payloads and frontend rendering manageable.
+The frontend receives this summarized data and displays it using KPIs, tables, and charts. It does not process all raw events in the browser.
 
-## Engineering considerations
+## Why is this useful?
 
-- Give every event a unique `eventId` for deduplication.
-- Include `tenantId` to isolate data belonging to different customers.
-- Store timestamps in UTC and convert them only for display.
-- Govern and version event names and schemas.
-- Exclude internal users, test accounts, and bots when appropriate.
-- Do not automatically interpret missing telemetry as poor usage.
-- Use consistent time windows when comparing current and previous periods.
+A Customer Success Manager can use these metrics to identify:
+
+- Customers who are actively using the product
+- Customers who are not adopting important features
+- Accounts whose usage is decreasing
+- Customers who may require training or support
+- Accounts that may be at risk of churn
 
 ## Interview answer
 
-> We tracked meaningful customer actions as product-usage events. Each event contained identifiers such as the tenant, account, user, event type, and timestamp. Backend pipelines validated and aggregated these events into metrics such as active-user rate, feature adoption, usage frequency, and usage trends.
+> We tracked important user actions such as logins, feature usage, and completed workflows. Each action was recorded with the account, user, action name, and timestamp.
 >
-> The Customer Success dashboard consumed aggregated account-level metrics and displayed them through KPIs and charts. These metrics could also become inputs to the account health score.
+> The backend grouped these events by customer account and calculated daily or weekly metrics such as active users, login count, feature adoption, last activity, and usage trend. The Customer Success dashboard displayed the summarized metrics through KPIs and charts. These metrics also helped Customer Success Managers identify low-adoption or at-risk accounts and could be used as inputs to the account health score.
 
 ---
 
@@ -152,45 +145,52 @@ The dashboard reads aggregated metrics rather than processing millions of raw ev
 
 ## Definition
 
-An account health score summarizes the overall condition of a customer account. It helps a Customer Success Manager identify healthy accounts and prioritize accounts that need attention.
+An account health score is a number between 0 and 100 that represents the overall condition of a customer account.
 
-## Possible inputs
+It helps a Customer Success Manager quickly identify:
 
-| Category | Example signals |
+- Healthy customers
+- Customers who need attention
+- Customers who may be at risk
+
+## Main inputs
+
+Use four simple categories. Give each category its own score between 0 and 100.
+
+| Category | What it measures |
 |---|---|
-| Product adoption | Active-user rate, key-feature adoption, usage trend |
-| Engagement | Meetings, emails, response rate, executive engagement |
-| Support | Open tickets, critical tickets, ticket age, escalations |
-| Commercial | Renewal date, contract value, payment status, expansion |
-| Sentiment | Survey score, call or email sentiment, CSM assessment |
-| Relationship | Active stakeholders and decision-maker engagement |
+| Product usage | Active users, important features used, and usage trend |
+| Support | Open tickets, critical tickets, and unresolved-ticket age |
+| Engagement | Meetings, emails, responses, and recent customer activity |
+| Sentiment | Survey results, customer feedback, or CSM assessment |
 
-## Example weighted formula
+## Simple calculation
 
-Normalize every category to a value between 0 and 100, then apply configurable weights:
+For a simple example, give every category equal importance:
 
 ```text
 Health score =
-    Product adoption score × 40%
-  + Engagement score       × 20%
-  + Support score          × 20%
-  + Commercial score       × 10%
-  + Sentiment score        × 10%
+    Product usage score × 25%
+  + Support score       × 25%
+  + Engagement score    × 25%
+  + Sentiment score     × 25%
 ```
 
 Example:
 
 ```text
-Product adoption = 80 × 0.40 = 32
-Engagement       = 65 × 0.20 = 13
-Support          = 50 × 0.20 = 10
-Commercial       = 90 × 0.10 =  9
-Sentiment        = 70 × 0.10 =  7
-                                 --
-Final health score              = 71/100
+Product usage = 80
+Support       = 60
+Engagement    = 70
+Sentiment     = 90
+
+Health score = (80 + 60 + 70 + 90) / 4
+             = 75
 ```
 
-Example status thresholds:
+The account's health score is `75/100`.
+
+## Health status
 
 | Score | Status | Meaning |
 |---:|---|---|
@@ -198,48 +198,29 @@ Example status thresholds:
 | 50–74 | Amber | Needs attention |
 | 0–49 | Red | At risk |
 
-The metrics, weights, and thresholds are examples. A real implementation commonly makes them configurable by customer, segment, product, or account type.
+These categories, weights, and ranges are examples. A real customer may configure different weights. For example, one customer may give product usage 40% importance and support only 20%.
 
-## Rule-based versus model-based scoring
+If one category has no data, do not automatically give it zero. Mark it as unavailable or calculate the score using only the available categories.
 
-### Rule-based score
-
-Business teams define metrics, weights, thresholds, and penalties. This approach is transparent and easy to explain.
-
-### Model-based score
-
-A statistical or machine-learning model learns which signals correlate with churn, renewal, or expansion.
-
-A platform can combine both methods—for example, showing a configurable business health score alongside an AI-generated risk prediction.
-
-## Example support adjustments
+## Simple flow
 
 ```text
-Open critical ticket older than 48 hours:  -15
-Three or more escalated tickets:           -10
-Ticket volume increased by over 50%:        -5
-All critical tickets resolved:              +5
+Collect product, support, engagement and sentiment data
+                         ↓
+Calculate a score for each category
+                         ↓
+Apply configured weights
+                         ↓
+Calculate final score from 0 to 100
+                         ↓
+Display Green, Amber or Red status
 ```
-
-Avoid penalizing the same underlying issue multiple times unless that behavior is intentional.
-
-## Handling missing data
-
-Missing information should not automatically become zero because zero represents poor performance, while missing means unknown.
-
-A safer approach is to:
-
-- Mark the component as unavailable.
-- Rebalance remaining weights where appropriate.
-- Display data completeness or confidence.
-- Temporarily preserve the previous score if a source is delayed.
-- Explain which inputs caused the latest score change.
 
 ## Interview answer
 
-> The account health score provides a consolidated view of customer risk. It can combine normalized signals from product adoption, engagement, support tickets, commercial information, and sentiment.
+> The account health score is a value between 0 and 100 that shows the overall condition of a customer account. We calculate separate scores for product usage, support, engagement, and customer sentiment.
 >
-> Each category receives a configurable weight, and the final score is mapped to a status such as healthy, needs attention, or at risk. The interface should also explain the factors behind the score so a CSM can understand and act on it instead of seeing only an unexplained number.
+> We combine those category scores using configured weights and map the final value to Green, Amber, or Red. The dashboard also shows the individual category scores so the CSM can understand why an account is healthy or at risk and decide what action to take.
 
 ---
 
@@ -247,198 +228,9 @@ A safer approach is to:
 
 Support tickets may originate in systems such as Zendesk, Jira Service Management etc.
 
-## Synchronization strategies
-
-### Initial and scheduled synchronization
-
-The integration periodically requests tickets created or updated after the previous successful synchronization:
-
-```http
-GET /tickets?updated_after=<last_successful_sync_time>
-```
-
-This supports:
-
-- Initial historical import
-- Recovery of events missed during downtime
-- Reconciliation of inconsistent records
-- Integrations that do not provide webhooks
-
-### Real-time webhook synchronization
-
-```text
-Ticket is created or updated
-        ↓
-Provider sends a webhook
-        ↓
-Integration authenticates and validates it
-        ↓
-Event enters a queue
-        ↓
-Worker maps and upserts the ticket
-        ↓
-Account metrics and health score are refreshed
-```
-
-A robust design commonly uses both:
-
-- **Webhooks** for low-latency updates
-- **Incremental synchronization** for recovery and reconciliation
-
-## Which identifiers are required?
-
-Ticket synchronization has two separate identity problems:
-
-1. How do we uniquely identify the ticket?
-2. How do we associate it with the correct customer account?
-
-### Ticket identity
-
-Use a composite key:
-
-```text
-tenantId + sourceSystem + externalTicketId
-```
-
-Example:
-
-```json
-{
-  "tenantId": "tenant_1007",
-  "sourceSystem": "zendesk",
-  "externalTicketId": "987654",
-  "internalTicketId": "ticket_abc123"
-}
-```
-
-`externalTicketId` alone may not be globally unique because separate customers or support systems can use the same numeric ID.
-
-The database can enforce:
-
-```sql
-UNIQUE (tenant_id, source_system, external_ticket_id)
-```
-
-Synchronization then performs an upsert:
-
-```text
-Ticket exists         → update changed fields
-Ticket does not exist → insert a new record
-```
-
-### Account identity
-
-The preferred solution is a stable mapping created during integration setup:
-
-```text
-Internal account ID ↔ CRM account ID ↔ Support organization ID
-```
-
-Example:
-
-```json
-{
-  "tenantId": "tenant_1007",
-  "internalAccountId": "account_245",
-  "crmAccountId": "0018X00002ABCDQ",
-  "supportOrganizationId": "zendesk_org_741"
-}
-```
-
-A ticket with `supportOrganizationId = zendesk_org_741` can then be connected reliably to `account_245`.
-
-### Account-matching keys in preferred order
-
-1. Support-system organization ID mapped to the internal account ID
-2. CRM account ID stored in the support system
-3. Verified customer or tenant ID in a custom ticket field
-4. Verified email domain
-5. Requester email mapped to an existing contact
-
-Email domain should be a fallback because:
-
-- One company may use several domains.
-- Separate companies may share public email domains.
-- Consultants may submit tickets for customers.
-- A company may change its domain.
-- Subsidiaries may require separate account records.
-
-If no reliable match exists, place the ticket in an unmatched queue instead of silently assigning it to the wrong account.
-
-## Normalized ticket record
-
-```json
-{
-  "id": "ticket_abc123",
-  "tenantId": "tenant_1007",
-  "accountId": "account_245",
-  "sourceSystem": "zendesk",
-  "externalTicketId": "987654",
-  "status": "open",
-  "priority": "high",
-  "subject": "Unable to publish forecast",
-  "requesterId": "contact_55",
-  "createdAt": "2026-09-20T04:15:00Z",
-  "updatedAt": "2026-09-21T06:40:00Z",
-  "resolvedAt": null,
-  "sourceUpdatedAt": "2026-09-21T06:40:00Z"
-}
-```
-
-## Preventing duplicate and stale updates
-
-- Enforce a unique composite key for each external ticket.
-- Use upserts instead of unconditional inserts.
-- Store the provider's `updatedAt` value or version number.
-- Ignore an event older than the version already stored.
-- Store webhook event IDs to detect repeated delivery.
-- Make consumers idempotent so retries are safe.
-- Use retry queues and a dead-letter queue for repeated failures.
-- Periodically reconcile local data with the source system.
-
-## Update flow
-
-```text
-Support system sends an update
-        ↓
-Find ticket using tenant + source + external ticket ID
-        ↓
-Compare source version or updated timestamp
-        ↓
-Normalize status, priority and timestamps
-        ↓
-Upsert ticket
-        ↓
-Recalculate account support metrics
-        ↓
-Recalculate or invalidate health score
-        ↓
-Refresh dashboard or publish an update event
-```
-
-Health-score calculation does not need to happen inside the webhook request. A safer design acknowledges the webhook quickly, queues the work, and updates the ticket and score asynchronously.
-
-## Interview answer
-
-> Support tickets are synchronized from an external ticketing system through webhooks, incremental polling, or both. We uniquely identify a ticket using the tenant, source system, and external ticket ID.
->
-> To associate the ticket with a customer, we preferably maintain a mapping between the support-system organization ID and our internal account ID. CRM account IDs or verified tenant identifiers can also be used, while email domains are only a fallback.
->
-> Updates are processed as idempotent upserts. We compare source timestamps or versions to prevent stale updates and periodically reconcile records so a missed webhook does not cause permanent inconsistency.
-
-## Complete Customer Success answer
-
-> In Customer Success Intelligence, we bring together product usage, support information, engagement, and commercial data to give CSMs a unified account view.
->
-> For product usage, meaningful actions generate events containing the tenant, account, user, event type, and timestamp. Backend pipelines aggregate these events into metrics such as active-user rate, key-feature adoption, usage frequency, and usage trends. The dashboard consumes aggregated metrics instead of processing raw events directly.
->
-> The account health score combines normalized signals from product adoption, engagement, support tickets, commercial status, and sentiment. These signals can have configurable weights, and the result is mapped to statuses such as healthy, needs attention, or at risk. The dashboard also explains the factors behind the score and distinguishes missing data from poor performance.
->
-> For support tickets, we can integrate with systems such as Zendesk or ServiceNow using webhooks for real-time changes and incremental polling for recovery and reconciliation. A ticket is uniquely identified using the tenant ID, source system, and external ticket ID. A stable support-organization or CRM-account mapping connects it to the correct account. Idempotent upserts prevent duplicate webhook deliveries from creating duplicate tickets. After ticket metrics change, the account summary and health score can be refreshed asynchronously.
-
 ### Short version
 
-> We collect product telemetry and aggregate it into adoption metrics, combine those metrics with engagement, support, and commercial signals to calculate a configurable account health score, and synchronize support tickets using webhooks plus scheduled reconciliation. A composite external identifier uniquely identifies each ticket, while a support-organization-to-account mapping connects it to the correct customer.
+> We collect product-usage metrics, combine them with support, engagement, and sentiment scores to calculate account health, and synchronize support tickets from external systems. This gives Customer Success Managers one place to understand customer activity and risk.
 
 ---
 
