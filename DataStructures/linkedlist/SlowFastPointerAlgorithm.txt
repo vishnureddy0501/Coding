@@ -1,3 +1,0 @@
-if n = even => slow points to the 2nd middle element
-
-if n is odd => slow points to the exact middle element

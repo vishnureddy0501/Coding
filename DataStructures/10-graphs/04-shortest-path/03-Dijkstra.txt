@@ -1,0 +1,46 @@
+Dijkstra: single source shortest path for graphs with NON-NEGATIVE weights.
+Time: O(E log V)
+
+Dijkstra doesn't work with negative edges (even without a negative cycle it can give wrong answers,
+because it assumes a popped node's distance is final). With a negative cycle no shortest path exists.
+Use Bellman-Ford (07-BellmanFord.txt) for negative edges.
+
+why do we need to use priority_queue in dijkstra?
+--------------------------------------------------
+sorting the queue based on the cost will decrease the number of operations.
+Hence store {cost, node} in priority_queue. 
+
+Standard Code:
+--------------
+
+void shortestPath(vector<vector<pair<int,int>>>& graph, vector<int>& dist, int src) {
+    priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
+    pq.push({0, src});
+
+    while(!pq.empty()) {
+        auto [d, u] = pq.top(); pq.pop();
+        if (d > dist[u]) continue; // skip outdated entries. optional. It improves time complexity
+
+        for (auto [v, w] : graph[u]) {
+            if (dist[v] > d + w) {
+                dist[v] = d + w;
+                pq.push({dist[v], v});
+            }
+        }
+    }
+}
+
+vector<int> dijkstra(vector<vector<int>> &vec, int n, int edges, int source) {
+    vector<vector<pair<int, int>>> graph(n);
+    for (int i = 0; i<vec.size(); i++) {
+        graph[vec[i][0]].push_back({ vec[i][1], vec[i][2]});
+        graph[vec[i][1]].push_back({ vec[i][0], vec[i][2]});
+    }   
+    vector<int> dist(n, INT_MAX);
+    dist[source] = 0;
+    shortestPath(graph, dist, source);
+    return dist;
+}
+
+Dijkstra problems: Path With Minimum Effort, Cheapest Flights Within K Stops (see 04-DijkstraDoubts.txt),
+Number of Ways to Arrive at Destination, Minimum Multiplications to reach End, Network Delay Time.

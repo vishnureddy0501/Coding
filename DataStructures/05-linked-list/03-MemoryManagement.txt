@@ -1,0 +1,31 @@
+
+🔸 When You Must Manually Delete (use delete)
+--------------------------------------------
+If you manually allocate memory using new, then you are responsible for freeing it using delete.
+
+ListNode* head = new ListNode(5);
+// Do stuff with head
+delete head; // ✅ Must do this to avoid memory leak
+
+
+ListNode* head = new ListNode(5);
+ListNode* ttemp = head;
+delete ttemp;
+
+
+
+1. Once the code is done, remove the unnecessary memory
+	This garbage collection happens after execution of function is done.
+	eg: delete head; // something like this. it will free up the memory.
+
+
+Node* deleteHead(Node* head) {
+	if (head == NULL) return head;
+	Node* temp = head;
+	head = head->next;
+	delete temp;   // memory from `new` -> delete. (free() is only for malloc)
+	return head;   // return new head, otherwise caller still points to deleted memory
+}
+
+Note: C++ has NO garbage collection. Nothing is freed automatically after the function ends
+(only local variables on the stack are). Every `new` needs a matching `delete`.

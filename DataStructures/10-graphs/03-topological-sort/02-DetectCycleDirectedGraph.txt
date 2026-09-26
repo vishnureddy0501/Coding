@@ -1,0 +1,94 @@
+Why not use the undirected method (visited + parent)?
+    In a directed graph, reaching an already visited node does NOT always mean a cycle.
+    e.g. 0->1, 0->2, 1->2 : node 2 is reached twice but there is no cycle.
+    A cycle exists only if the visited node is still on the current DFS path (inStack).
+
+Course Schedule I is the best example
+
+1. DFS (Depth-First Search) with Recursion Stack
+
+    Idea:
+        Maintain
+            visited[node]: whether node is visited at all.
+            inStack[node]: whether node is currently in the DFS recursion stack.
+        If during DFS we find a neighbor that is already in the recursion stack → cycle exists.
+
+    class Solution {
+    public:
+        bool dfs(int node, vector<vector<int>>& adj, vector<int>& visited, vector<int>& inStack) {
+            visited[node] = 1;
+            inStack[node] = 1;
+
+            for (int nei : adj[node]) {
+                if (!visited[nei]) {
+                    if (dfs(nei, adj, visited, inStack)) return true;
+                } else {
+                    if (inStack[nei]) {
+                        return true; // found back edge -> cycle
+                    }
+                }
+            }
+
+            inStack[node] = 0; // remove from recursion stack
+            return false;
+        }
+
+        bool hasCycle(int n, vector<vector<int>>& adj) {
+            vector<int> visited(n, 0), inStack(n, 0);
+
+            for (int i = 0; i < n; i++) {
+                if (!visited[i]) {
+                    if (dfs(i, adj, visited, inStack)) return true;
+                }
+            }
+            return false;
+        }
+    };
+
+
+
+🔹 2. Kahn’s Algorithm (BFS / Topological Sort)
+--------------------------------------------------
+Topological sort using BFS known as Kahn’s Algorithm
+
+This is a BFS approach that uses indegrees.
+
+Idea:
+    If a graph has a cycle, then topological sorting is impossible.
+    Count how many nodes are processed in topo order:
+    If processed nodes < total nodes → cycle exists.
+
+class Solution {
+public:
+    bool hasCycle(int n, vector<vector<int>>& adj) {
+        vector<int> indegree(n, 0);
+        vector<int> toposort;
+        
+        // compute indegree
+        for (int u = 0; u < n; u++) {
+            for (int v : adj[u]) {
+                indegree[v]++;
+            }
+        }
+
+        queue<int> q;
+        for (int i = 0; i < n; i++) {
+            if (indegree[i] == 0) q.push(i);
+        }
+
+        int count = 0;
+        while (!q.empty()) {
+            int u = q.front(); q.pop();
+            toposort.push_back(u);
+            count++;
+            for (int v : adj[u]) {
+                indegree[v]--;
+                if (indegree[v] == 0) q.push(v);
+            }
+        }
+
+        return count != n; // if not all nodes processed => cycle
+
+        // if count == n then toposort gives the topological sort order.
+    }
+};

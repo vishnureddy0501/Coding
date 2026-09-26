@@ -1,0 +1,7 @@
+Slow moves 1 step, fast moves 2 steps. Loop: while (fast != NULL && fast->next != NULL)
+
+if n = even => slow points to the 2nd middle element
+
+if n is odd => slow points to the exact middle element
+
+Want the FIRST middle (needed in merge sort)? Loop while (fast->next != NULL && fast->next->next != NULL).

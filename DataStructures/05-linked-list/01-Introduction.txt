@@ -1,0 +1,12 @@
+Linked list: nodes connected by pointers. No random access, O(1) insert/delete if you have the node.
+Memory / delete notes: see 03-MemoryManagement.txt
+
+concept of dummy node: (for clean code if you want to return the answer in new list)
+---------------------------------------
+add 2 numbers (linked list)
+
+you have to return the result in new list. always prefer dummy node concept.
+
+take the initial dummy node with -1 as value. while doing sum append the nodes to dummy node. 
+
+then for the finalResult return dummyNode->next.
