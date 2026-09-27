@@ -36,4 +36,4 @@ Why check dist[u] != 1e8? An unreachable node plus a negative edge would wrongly
 
 Related: "Cheapest Flights Within K Stops" = Bellman-Ford with at most K + 1 rounds
 (copy dist into a temp array each round). Striver solves it with a BFS on {stops, node, cost}.
-See 04-DijkstraDoubts.txt.
+See 04-DijkstraDoubts.md.

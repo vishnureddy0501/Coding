@@ -1,9 +1,0 @@
-    Example Push:
-    ------------
-    priority_queue<T, vector<T>, greater<T>> minHeap;
-    
-    priority_queue< pair<double, vector<int>>, vector<pair<double, vector<int>> >, CustomCompare> minHeap;
-
-    minHeap.push({3.5, {1, 2, 3}});
-    minHeap.push({1.2, {4, 5}});
-    minHeap.push({2.8, {6, 7}});

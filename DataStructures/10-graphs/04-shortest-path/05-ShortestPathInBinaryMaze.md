@@ -1,4 +1,6 @@
-https://www.naukri.com/code360/problems/shortest-path-in-a-binary-maze_893065?leftPanelTabValue=SUBMISSION
+# Shortest Path in a Binary Maze
+
+[Practice problem](https://www.naukri.com/code360/problems/shortest-path-in-a-binary-maze_893065)
 
 Problem: grid of 0/1. Move only through cells with 1 (up/down/left/right).
 Find the minimum steps from src to dest, or -1 if not reachable.

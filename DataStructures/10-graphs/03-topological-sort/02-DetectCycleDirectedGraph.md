@@ -1,10 +1,32 @@
-Why not use the undirected method (visited + parent)?
+# Detect a Cycle in a Directed Graph
+
+## Why Not Use `visited + parent`?
     In a directed graph, reaching an already visited node does NOT always mean a cycle.
     e.g. 0->1, 0->2, 1->2 : node 2 is reached twice but there is no cycle.
     A cycle exists only if the visited node is still on the current DFS path (inStack).
 
 Course Schedule I is the best example
 
+🔹 2. Kahn’s Algorithm (BFS / Topological Sort)
+--------------------------------------------------
+Topological sort using BFS known as Kahn’s Algorithm
+
+Uses Indegree
+
+solution:
+    compute topological sort vector.
+    if toposort.size() < numbe of nodes 
+        then the graph contains cycle
+        because you are not able to print all nodes.
+    if toposort.size() == number of nodes.
+        no cycle. because you are able to print all nodes.
+
+
+
+
+
+No Need:
+-------
 1. DFS (Depth-First Search) with Recursion Stack
 
     Idea:
@@ -45,50 +67,3 @@ Course Schedule I is the best example
         }
     };
 
-
-
-🔹 2. Kahn’s Algorithm (BFS / Topological Sort)
---------------------------------------------------
-Topological sort using BFS known as Kahn’s Algorithm
-
-This is a BFS approach that uses indegrees.
-
-Idea:
-    If a graph has a cycle, then topological sorting is impossible.
-    Count how many nodes are processed in topo order:
-    If processed nodes < total nodes → cycle exists.
-
-class Solution {
-public:
-    bool hasCycle(int n, vector<vector<int>>& adj) {
-        vector<int> indegree(n, 0);
-        vector<int> toposort;
-        
-        // compute indegree
-        for (int u = 0; u < n; u++) {
-            for (int v : adj[u]) {
-                indegree[v]++;
-            }
-        }
-
-        queue<int> q;
-        for (int i = 0; i < n; i++) {
-            if (indegree[i] == 0) q.push(i);
-        }
-
-        int count = 0;
-        while (!q.empty()) {
-            int u = q.front(); q.pop();
-            toposort.push_back(u);
-            count++;
-            for (int v : adj[u]) {
-                indegree[v]--;
-                if (indegree[v] == 0) q.push(v);
-            }
-        }
-
-        return count != n; // if not all nodes processed => cycle
-
-        // if count == n then toposort gives the topological sort order.
-    }
-};

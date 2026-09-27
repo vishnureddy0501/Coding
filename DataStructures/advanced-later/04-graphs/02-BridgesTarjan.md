@@ -1,4 +1,4 @@
-Bridges: if we remove an edge, number of components gets increased  (Tarjan's algorithm)
+# Bridges — Tarjan's Algorithm
 -------------------------------------------------------------------------------------------
 timeOfInsertion[node] : when DFS first reached the node (here the DFS depth is used as time)
 last[node]            : lowest insertion time reachable from node's subtree, using at most one back edge

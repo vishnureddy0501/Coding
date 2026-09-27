@@ -1,4 +1,6 @@
-LeetCode 839. Similar String Groups
+# Similar String Groups
+
+[LeetCode 839](https://leetcode.com/problems/similar-string-groups/)
 Two strings are connected if they are equal or differ by one swap (exactly 2 positions differ).
 Union every connected pair, answer = number of components.
 

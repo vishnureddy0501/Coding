@@ -1,4 +1,4 @@
-Strongly Connected Components (Kosaraju's Algorithm) - DIRECTED graphs only
+# Strongly Connected Components — Kosaraju's Algorithm
 ----------------------------------------------------------------------------
 SCC: a group where every node can reach every other node.
 

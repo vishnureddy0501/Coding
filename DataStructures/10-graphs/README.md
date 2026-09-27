@@ -5,44 +5,44 @@ Go folder by folder, file by file, in number order. Each step uses ideas from th
 ## 01-basics
 | # | File | What you learn |
 |---|------|----------------|
-| 1 | [GraphRepresentation](01-basics/01-GraphRepresentation.txt) | Edge list vs adjacency list vs matrix, building the graph |
-| 2 | [BFS](01-basics/02-BFS.txt) | Queue traversal, level-wise BFS, multi-source BFS, grid BFS |
-| 3 | [DFS](01-basics/03-DFS.txt) | Recursive traversal, connected components, BFS vs DFS |
-| 4 | [ImportantNotes](01-basics/04-ImportantNotes.txt) | Quick tips |
+| 1 | [GraphRepresentation](01-basics/01-GraphRepresentation.md) | Edge list vs adjacency list vs matrix, building the graph |
+| 2 | [BFS](01-basics/02-BFS.md) | Queue traversal, level-wise BFS, multi-source BFS, grid BFS |
+| 3 | [DFS](01-basics/03-DFS.md) | Recursive traversal, connected components, BFS vs DFS |
+| 4 | [ImportantNotes](01-basics/04-ImportantNotes.md) | Quick tips |
 
 ## 02-cycles-and-bipartite (undirected graphs)
 | # | File | What you learn |
 |---|------|----------------|
-| 1 | [DetectCycleUndirectedGraph](02-cycles-and-bipartite/01-DetectCycleUndirectedGraph.txt) | BFS/DFS with parent tracking |
-| 2 | [BipartiteGraph](02-cycles-and-bipartite/02-BipartiteGraph.txt) | 2-coloring, odd cycle ⇒ not bipartite |
+| 1 | [DetectCycleUndirectedGraph](02-cycles-and-bipartite/01-DetectCycleUndirectedGraph.md) | BFS/DFS with parent tracking |
+| 2 | [BipartiteGraph](02-cycles-and-bipartite/02-BipartiteGraph.md) | 2-coloring, odd cycle ⇒ not bipartite |
 
 ## 03-topological-sort (directed graphs)
 | # | File | What you learn |
 |---|------|----------------|
-| 1 | [TopologicalSort](03-topological-sort/01-TopologicalSort.txt) | DFS topo sort, Kahn's (BFS) algorithm, applications |
-| 2 | [DetectCycleDirectedGraph](03-topological-sort/02-DetectCycleDirectedGraph.txt) | DFS + recursion stack, Kahn's count check |
+| 1 | [TopologicalSort](03-topological-sort/01-TopologicalSort.md) | DFS topo sort, Kahn's (BFS) algorithm, applications |
+| 2 | [DetectCycleDirectedGraph](03-topological-sort/02-DetectCycleDirectedGraph.md) | DFS + recursion stack, Kahn's count check |
 
 ## 04-shortest-path
 | # | File | What you learn |
 |---|------|----------------|
-| 1 | [ShortestPathUnitDistance](04-shortest-path/01-ShortestPathUnitDistance.txt) | BFS for unit weights |
-| 2 | [ShortestPathInDAG](04-shortest-path/02-ShortestPathInDAG.txt) | Topo sort + relaxation |
-| 3 | [Dijkstra](04-shortest-path/03-Dijkstra.txt) | Priority queue, non-negative weights |
-| 4 | [DijkstraDoubts](04-shortest-path/04-DijkstraDoubts.txt) | Why store distance in the queue |
-| 5 | [ShortestPathInBinaryMaze](04-shortest-path/05-ShortestPathInBinaryMaze.txt) | Grid shortest path |
-| 6 | [WordLadder2](04-shortest-path/06-WordLadder2.txt) | BFS storing whole paths |
-| 7 | [BellmanFord](04-shortest-path/07-BellmanFord.txt) | Negative edges, negative-cycle detection |
-| 8 | [FloydWarshall](04-shortest-path/08-FloydWarshall.txt) | All-pairs shortest path + **which algorithm to pick** |
+| 1 | [ShortestPathUnitDistance](04-shortest-path/01-ShortestPathUnitDistance.md) | BFS for unit weights |
+| 2 | [ShortestPathInDAG](04-shortest-path/02-ShortestPathInDAG.md) | Topo sort + relaxation |
+| 3 | [Dijkstra](04-shortest-path/03-Dijkstra.md) | Priority queue, non-negative weights |
+| 4 | [DijkstraDoubts](04-shortest-path/04-DijkstraDoubts.md) | Why store distance in the queue |
+| 5 | [ShortestPathInBinaryMaze](04-shortest-path/05-ShortestPathInBinaryMaze.md) | Grid shortest path |
+| 6 | [WordLadder2](04-shortest-path/06-WordLadder2.md) | BFS storing whole paths |
+| 7 | [BellmanFord](04-shortest-path/07-BellmanFord.md) | Negative edges, negative-cycle detection |
+| 8 | [FloydWarshall](04-shortest-path/08-FloydWarshall.md) | All-pairs shortest path + **which algorithm to pick** |
 
 ## 05-disjoint-set-and-mst
 | # | File | What you learn |
 |---|------|----------------|
-| 1 | [Prims](05-disjoint-set-and-mst/01-Prims.txt) | MST definition, Prim's with a min-heap |
-| 2 | [DisjointSet](05-disjoint-set-and-mst/02-DisjointSet.txt) | Union by rank/size, path compression |
-| 3 | [Kruskals](05-disjoint-set-and-mst/03-Kruskals.txt) | MST using sorted edges + DSU |
-| 4 | [NumberOfProvinces](05-disjoint-set-and-mst/04-NumberOfProvinces.txt) | Counting components with DSU |
-| 5 | [SimilarStringGroups](05-disjoint-set-and-mst/05-SimilarStringGroups.txt) | DSU on strings |
-| 6 | [PracticeProblems](05-disjoint-set-and-mst/06-PracticeProblems.txt) | More DSU problems |
+| 1 | [Prims](05-disjoint-set-and-mst/01-Prims.md) | MST definition, Prim's with a min-heap |
+| 2 | [DisjointSet](05-disjoint-set-and-mst/02-DisjointSet.md) | Union by rank/size, path compression |
+| 3 | [Kruskals](05-disjoint-set-and-mst/03-Kruskals.md) | MST using sorted edges + DSU |
+| 4 | [NumberOfProvinces](05-disjoint-set-and-mst/04-NumberOfProvinces.md) | Counting components with DSU |
+| 5 | [SimilarStringGroups](05-disjoint-set-and-mst/05-SimilarStringGroups.md) | DSU on strings |
+| 6 | [PracticeProblems](05-disjoint-set-and-mst/06-PracticeProblems.md) | More DSU problems |
 
 ## Advanced (later)
 Kosaraju SCC and Bridges/Tarjan moved to [advanced-later/04-graphs](../advanced-later/04-graphs/).

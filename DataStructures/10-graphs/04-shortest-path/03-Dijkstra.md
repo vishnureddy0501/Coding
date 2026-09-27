@@ -3,7 +3,7 @@ Time: O(E log V)
 
 Dijkstra doesn't work with negative edges (even without a negative cycle it can give wrong answers,
 because it assumes a popped node's distance is final). With a negative cycle no shortest path exists.
-Use Bellman-Ford (07-BellmanFord.txt) for negative edges.
+Use Bellman-Ford (07-BellmanFord.md) for negative edges.
 
 why do we need to use priority_queue in dijkstra?
 --------------------------------------------------
@@ -42,5 +42,5 @@ vector<int> dijkstra(vector<vector<int>> &vec, int n, int edges, int source) {
     return dist;
 }
 
-Dijkstra problems: Path With Minimum Effort, Cheapest Flights Within K Stops (see 04-DijkstraDoubts.txt),
+Dijkstra problems: Path With Minimum Effort, Cheapest Flights Within K Stops (see 04-DijkstraDoubts.md),
 Number of Ways to Arrive at Destination, Minimum Multiplications to reach End, Network Delay Time.

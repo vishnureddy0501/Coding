@@ -1,4 +1,6 @@
-Number of Provinces using Disjoint Set (input is an adjacency MATRIX).
+# Number of Provinces
+
+This solution uses Disjoint Set, and the input is an adjacency matrix.
 Can also be solved with plain DFS/BFS: count how many times you start a new traversal.
 
 #include <bits/stdc++.h>

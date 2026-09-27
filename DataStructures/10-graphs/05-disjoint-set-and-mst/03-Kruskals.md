@@ -5,7 +5,7 @@ Kruskal's Algorithm (MST)
    and union them. Otherwise skip it (it would make a cycle).
 Time: O(E log E) for sorting.
 
-Needs the DisjointSet class from 02-DisjointSet.txt.
+Needs the DisjointSet class from 02-DisjointSet.md.
 
 class Solution
 {

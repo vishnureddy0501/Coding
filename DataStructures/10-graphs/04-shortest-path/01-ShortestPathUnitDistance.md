@@ -1,4 +1,8 @@
-https://www.geeksforgeeks.org/problems/shortest-path-in-undirected-graph-having-unit-distance/1
+# Shortest Path in an Unweighted Graph
+
+[Practice problem](https://www.geeksforgeeks.org/problems/shortest-path-in-undirected-graph-having-unit-distance/1)
+
+Every edge has cost `1`, so BFS finds the shortest distance from the source to every reachable node.
 
 class Solution {
   public:

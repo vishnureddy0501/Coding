@@ -1,7 +1,10 @@
-Bipartite Graphs: if you color a graph using 2 colors then it is Bipartite
+# Bipartite Graph
 -----------------
-Any graph without cycles is Bipartite
-graph having cycles with odd number of nodes is not Bipartite
+A graph is bipartite if adjacent nodes can be colored using two different colors.
+
+- Every graph without a cycle is bipartite.
+- A graph containing an odd-length cycle is not bipartite.
+- A graph containing only even-length cycles can still be bipartite.
 
 
 
