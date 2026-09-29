@@ -6,30 +6,39 @@ Every edge has cost `1`, so BFS finds the shortest distance from the source to e
 
 class Solution {
   public:
-    void bfs(vector<vector<int>>& graph, vector<int>& dict, int src) {
-        queue<int> q;
-        q.push(src);
-        dict[src] = 0;
+    int shortestPath(int n, vector<vector<int>> &edges, int src, int dest) {
+        vector<vector<int>> graph(n);
+		vector<int> distance(n, INT_MAX);
+		for(auto edge : edges) {
+		     graph[edge[0]].push_back(edge[1]);
+		     graph[edge[1]].push_back(edge[0]);
+	    }
+		queue<pair<int, int>> q; 
+        int res = INT_MAX;
+        q.push({ src, 0 });
+        distance[src] = 0;
         while(q.size() > 0) {
-            auto it = q.front();
-            q.pop();
-            int cost = dict[it];
-            for (auto &node: graph[it]) {
-                if (dict[node] > cost + 1) {
-                    dict[node] = cost + 1;
-                    q.push(node);
-                }
-            }
+        	auto it = q.front();
+        	q.pop();
+        	for (auto neighbour : graph[it.first]) {
+        		if (distance[neighbour] > it.second + 1) {
+        		    distance[neighbour] = it.second + 1;
+        		    q.push({ neighbour, distance[neighbour] });
+        		}
+        	}
         }
-    }
-    // Function to find the shortest path from source to all other nodes
-    vector<int> shortestPath(vector<vector<int>>& graph, int src) {
-        int n = graph.size();
-        vector<int> dict(n, INT_MAX);
-        bfs(graph, dict, src);
-        for (int& d : dict) {
-            if (d == INT_MAX) d = -1;
-        }
-        return dict;
+        return distance[dest] == INT_MAX ? -1 : distance[dest];
     }
 };
+
+
+Tip: 
+---
+in above problem, you can store only 
+    queue<int> q; // store only node in q. 
+    for distance use the distance vector always.
+
+
+https://www.naukri.com/code360/problems/shortest-path-in-an-unweighted-graph_981297?leftPanelTabValue=PROBLEM
+
+the solution i solved is not good. we can solve this in simple way by storing parent as well.
