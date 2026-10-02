@@ -1,60 +1,319 @@
-Promises provide a way to handle asynchronous operations.
+PROMISES
+========
 
-    Pending: The initial state of a promise.
-    Fulfilled: The promise is resolved successfully.
-    Rejected: The promise has failed.
+A Promise represents a value that may become available in the future.
 
-A promise represents the result of an asynchronous operation and provides .then() and .catch() methods to handle the result or error.
+It is commonly used for asynchronous operations such as API requests.
 
-allSettled:
-------------
-    The Promise.allSettled method is used to handle multiple promises concurrently, allowing you to wait for all of them to settle (either resolved or rejected) without immediately rejecting if one of the promises fails.
-    In Promise.allSettled, the then block always executes once all the promises have settled, regardless of whether they resolved or rejected. The catch block does not execute because Promise.allSettled never rejects; it always fulfills with an array of results that indicate the status of each promise (either "fulfilled" or "rejected").
-    eg: 
-    const paramsArray = [{ node: "APAC", "path": "APAC"}, { node: "EPAC", "path": "EPAC"}]
-    const dataPromise = Promise.allSettled(paramsArray.map(params => API.get('url', { params })));
-    dataPromise.then(resp => {
-        // resp is an array. resp[0] contains response of first promise, resp[1] contains response of 2nd promise
-    }).catch(() => {
-        This will not execute because allSettled never rejects
+
+1. Promise States
+-----------------
+
+A Promise has one of these states:
+
+Pending   : The operation is still running.
+Fulfilled : The operation completed successfully.
+Rejected  : The operation failed.
+
+A Promise that is fulfilled or rejected is called settled.
+After a Promise settles, its state cannot change again.
+
+
+2. Creating a Promise
+---------------------
+
+const promise = new Promise((resolve, reject) => {
+    const success = true;
+
+    if (success) {
+        resolve("Data received");
+    } else {
+        reject(new Error("Request failed"));
+    }
+});
+
+resolve(value) means success.
+reject(error) means failure.
+
+Important:
+
+The function passed to new Promise runs immediately and synchronously.
+The .then(), .catch() and .finally() handlers run later as microtasks.
+
+
+3. Handling a Promise
+---------------------
+
+promise
+    .then((value) => {
+        console.log(value);
+    })
+    .catch((error) => {
+        console.log(error.message);
+    })
+    .finally(() => {
+        console.log("Operation finished");
     });
 
-    Then why have a try...catch?
-    ----------------------------
-    It only catches unexpected errors, such as:
-    const promises = null;
-        try {
-            await Promise.allSettled(promises);
-        } catch (err) {
-            console.log(err);
-        }
+.then()    : Handles a fulfilled Promise.
+.catch()   : Handles a rejected Promise.
+.finally() : Runs after success or failure. It is useful for cleanup.
 
-    Output:
-        TypeError: object is not iterable
-    
-    Or if you accidentally write:
 
-        try {
-        const result = await Promise.allSettled([
-            Promise.resolve(1)
-        ]);
+4. Promise Chaining
+-------------------
 
-        console.log(result.value.name); // result.value is undefined
-        } catch (err) {
-            console.log(err);
-        }
+Every .then() returns a new Promise. This allows us to perform asynchronous
+steps one after another.
 
-    Output:
-        TypeError: Cannot read properties of undefined
-
-The error comes from your code, not from the promises.
-promise.all:
----------------
-    Promise.all is a method in JavaScript that takes an iterable (usually an array) of promises and returns a single promise that resolves when all the promises in the iterable have resolved, or rejects if any of the promises in the iterable reject.
-    The returned promise resolves with an array of the resolved values of the input promises in the same order as the input.
-    const promises = [this.fetchOrgChartData(), this.fetchAccInsightsMap(), this.fetchDefaultConfigForInsight()];
-    Promise.all(promises).then(() => {
-        // then code
-    }).catch(() => {
-        // if any of the promise rejected, then it won't check for other promises. directly catch block executes
+getUser()
+    .then((user) => {
+        return getOrders(user.id);
     })
+    .then((orders) => {
+        return getOrderDetails(orders[0].id);
+    })
+    .then((details) => {
+        console.log(details);
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+
+The important rule is:
+
+Return the next value or Promise from every .then() handler.
+
+If a Promise is returned, the next .then() waits for it.
+If a normal value is returned, the next .then() receives that value.
+If an error is thrown, the chain moves to the nearest .catch().
+
+Wrong:
+
+getUser().then((user) => {
+    getOrders(user.id); // Not returned
+});
+
+The chain cannot wait for getOrders(). This is called a floating Promise.
+
+
+5. Promise.all()
+----------------
+
+Use Promise.all() when every operation must succeed.
+
+const promises = [
+    fetchOrgChartData(),
+    fetchAccInsightsMap(),
+    fetchDefaultConfigForInsight()
+];
+
+Promise.all(promises)
+    .then((results) => {
+        console.log(results);
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+
+Behavior:
+
+- Fulfills when all input Promises fulfill.
+- Returns an array of values in the original input order.
+- Rejects as soon as one input Promise rejects.
+
+Important:
+
+Promise.all() is fail-fast, but it does not cancel the other operations.
+Other API requests may continue running after one request fails.
+
+Example:
+
+Promise.all([
+    Promise.resolve("Users"),
+    Promise.resolve("Orders")
+]).then((values) => {
+    console.log(values); // ["Users", "Orders"]
+});
+
+
+6. Promise.allSettled()
+-----------------------
+
+Use Promise.allSettled() when every result is important, even if some
+operations fail.
+
+const paramsArray = [
+    { node: "APAC", path: "APAC" },
+    { node: "EPAC", path: "EPAC" }
+];
+
+Promise.allSettled(
+    paramsArray.map((params) => API.get("url", { params }))
+).then((results) => {
+
+    // always then block executes if no code error.
+    console.log(results);
+});
+
+It waits for every input Promise and returns results like this:
+
+[
+    { status: "fulfilled", value: "APAC data" },
+    { status: "rejected", reason: Error("EPAC failed") }
+]
+
+Behavior:
+
+- Waits until every input settles.
+- Never rejects because an input Promise rejected.
+- Keeps results in the original input order.
+- Each result contains status and either value or reason.
+
+Why might try/catch still run?
+
+Promise.allSettled() does not reject because an input failed. However, errors
+in our own surrounding code can still be caught.
+
+try {
+    const promises = null;
+    await Promise.allSettled(promises);
+} catch (error) {
+    console.log(error); // null is not iterable
+}
+
+This error comes from invalid usage, not from an input Promise rejection.
+
+
+7. Promise.any()
+----------------
+
+Use Promise.any() when one successful result is enough.
+
+Promise.any([
+    fetchFromServerOne(),
+    fetchFromServerTwo(),
+    fetchFromServerThree()
+])
+    .then((firstSuccessfulValue) => {
+        console.log(firstSuccessfulValue);
+    })
+    .catch((error) => {
+        console.log(error); // AggregateError if every Promise failed
+    });
+
+Behavior:
+
+- Fulfills with the first Promise that fulfills.
+- Ignores earlier rejections while another Promise may still succeed.
+- Rejects with AggregateError only when all inputs reject.
+
+Example use case:
+
+Request the same resource from multiple servers and use the first successful
+response.
+
+
+8. Promise.race()
+-----------------
+
+Use Promise.race() when the first settled result should win.
+
+Promise.race([
+    fetchData(),
+    timeoutPromise()
+])
+    .then((value) => {
+        console.log(value);
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+
+Behavior:
+
+- Settles when the first input Promise settles.
+- The first result may be fulfilled or rejected.
+- Does not cancel the remaining operations.
+
+Common use case:
+
+Race an API request against a timeout Promise.
+
+
+9. Promise.any() vs Promise.race()
+----------------------------------
+
+Promise.any():
+
+- Waits for the first success.
+- An early failure does not end it.
+
+Promise.race():
+
+- Waits for the first settled result.
+- An early failure immediately rejects it.
+
+Example:
+
+const fastFailure = Promise.reject("Failed");
+const slowSuccess = new Promise((resolve) => {
+    setTimeout(() => resolve("Success"), 100);
+});
+
+Promise.any([fastFailure, slowSuccess]);
+// Fulfills with "Success"
+
+Promise.race([fastFailure, slowSuccess]);
+// Rejects with "Failed"
+
+
+10. Quick Comparison
+--------------------
+
+Promise.all:
+    Every operation must succeed.
+
+Promise.allSettled:
+    Wait for every success and failure.
+
+Promise.any:
+    One successful result is enough.
+
+Promise.race:
+    Use the first result, whether success or failure.
+
+
+11. Empty Array Behavior
+------------------------
+
+Promise.all([])        : Fulfills with [].
+Promise.allSettled([]) : Fulfills with [].
+Promise.any([])        : Rejects with AggregateError.
+Promise.race([])       : Remains pending forever.
+
+13. Important Interview Points
+------------------------------
+
+- A Promise represents future completion, not the asynchronous operation itself.
+- Promise handlers run as microtasks.
+- The Promise executor runs synchronously.
+- Every .then(), .catch() and .finally() returns a new Promise.
+- Always return an inner Promise when the chain must wait for it.
+- Promise.all() rejects early but does not cancel other operations.
+- Creating a Promise usually starts the operation; Promise.all() does not start it.
+- Promises do not automatically cancel operations. Use AbortController where supported.
+
+
+Final Revision
+--------------
+
+Promise            = future result of an asynchronous operation
+.then()             = handle success
+.catch()            = handle failure
+.finally()          = cleanup after success or failure
+Promise chaining    = perform dependent steps in order
+Promise.all         = all must succeed
+Promise.allSettled  = wait for every result
+Promise.any         = first success wins
+Promise.race        = first settled result wins

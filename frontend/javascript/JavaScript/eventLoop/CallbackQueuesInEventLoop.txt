@@ -3,7 +3,7 @@
 
     • JavaScript has two main queues:
         1. Macro-task queue (setTimeout, setInterval, DOM events)
-        2. Micro-task queue (Promises, MutationObserver, queueMicrotask)
+        2. Micro-task queue (Promises, MutationObserver, queueMicrotask, code after async/await)
 	
 	1️⃣ What goes into microtask & macrotask queue?
 		👉 the callback function (or continuation) that should run later.

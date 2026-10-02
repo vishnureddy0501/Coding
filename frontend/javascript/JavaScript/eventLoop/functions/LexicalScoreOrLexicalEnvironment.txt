@@ -1,42 +1,99 @@
-function a () {
-	const x = 10;
-	function b () {
-		const y = 20;
-		console.log(x, y);
-	}
+LEXICAL SCOPE, LEXICAL ENVIRONMENT AND SCOPE CHAIN
+==================================================
+
+1. Lexical Scope
+----------------
+
+Lexical scope means:
+ 	def 1 : Function's placement in code decides what outer variables it can access.
+	
+	def 2: Where a function is written decides which outer variables it can access.
+
+lexical scope mainly focuses on the outer variables access.
+
+Example:
+
+const globalValue = 5;
+
+function outer() {
+    const outerValue = 10;
+
+    function inner() {
+        const innerValue = 20;
+        console.log(globalValue, outerValue, innerValue);
+    }
+
+    inner();
 }
 
-a();
+outer();
+
+inner() is written inside outer(). Therefore, inner() can access:
+
+- Its own variable: innerValue
+- Its parent's variable: outerValue
+- The global variable: globalValue
+
+Remember:
+
+Lexical scope = access decided by where the function is written.
 
 
-lexical means in-hierarchy.
-b is lexically sitting inside a.
-a is lexically inside "Global Scope".
+2. Lexical Environment
+----------------------
 
-Lexical Environment:
---------------------
- Local memory + reference to Execution Context of Parent
+A lexical environment contains:
+
+1. The variables and functions in the current scope.
+2. A reference to its outer lexical environment.
+
+For inner() in the previous example:
+
+Current variables: innerValue
+Outer reference:   outer() environment
+
+For outer():
+
+Current variables: outerValue and inner
+Outer reference:   global environment
+
+Remember:
+
+Lexical environment = current scope's data + link to the outer scope.
 
 
+3. Scope Chain
+--------------
 
-Lexical Scope Chain:  Chain of Lexical Environments
+The scope chain is the order JavaScript follows while searching for a variable.
+
+For console.log(globalValue, outerValue, innerValue) inside inner():
+
+inner scope
+    ↓ not found?
+outer scope
+    ↓ not found?
+global scope
+    ↓ not found?
+ReferenceError
+
+JavaScript searches from the current scope toward the outer scopes.
+It does not search inside child functions.
+
+Remember:
+
+Scope chain = current scope → parent scope → global scope.
+
+
+Simple Difference
+-----------------
+
+Lexical scope       = Where the function is written decides its access.
+Lexical environment = Current variables plus a link to the outer environment.
+Scope chain         = The path used to search for a variable.
+
+
+Closure Connection
 ------------------
-Lexical scope means the scope of a variable is determined by its placement in the source code, and inner functions can access variables from their outer functions.
 
-search in current score, parent scope .....
-
-eg:
----
-console.log(x, y);
-
-first control searches for x, y in local memory of b. if it don't find, using reference of Execution Context of "a",  goto "a".
-Now we are in "a". search in Local memory of "a".
-... and so on
-
-
-This porcess is called scope chain.
-
-
-Closure:
----------
-b has access to lexical Environment of it's parent(a). This is called closure. 
+A closure happens when a function remembers and uses variables from its outer lexical environment, even after the outer function has finished.

@@ -18,17 +18,27 @@ Use these answers as speaking points. Do not memorize every word. Keep your deli
 
 # 1. Tell Me About Yourself
 
-## 60–90 second answer
+## Answer 2 — Complete experience, skills, and education
 
-> Hi, I'm Vishnu Vardhan Reddy. I'm a full-stack software engineer with over three years of experience, currently working at Aviso AI.
+> Hi, I'm Vishnu Vardhan Reddy. I'm a full-stack software engineer with over three years of experience, with stronger expertise in frontend engineering.
 >
-> My strongest area is frontend development using Vue.js and React.js. I also work with Node.js, Express.js, FastAPI, MongoDB, and Redis on the backend.
+> I completed my B.Tech in Computer Science from JNTUK with an 8.5 CGPA. During college, I built a strong foundation in data structures and problem-solving through competitive programming, where I solved more than a thousand problems.
 >
-> At Aviso, I have contributed to Sales Engagement, Customer Success Intelligence, Deals, Forecasting, notifications, and real-time chat. My work includes building end-to-end features, dashboards, data visualizations, API integrations, performance improvements, and resolving production issues.
+> I began my professional journey with internships at CDAC and Backflipt Software. At CDAC, I worked on teletraffic visualizations using Vue.js, D3.js, Express.js. At Backflipt, I contributed to a no-code application platform, organizational visualizations, and authentication.
+
 >
-> I have also worked on microfrontends, a Vue 2-to-Vue 3 migration, lazy loading, code splitting, and simplifying the codebase by removing unnecessary RxJS usage. I currently lead three engineers, review code, and mentor team members.
+> In October 2023, I joined Aviso AI as an Associate Software Engineer . Intially I worked on revenue-intelligence products like, Deals, Forecasting, Activity Intelligence, Relationship Intelligence, Sales Engagement, and Customer Success Intelligence. I have also worked on notifications and real-time chat.
 >
-> I'm looking for an opportunity where I can take greater ownership and contribute to scalable, high-impact products.
+> Most of my work focuses on frontend problems. Our users work with a large amount of sales and customer data, so my job is to make that information easy to understand and act on. I build dashboards with clear tables, charts, filters, and drill-down views. I also handle loading and error states, build reusable components, and keep pages fast even when they display a lot of data. For performance and maintainability, I have worked on lazy loading, code splitting, microfrontends, a Vue 2-to-Vue 3 migration, and removing unnecessary RxJS complexity.
+>
+> On the backend, the main problem is delivering the correct data to the frontend quickly and securely. I build and integrate APIs and work with authentication, caching, notifications, and real-time communication. When something fails in production, I trace the complete flow from the browser through the API to the database. This helps me solve the actual problem instead of looking at only the frontend or backend in isolation.
+>
+> Technically, my strongest skills are JavaScript, Vue.js, and React.js. On the backend, I work with Node.js, Express.js, FastAPI, MongoDB, and Redis.
+>
+> Along with individual contribution, I currently lead three engineers. I help break down requirements, review technical approaches and code, mentor team members, resolve blockers, and coordinate with product, design, QA, and backend teams. I would describe my main strength as product ownership.
+>
+> I'm now looking for a role where I can use this experience to own larger technical problems, work on scalable products, and continue growing as both an engineer and a technical leader.
+
 
 ## 30-second answer
 
@@ -47,25 +57,8 @@ Leadership or special contribution
     ↓
 What you want next
 ```
-
 ---
 
-# 2. Walk Me Through Your Résumé
-
-> I completed my B.Tech in Computer Science from JNTUK with an 8.5 CGPA. During college, I developed strong problem-solving skills through competitive programming and solved more than a thousand problems.
->
-> I completed internships at CDAC and Backflipt Software. At CDAC, I worked on network and teletraffic visualizations using Vue.js and D3.js. At Backflipt, I worked on a no-code application platform, organizational visualizations, and authentication using JWT, Gmail OAuth, and email verification.
->
-> In October 2023, I joined Aviso AI as an Associate Software Engineer. I initially contributed to Deals, Forecasting, Activity Intelligence, and Relationship Intelligence. I also worked on microfrontends, analytics visualizations, performance improvements, and the Vue 2-to-Vue 3 migration.
->
-> I later moved into a Software Engineer role with greater ownership. I have worked on Sales Engagement, Customer Success Intelligence, notifications, and real-time chat. Along with feature development, I resolve production issues, review code, mentor engineers, and coordinate with product, design, QA, and backend teams.
-
-## Important difference
-
-- **Tell me about yourself:** Focus on who you are now and your strongest experience.
-- **Walk me through your résumé:** Explain your career chronologically.
-
----
 
 # 3. Explaining a Project
 

@@ -2,6 +2,7 @@
 
 Use this document to prepare explanations for the following projects and modules:
 
+0. [Simple sales terms](#0-simple-sales-terms)
 1. [Customer Success Intelligence](#1-customer-success-intelligence)
 2. [Product usage tracking](#2-product-usage-tracking)
 3. [Account health scoring](#3-account-health-scoring)
@@ -10,23 +11,90 @@ Use this document to prepare explanations for the following projects and modules
 6. [Forecasting module](#6-forecasting-module)
 7. [Deals versus Forecasting](#7-deals-versus-forecasting)
 
+# 0. Simple Sales Terms
+
+## Basic terms
+
+| Term | Simple meaning |
+|---|---|
+| **CRM** | Software such as Salesforce that stores customer and sales information. |
+| **Account** | A company that we are selling to or already work with. |
+| **Lead** | A person or company that may be interested, but is not yet a confirmed sales opportunity. |
+| **Opportunity / Deal** | A possible sale that the sales team is actively working on. Both words usually mean the same thing. |
+| **Sales representative** | The salesperson who works on a deal. It is also shortened to **sales rep**. |
+| **Deal owner** | The sales representative responsible for a particular deal. |
+| **Deal amount** | The possible value of the sale. |
+| **Revenue** | Money earned by the company from sales. |
+| **Deal stage** | The current step of a deal, such as discovery, demo, negotiation, or closed. |
+| **Close date** | The date on which the salesperson expects the deal to finish. |
+| **Activity** | A sales action such as a call, email, meeting, or demo. |
+| **Engagement** | How actively the customer is communicating or interacting with the sales team. |
+| **Deal risk** | A warning that a deal may be delayed or lost. |
+| **Stalled deal** | A deal that has not had meaningful progress for some time. |
+| **WinScore** | An AI-generated score showing how likely a deal is to be won. A higher score generally means a better chance. |
+| **Closed Won** | The customer agreed to buy, so the deal was successful. |
+| **Closed Lost** | The customer did not buy, so the deal was unsuccessful. |
+
+## Pipeline and forecasting terms
+
+| Term | Simple meaning |
+|---|---|
+| **Sales pipeline** | All open deals that the sales team is currently working on. |
+| **Pipeline movement** | Changes to deals, such as their amount, stage, close date, or status. |
+| **Forecast** | An estimate of how much revenue is likely to close during a period. |
+| **Forecast period** | The time covered by the forecast, usually a month or quarter. |
+| **Forecast category** | A confidence label assigned to a deal, such as commit or best case. |
+| **Commit** | Deals the sales team strongly believes will close during the current period. It is still a prediction, not a guarantee. |
+| **Best case** | Deals that could close in the period if things go well, but are less certain than commit deals. |
+| **Pipeline category** | Open deals that may close, but currently have lower confidence than best case or commit. |
+| **Closed revenue** | Revenue from deals that are already won. |
+| **AI forecast** | Revenue predicted by the system using deal data, activity, and historical patterns. |
+| **Submitted forecast** | The revenue estimate manually provided by a sales representative or manager. |
+| **Quota / Target** | The sales amount a person or team is expected to achieve. |
+| **Quota attainment** | The percentage of the target already achieved. If the target is ₹1 crore and sales are ₹60 lakh, attainment is 60%. |
+| **Pipeline coverage** | A comparison of open pipeline with the remaining target. For example, a ₹3 crore pipeline for a ₹1 crore target gives 3× coverage. It does not mean all ₹3 crore will close. |
+| **Pacing** | Whether sales are progressing fast enough to meet the target by the end of the period. |
+
+## Dashboard and data terms
+
+| Term | Simple meaning |
+|---|---|
+| **Historical trend** | How a value changed over previous weeks, months, or quarters. |
+| **Hierarchy** | The company reporting structure: sales representative → manager → region → organization. |
+| **Roll-up** | Combining values from lower levels into a manager or company total. |
+| **Drill-down** | Opening a total to see the teams, representatives, or deals behind it. |
+| **Signal** | A useful clue, such as no recent meeting, a changed close date, or low customer engagement. |
+| **Insight** | A meaningful conclusion created from one or more signals. |
+| **System of record / Source of truth** | The main system where the official data is stored. In this case, it is usually the CRM. |
+| **Writeback** | Updating CRM data from Aviso. Aviso sends the change back, and the CRM stores the official value. |
+
+## One simple example
+
+```text
+Quarterly quota:              ₹1 crore
+Already closed:               ₹40 lakh
+Commit deals:                 ₹30 lakh
+Best-case deals:              ₹20 lakh
+Other open pipeline:          ₹50 lakh
+```
+
+- `₹40 lakh` is already won.
+- The team is highly confident about the `₹30 lakh` commit amount.
+- The `₹20 lakh` best-case amount may close if things go well.
+- The remaining pipeline contains less-certain open deals.
+- The forecast estimates the amount that will actually close; it does not simply add every number above.
+
+## Short interview explanation
+
+> A sales pipeline is the complete set of open deals. A forecast estimates how much revenue from those deals is likely to close in a month or quarter. Commit means the sales team is highly confident that those deals will close, while best case means they may close if things go well. Closed revenue has already been won, and quota is the sales target. Aviso analyzes these deals, activities, changes, and historical patterns to show risks and provide a more informed revenue forecast.
+
 # 1. Customer Success Intelligence
-
-## One-line description
-
-> Customer Success Intelligence is a unified analytics platform that helps Customer Success Managers monitor customer health, product usage, support activity, and engagement so they can identify risks(identify accounts requiring attention) and take proactive action.
 
 ## Interview-ready explanation
 
 > At Aviso AI, I worked on a Customer Success Intelligence platform designed to help Customer Success Managers monitor customer health and manage accounts proactively.
 >
 > Customer information—such as product usage, support tickets, engagement activities, account details, and business metrics—often exists across multiple systems. The platform brings this information into a unified dashboard so CSMs can understand account health, identify risk, and prioritize customer engagement.
->
-> I contributed to interactive dashboards, ticket tracking, global search, advanced filters, and configurable data views. I also integrated backend services and APIs to present customer data in a consistent format.
->
-> On the frontend, I primarily used Vue.js to build reusable components, tables, charts, and responsive interfaces. On the backend, I worked with Express.js and MongoDB-based services for data retrieval, aggregation, and synchronization.
->
-> I also contributed to role-based access control so users could access only permitted accounts and actions. For performance, I worked on reducing unnecessary API requests, optimizing component rendering, and efficiently handling large datasets.
 
 ## My role
 

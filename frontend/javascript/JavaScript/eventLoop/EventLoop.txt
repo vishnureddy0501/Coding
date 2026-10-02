@@ -37,29 +37,6 @@
       and pushes it onto the call stack.
 
 
-🔹 Example Walkthrough
-
-    console.log("Start");
-
-    setTimeout(() => console.log("Timeout!"), 1000);
-
-    console.log("End");
-
-Execution:
-
-    "Start" → printed.
-    setTimeout → timer set in browser, callback saved for later.
-    "End" → printed.
-    After 1s, browser moves callback → queue.
-    Event loop sees stack is empty → runs "Timeout!".
-
-👉 Output:
-
-    Start
-    End
-    Timeout!
-
-
 
 ✅ Simple Definition
 
