@@ -1,19 +1,3 @@
-# FastAPI learning plan
-
-Use this folder as both a learning course and an interview revision guide. Study the lessons in order because later lessons assume that earlier concepts are clear.
-
-## How to study each lesson
-
-For every lesson:
-
-1. Read the explanation once.
-2. Type the examples yourself instead of copying them.
-3. Change one or two values and predict the result.
-4. Complete the exercises without looking at the answer.
-5. Explain the lesson aloud in simple words.
-
-Do not try to memorize every function. Understand what FastAPI is doing with normal Python types and functions.
-
 ## Module 1 — Foundation
 
 Goal: understand the Python syntax FastAPI uses and build a small validated API.
@@ -26,80 +10,74 @@ Goal: understand the Python syntax FastAPI uses and build a small validated API.
 
 After Module 1, you should be able to build a small in-memory CRUD API and explain automatic validation and documentation.
 
-## Module 2 — Responses, errors and dependency injection
+## Module 2 — Responses, errors and application flow
 
-Goal: build cleaner endpoints with predictable responses and reusable request logic.
+Goal: build predictable endpoints and understand the request/application lifecycle used by the reference service.
 
-- Response models and safe output
-- HTTP status codes and `Response`
-- `HTTPException`
-- Custom exception handlers
-- Python syntax: function objects, callables and `Annotated`
-- `Depends` from first principles
-- Nested dependencies and dependency caching
-- Dependencies using `yield`
-- Dependency overrides in tests
+- [Module 2 guide](module-2/README.md)
+- [Lesson 1: Responses and status codes](module-2/1.responses-and-status-codes.md)
+- [Lesson 2: Errors and exception handlers](module-2/2.errors-and-exception-handlers.md)
+- [Lesson 3: Routers and service functions](module-2/3.dependency-injection.md)
+- [Lesson 4: Application lifespan and middleware](module-2/4.dependency-lifecycle.md)
+- [Lesson 6: Module 2 practice](module-2/6.practice.md)
+- [Reference implementation](module-2/7.reference-implementation.md)
 
-## Module 3 — Application structure and middleware
+## Module 3 — Application structure
 
 Goal: organize a growing FastAPI service without creating unnecessary complexity.
 
-- `APIRouter`
-- Python modules, packages and imports
-- Separating routes, schemas and services
-- Configuration and `.env` files
-- Middleware execution flow
-- CORS
-- Request state and request IDs
-- Lifespan startup and shutdown
+- [Module 3 guide](module-3/README.md)
+- [Packages and imports](module-3/1.packages-and-imports.md)
+- [Feature-based application layers](module-3/2.application-layers.md)
+- [Router composition](module-3/3.router-composition.md)
+- [Configuration and environment variables](module-3/4.configuration.md)
+- [Practice](module-3/5.practice.md)
 
-## Module 4 — Async and database development
+## Module 4 — Async code and MongoDB data access
 
 Goal: understand concurrency and connect an API to a real database safely.
 
-- Python `async def`, `await` and coroutines
-- I/O-bound versus CPU-bound work
-- Blocking calls inside async endpoints
-- Database session/client dependencies
-- CRUD with a database
-- Transactions and indexes
-- Pagination
-- Migrations for relational databases
-- MongoDB document concepts if MongoDB is selected
+- [Module 4 guide](module-4/README.md)
+- [Coroutines, `async def`, and `await`](module-4/1.async-and-await.md)
+- [Blocking work](module-4/2.blocking-work.md)
+- [MongoDB documents and CRUD](module-4/3.mongodb-crud.md)
+- [Filtering, sorting, and pagination](module-4/4.querying-and-pagination.md)
+- [Connections, caching, and concurrency safety](module-4/5.connections-and-cache.md)
+- [Practice](module-4/6.practice.md)
 
-Learn one database path first. Do not try to learn SQLAlchemy and MongoDB simultaneously.
-
-## Module 5 — Authentication and security
+## Module 5 — Service authentication and security
 
 Goal: protect endpoints and explain production API security.
 
-- Authentication versus authorization
-- Bearer-token extraction
-- Password hashing
-- JWT structure and validation
-- Current-user dependency
-- Roles, permissions and resource ownership
-- Cookies, sessions and CSRF
-- CORS versus authentication
-- Secrets and environment configuration
-- Rate limiting and common API-security mistakes
+- [Module 5 guide](module-5/README.md)
+- [Authentication, authorization, and trust boundaries](module-5/1.security-foundations.md)
+- [Signed internal requests](module-5/2.signed-requests.md)
+- [Authentication middleware](module-5/3.auth-middleware.md)
+- [CORS, secrets, and safe errors](module-5/4.security-practices.md)
+- [Practice](module-5/5.practice.md)
 
-## Module 6 — Testing and production
+## Module 6 — Production operation
 
-Goal: test confidently and understand how a FastAPI application is deployed.
+Goal: understand how a FastAPI application is run and observed in production. Testing is deferred.
 
-- Pytest fundamentals
-- `TestClient`
-- Fixtures
-- Dependency overrides and mocks
-- Unit versus integration tests
-- Testing validation and authorization
-- Uvicorn and ASGI workers
-- Containers and environment configuration
-- Health checks
-- Logging, metrics and tracing
-- Timeouts, retries and background jobs
-- Final interview revision
+- [Module 6 guide](module-6/README.md)
+- [ASGI, Uvicorn, and containers](module-6/1.asgi-and-containers.md)
+- [Health checks and graceful lifecycle](module-6/2.health-and-lifecycle.md)
+- [Logging and tracing](module-6/3.observability.md)
+- [Timeouts, retries, and background refresh](module-6/4.resilience.md)
+- [Production checklist](module-6/5.production-checklist.md)
+
+## Module 7 — Background, scheduled, and bulk-sync jobs
+
+Goal: run work outside the request lifecycle safely and make important jobs durable and resumable.
+
+- [Module 7 guide](module-7-jobs/README.md)
+- [Choose the correct job type](module-7-jobs/1.job-types.md)
+- [Scheduled email design](module-7-jobs/2.scheduled-email-design.md)
+- [Scheduled email implementation](module-7-jobs/3.scheduled-email-implementation.md)
+- [Bulk CRM sync design](module-7-jobs/4.bulk-sync-design.md)
+- [Bulk CRM sync implementation](module-7-jobs/5.bulk-sync-implementation.md)
+- [Running and operating jobs](module-7-jobs/6.running-jobs.md)
 
 ## Recommended order
 
@@ -108,15 +86,17 @@ Complete one module before moving to the next:
 ```text
 Python and FastAPI basics
         ↓
-Responses, errors and dependencies
+Responses, errors and application flow
         ↓
 Project structure and middleware
         ↓
 Async and database
         ↓
-Authentication and security
+Service authentication and security
         ↓
-Testing and production
+Production operation
+        ↓
+Background and bulk jobs
 ```
 
 ## Topics to postpone
@@ -128,6 +108,8 @@ These are useful but not required at the beginning:
 - custom OpenAPI generation
 - advanced Pydantic core schemas
 - advanced validator `plain` and `wrap` modes
-- distributed background-task systems
+- distributed job frameworks such as Celery
 - writing a custom authentication provider
-
+- automated testing (reserved for a later module)
+- SQLAlchemy and relational migrations
+- browser login, JWT issuance, and session authentication

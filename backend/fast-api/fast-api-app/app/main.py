@@ -19,3 +19,16 @@ app = FastAPI();
 @app.post("/health", response_model = UserResponse, status_code = 201)
 def root(body: CreateUser):
     return body
+
+class TaskCreate(BaseModel):
+    title: str = Field(description="enter title", min_length=2, max_length=5)
+    completed: bool = False
+
+try:
+    data = {"title": "Study123"}
+    task = TaskCreate(**data)
+    result = {"id": 1, **task.model_dump()}
+    print(data, task, result);
+    print(type(data), type(task), type(result));
+except:
+    print("some error occured")
