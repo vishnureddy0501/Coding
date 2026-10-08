@@ -1,0 +1,143 @@
+{
+  "FastAPI application": {
+    "scope": "python",
+    "prefix": "fastapi.app",
+    "description": "Create a FastAPI application",
+    "body": [
+      "from fastapi import FastAPI",
+      "",
+      "",
+      "app = FastAPI(",
+      "    title=\"${1:Application API}\",",
+      "    docs_url=\"/swagger\",",
+      "    version=\"${2:1.0.0}\",",
+      ")",
+      "$0"
+    ]
+  },
+  "FastAPI application with lifespan": {
+    "scope": "python",
+    "prefix": "fastapi.app.lifespan",
+    "description": "Create a FastAPI application with startup and shutdown",
+    "body": [
+      "from contextlib import asynccontextmanager",
+      "",
+      "from fastapi import FastAPI",
+      "",
+      "",
+      "@asynccontextmanager",
+      "async def lifespan(app: FastAPI):",
+      "    ${1:# Initialize shared clients and resources}",
+      "    yield",
+      "    ${2:# Close shared clients and resources}",
+      "",
+      "",
+      "app = FastAPI(",
+      "    title=\"${3:Application API}\",",
+      "    docs_url=\"/swagger\",",
+      "    version=\"${4:1.0.0}\",",
+      "    lifespan=lifespan,",
+      ")",
+      "$0"
+    ]
+  },
+  "FastAPI APIRouter": {
+    "scope": "python",
+    "prefix": "fastapi.router",
+    "description": "Create a versioned APIRouter",
+    "body": [
+      "from fastapi import APIRouter",
+      "",
+      "",
+      "router = APIRouter(",
+      "    prefix=\"/api/v1/${1:resources}\",",
+      "    tags=[\"${2:Resources}\"],",
+      ")",
+      "$0"
+    ]
+  },
+  "Include FastAPI router": {
+    "scope": "python",
+    "prefix": "fastapi.router.include",
+    "description": "Register a router on an app or parent router",
+    "body": [
+      "${1:app}.include_router(${2:resource_router})$0"
+    ]
+  },
+  "Register feature router": {
+    "scope": "python",
+    "prefix": "fastapi.router.feature_include",
+    "description": "Import and register a feature's versioned router",
+    "body": [
+      "from app.${1:feature}.api.v1.router import router as ${1:feature}_v1_router",
+      "",
+      "app.include_router(${1:feature}_v1_router)$0"
+    ]
+  },
+  "Trace response middleware": {
+    "scope": "python",
+    "prefix": "fastapi.middleware.trace",
+    "description": "Expose the active OpenTelemetry trace and span IDs",
+    "body": [
+      "from opentelemetry import trace",
+      "from starlette.middleware.base import BaseHTTPMiddleware",
+      "",
+      "",
+      "class TraceContextMiddleware(BaseHTTPMiddleware):",
+      "    async def dispatch(self, request, call_next):",
+      "        response = await call_next(request)",
+      "        span = trace.get_current_span()",
+      "        if span.is_recording():",
+      "            context = span.get_span_context()",
+      "            response.headers[\"x-trace-id\"] = format(context.trace_id, \"032x\")",
+      "            response.headers[\"x-span-id\"] = format(context.span_id, \"016x\")",
+      "        return response",
+      "$0"
+    ]
+  },
+  "Health endpoint": {
+    "scope": "python",
+    "prefix": "fastapi.health",
+    "description": "Add a basic health endpoint",
+    "body": [
+      "@router.get(\"/health\")",
+      "async def health():",
+      "    return {\"status\": \"ok\"}$0"
+    ]
+  },
+  "CORS middleware": {
+    "scope": "python",
+    "prefix": "fastapi.middleware.cors",
+    "description": "Configure FastAPI CORS middleware",
+    "body": [
+      "from fastapi.middleware.cors import CORSMiddleware",
+      "",
+      "",
+      "app.add_middleware(",
+      "    CORSMiddleware,",
+      "    allow_origins=${1:[\"http://localhost:3000\"]},",
+      "    allow_credentials=True,",
+      "    allow_methods=[\"GET\", \"POST\", \"PUT\", \"PATCH\", \"DELETE\", \"OPTIONS\"],",
+      "    allow_headers=[\"*\"],",
+      ")$0"
+    ]
+  },
+  "BaseHTTPMiddleware class": {
+    "scope": "python",
+    "prefix": "fastapi.middleware.class",
+    "description": "Create request middleware using BaseHTTPMiddleware",
+    "body": [
+      "from fastapi import Request",
+      "from starlette.middleware.base import BaseHTTPMiddleware",
+      "",
+      "",
+      "class ${1:RequestContextMiddleware}(BaseHTTPMiddleware):",
+      "    async def dispatch(self, request: Request, call_next):",
+      "        ${2:# Code before the route}",
+      "        response = await call_next(request)",
+      "        ${3:# Code after the route}",
+      "        return response",
+      "$0"
+    ]
+  }
+}

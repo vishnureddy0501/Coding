@@ -1,0 +1,139 @@
+{
+  "Pydantic strict update model": {
+    "scope": "python",
+    "prefix": "fastapi.model.strict_update",
+    "description": "Create a partial update model that rejects unknown fields",
+    "body": [
+      "from pydantic import BaseModel, ConfigDict, Field",
+      "",
+      "",
+      "class ${1:ResourceUpdateRequest}(BaseModel):",
+      "    model_config = ConfigDict(extra=\"forbid\")",
+      "",
+      "    ${2:title}: str | None = Field(default=None, max_length=${3:300})",
+      "    ${4:status}: str | None = None",
+      "    last_updated_by: ${5:AuditUser}",
+      "$0"
+    ]
+  },
+  "Pydantic default factory fields": {
+    "scope": "python",
+    "prefix": "fastapi.model.factories",
+    "description": "Declare safe list and nested-model defaults",
+    "body": [
+      "${1:items}: list[${2:ResourceItem}] = Field(default_factory=list)",
+      "${3:filters}: ${4:ResourceFilters} = Field(default_factory=${4:ResourceFilters})$0"
+    ]
+  },
+  "Pydantic model validator": {
+    "scope": "python",
+    "prefix": "fastapi.model.root_validator",
+    "description": "Validate related fields after Pydantic model creation",
+    "body": [
+      "from typing import Self",
+      "",
+      "from pydantic import model_validator",
+      "",
+      "",
+      "@model_validator(mode=\"after\")",
+      "def validate_${1:references}(self) -> Self:",
+      "    supplied = [self.${2:first_id}, self.${3:second_id}]",
+      "    if sum(bool(value) for value in supplied) != 1:",
+      "        raise ValueError(\"Exactly one reference must be provided\")",
+      "    return self$0"
+    ]
+  },
+  "Pydantic request model": {
+    "scope": "python",
+    "prefix": "fastapi.model.request",
+    "description": "Create a validated Pydantic request model",
+    "body": [
+      "from typing import Optional",
+      "",
+      "from pydantic import BaseModel, Field",
+      "",
+      "",
+      "class ${1:ResourceCreateRequest}(BaseModel):",
+      "    ${2:name}: str = Field(min_length=1, max_length=200)",
+      "    ${3:description}: Optional[str] = Field(default=None, max_length=1000)",
+      "$0"
+    ]
+  },
+  "Pydantic update model": {
+    "scope": "python",
+    "prefix": "fastapi.model.update",
+    "description": "Create a partial-update Pydantic model",
+    "body": [
+      "from typing import Optional",
+      "",
+      "from pydantic import BaseModel, Field",
+      "",
+      "",
+      "class ${1:ResourceUpdateRequest}(BaseModel):",
+      "    ${2:name}: Optional[str] = Field(default=None, min_length=1, max_length=200)",
+      "    ${3:description}: Optional[str] = Field(default=None, max_length=1000)",
+      "$0"
+    ]
+  },
+  "Pydantic response model": {
+    "scope": "python",
+    "prefix": "fastapi.model.response",
+    "description": "Create a public response model",
+    "body": [
+      "from datetime import datetime",
+      "from typing import Optional",
+      "",
+      "from pydantic import BaseModel",
+      "",
+      "",
+      "class ${1:ResourceResponse}(BaseModel):",
+      "    ${2:resource_id}: str",
+      "    ${3:name}: str",
+      "    ${4:description}: Optional[str] = None",
+      "    created_at: datetime",
+      "    updated_at: datetime",
+      "$0"
+    ]
+  },
+  "Pydantic list response": {
+    "scope": "python",
+    "prefix": "fastapi.model.list_response",
+    "description": "Create a paginated list response model",
+    "body": [
+      "from pydantic import BaseModel",
+      "",
+      "",
+      "class ${1:ResourceListResponse}(BaseModel):",
+      "    items: list[${2:ResourceResponse}]",
+      "    has_more: bool",
+      "    limit: int",
+      "    offset: int",
+      "$0"
+    ]
+  },
+  "Pydantic field validator": {
+    "scope": "python",
+    "prefix": "fastapi.model.validator",
+    "description": "Add a Pydantic v2 field validator",
+    "body": [
+      "from pydantic import field_validator",
+      "",
+      "",
+      "@field_validator(\"${1:field_name}\")",
+      "@classmethod",
+      "def validate_${1:field_name}(cls, value: ${2:str}) -> ${2:str}:",
+      "    value = value.strip()",
+      "    if not value:",
+      "        raise ValueError(\"${3:field_name cannot be empty}\")",
+      "    return value$0"
+    ]
+  },
+  "Model dump for partial update": {
+    "scope": "python",
+    "prefix": "fastapi.model.dump_update",
+    "description": "Convert a PATCH model to only explicitly supplied fields",
+    "body": [
+      "update_data = ${1:payload}.model_dump(exclude_unset=True)$0"
+    ]
+  }
+}

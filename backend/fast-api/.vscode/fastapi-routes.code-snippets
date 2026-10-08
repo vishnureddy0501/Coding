@@ -1,0 +1,144 @@
+{
+  "Feature router composition": {
+    "scope": "python",
+    "prefix": "fastapi.route.feature_router",
+    "description": "Compose endpoint modules under a versioned feature router",
+    "body": [
+      "from fastapi import APIRouter",
+      "",
+      "from app.${1:feature}.api.v1 import ${2:resource}, onboarding",
+      "",
+      "",
+      "router = APIRouter(prefix=\"/api/v1\", tags=[\"${3:Resources}\"])",
+      "router.include_router(${2:resource}.router, prefix=\"/{tenant}/${4:resources}\")",
+      "router.include_router(onboarding.router, prefix=\"/${4:resources}/onboard\")",
+      "$0"
+    ]
+  },
+  "POST list route with optional body": {
+    "scope": "python",
+    "prefix": "fastapi.route.list_body",
+    "description": "Create a filtered list endpoint with an optional request body",
+    "body": [
+      "@router.post(\"/list\", response_model=${1:ResourceListResponse}, summary=\"List ${2:resources}\")",
+      "async def api_list_${2:resources}(",
+      "    tenant: str,",
+      "    node: str = Query(description=\"Drilldown node\"),",
+      "    payload: ${3:ResourceListRequest} | None = Body(default=None),",
+      "):",
+      "    try:",
+      "        request = payload or ${3:ResourceListRequest}()",
+      "        logger.info(\"[%s] List ${2:resources}\", tenant)",
+      "        return await list_${2:resources}(tenant, node, request)",
+      "    except HTTPException:",
+      "        raise",
+      "    except Exception as exc:",
+      "        logger.exception(\"[%s] Error listing ${2:resources}: %s\", tenant, exc)",
+      "        raise HTTPException(status_code=500, detail=\"Internal Server Error\") from exc",
+      "$0"
+    ]
+  },
+  "GET by ID route": {
+    "scope": "python",
+    "prefix": "fastapi.route.get",
+    "description": "Create an async GET-by-ID route with response model",
+    "body": [
+      "@router.get(\"/{${1:resource_id}}\", response_model=${2:ResourceResponse})",
+      "async def ${3:get_resource}(${1:resource_id}: str):",
+      "    return await ${4:get_resource_service}(${1:resource_id})$0"
+    ]
+  },
+  "GET list route": {
+    "scope": "python",
+    "prefix": "fastapi.route.list",
+    "description": "Create a paginated list route",
+    "body": [
+      "from fastapi import Query",
+      "",
+      "",
+      "@router.get(\"\", response_model=${1:ResourceListResponse})",
+      "async def ${2:list_resources}(",
+      "    tenant: str,",
+      "    limit: int = Query(20, ge=1, le=100),",
+      "    offset: int = Query(0, ge=0),",
+      "):",
+      "    return await ${3:list_resources_service}(",
+      "        tenant=tenant,",
+      "        limit=limit,",
+      "        offset=offset,",
+      "    )$0"
+    ]
+  },
+  "POST create route": {
+    "scope": "python",
+    "prefix": "fastapi.route.post",
+    "description": "Create an async POST route",
+    "body": [
+      "from fastapi import status",
+      "",
+      "",
+      "@router.post(",
+      "    \"\",",
+      "    response_model=${1:ResourceCreateResponse},",
+      "    status_code=status.HTTP_201_CREATED,",
+      ")",
+      "async def ${2:create_resource}(tenant: str, payload: ${3:ResourceCreateRequest}):",
+      "    return await ${4:create_resource_service}(tenant, payload)$0"
+    ]
+  },
+  "PUT replace route": {
+    "scope": "python",
+    "prefix": "fastapi.route.put",
+    "description": "Create an async PUT route",
+    "body": [
+      "@router.put(\"/{${1:resource_id}}\", response_model=${2:ResourceResponse})",
+      "async def ${3:replace_resource}(",
+      "    tenant: str,",
+      "    ${1:resource_id}: str,",
+      "    payload: ${4:ResourceReplaceRequest},",
+      "):",
+      "    return await ${5:replace_resource_service}(tenant, ${1:resource_id}, payload)$0"
+    ]
+  },
+  "PATCH update route": {
+    "scope": "python",
+    "prefix": "fastapi.route.patch",
+    "description": "Create an async PATCH route",
+    "body": [
+      "@router.patch(\"/{${1:resource_id}}\", response_model=${2:ResourceResponse})",
+      "async def ${3:update_resource}(",
+      "    tenant: str,",
+      "    ${1:resource_id}: str,",
+      "    payload: ${4:ResourceUpdateRequest},",
+      "):",
+      "    return await ${5:update_resource_service}(tenant, ${1:resource_id}, payload)$0"
+    ]
+  },
+  "DELETE route": {
+    "scope": "python",
+    "prefix": "fastapi.route.delete",
+    "description": "Create an async DELETE route returning a message",
+    "body": [
+      "@router.delete(\"/{${1:resource_id}}\")",
+      "async def ${2:delete_resource}(tenant: str, ${1:resource_id}: str):",
+      "    return await ${3:delete_resource_service}(tenant, ${1:resource_id})$0"
+    ]
+  },
+  "Route with HTTP error boundary": {
+    "scope": "python",
+    "prefix": "fastapi.route.error_boundary",
+    "description": "Preserve HTTPException and safely handle unexpected failures",
+    "body": [
+      "try:",
+      "    return await ${1:service_function}(${2:arguments})",
+      "except HTTPException:",
+      "    raise",
+      "except Exception as exc:",
+      "    logger.exception(\"${3:Unexpected API error}: %s\", exc)",
+      "    raise HTTPException(",
+      "        status_code=500,",
+      "        detail=\"Internal Server Error\",",
+      "    )$0"
+    ]
+  }
+}

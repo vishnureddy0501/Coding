@@ -1,0 +1,103 @@
+{
+  "Raise HTTPException": {
+    "scope": "python",
+    "prefix": "fastapi.error.http",
+    "description": "Raise an expected FastAPI HTTP error",
+    "body": [
+      "raise HTTPException(",
+      "    status_code=${1|400,401,403,404,409,422,500|},",
+      "    detail=\"${2:Error message}\",",
+      ")$0"
+    ]
+  },
+  "Safe service error boundary": {
+    "scope": "python",
+    "prefix": "fastapi.error.boundary",
+    "description": "Preserve HTTPException and hide unexpected errors",
+    "body": [
+      "try:",
+      "    ${1:return await service_function()}",
+      "except HTTPException:",
+      "    raise",
+      "except Exception as exc:",
+      "    logger.exception(\"${2:Unexpected service error}: %s\", exc)",
+      "    raise HTTPException(",
+      "        status_code=500,",
+      "        detail=\"Internal Server Error\",",
+      "    ) from exc",
+      "$0"
+    ]
+  },
+  "Request validation handler": {
+    "scope": "python",
+    "prefix": "fastapi.error.validation_handler",
+    "description": "Register a consistent RequestValidationError response",
+    "body": [
+      "from fastapi.exceptions import RequestValidationError",
+      "from fastapi.responses import JSONResponse",
+      "",
+      "",
+      "async def validation_exception_handler(request, exc: RequestValidationError):",
+      "    errors = [",
+      "        {",
+      "            \"field\": str(error[\"loc\"][-1]),",
+      "            \"message\": error[\"msg\"],",
+      "            \"type\": error[\"type\"],",
+      "        }",
+      "        for error in exc.errors()",
+      "    ]",
+      "    return JSONResponse(",
+      "        status_code=422,",
+      "        content={",
+      "            \"message\": errors[0][\"message\"] if errors else \"Validation failed\",",
+      "            \"detail\": \"Validation error\",",
+      "            \"errors\": errors,",
+      "        },",
+      "    )",
+      "",
+      "",
+      "app.add_exception_handler(",
+      "    RequestValidationError,",
+      "    validation_exception_handler,",
+      ")",
+      "$0"
+    ]
+  },
+  "PyMongo duplicate key handling": {
+    "scope": "python",
+    "prefix": "fastapi.mongo.error.duplicate",
+    "description": "Convert DuplicateKeyError to HTTP 409",
+    "body": [
+      "from pymongo.errors import DuplicateKeyError",
+      "",
+      "",
+      "try:",
+      "    ${1:result = collection.insert_one(document)}",
+      "except DuplicateKeyError as exc:",
+      "    raise HTTPException(",
+      "        status_code=409,",
+      "        detail=\"${2:Resource already exists}\",",
+      "    ) from exc",
+      "$0"
+    ]
+  },
+  "PyMongo operation failure handling": {
+    "scope": "python",
+    "prefix": "fastapi.mongo.error.operation",
+    "description": "Log PyMongo failures and return a safe 500",
+    "body": [
+      "from pymongo.errors import PyMongoError",
+      "",
+      "",
+      "try:",
+      "    ${1:result = collection.find_one(query)}",
+      "except PyMongoError as exc:",
+      "    logger.exception(\"MongoDB operation failed: %s\", exc)",
+      "    raise HTTPException(",
+      "        status_code=500,",
+      "        detail=\"Internal Server Error\",",
+      "    ) from exc",
+      "$0"
+    ]
+  }
+}

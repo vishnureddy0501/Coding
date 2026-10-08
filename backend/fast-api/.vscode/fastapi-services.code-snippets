@@ -1,0 +1,78 @@
+{
+  "Create service": {
+    "scope": "python",
+    "prefix": "fastapi.service.create",
+    "description": "Create and insert a tenant resource",
+    "body": [
+      "async def create_${1:resource}(tenant: str, payload: ${2:ResourceCreateRequest}):",
+      "    collection = await get_${1:resource}_collection(tenant)",
+      "    now = datetime.now(timezone.utc)",
+      "    ${3:resource_id} = str(uuid.uuid4())",
+      "    document = {",
+      "        **payload.model_dump(),",
+      "        \"${3:resource_id}\": ${3:resource_id},",
+      "        \"is_deleted\": False,",
+      "        \"created_at\": now,",
+      "        \"last_updated_at\": now,",
+      "    }",
+      "    collection.insert_one(document)",
+      "    return {\"success\": True, \"${3:resource_id}\": ${3:resource_id}}",
+      "$0"
+    ]
+  },
+  "List service": {
+    "scope": "python",
+    "prefix": "fastapi.service.list",
+    "description": "List filtered resources with has_more pagination",
+    "body": [
+      "async def list_${1:resources}(tenant: str, payload: ${2:ResourceListRequest}):",
+      "    collection = await get_${3:resource}_collection(tenant)",
+      "    query = {\"is_deleted\": False}",
+      "    if payload.search:",
+      "        query[\"${4:title}\"] = {\"\\$regex\": re.escape(payload.search), \"\\$options\": \"i\"}",
+      "",
+      "    documents = list(",
+      "        collection.find(query, {\"_id\": 0})",
+      "        .sort(payload.sort_by, -1 if payload.sort_order == \"desc\" else 1)",
+      "        .skip(payload.skip)",
+      "        .limit(payload.limit + 1)",
+      "    )",
+      "    return {",
+      "        \"items\": documents[: payload.limit],",
+      "        \"has_more\": len(documents) > payload.limit,",
+      "    }",
+      "$0"
+    ]
+  },
+  "Parallel async lookups": {
+    "scope": "python",
+    "prefix": "fastapi.service.gather",
+    "description": "Run independent async lookups concurrently",
+    "body": [
+      "${1:first_result}, ${2:second_result} = await asyncio.gather(",
+      "    ${3:get_first}(tenant, ${4:resource_ids}),",
+      "    ${5:get_second}(tenant, ${4:resource_ids}),",
+      ")",
+      "$0"
+    ]
+  },
+  "Case-insensitive search filter": {
+    "scope": "python",
+    "prefix": "fastapi.service.search_filter",
+    "description": "Build a safely escaped case-insensitive search condition",
+    "body": [
+      "search = (${1:search} or \"\").strip()",
+      "if search:",
+      "    query[\"${2:title}\"] = {\"\\$regex\": re.escape(search), \"\\$options\": \"i\"}",
+      "$0"
+    ]
+  },
+  "Service logger calls": {
+    "scope": "python",
+    "prefix": "fastapi.service.log",
+    "description": "Log a tenant-scoped service operation",
+    "body": [
+      "logger.info(\"[%s] ${1:Operation} | ${2:resource_id}=%s\", tenant, ${2:resource_id})$0"
+    ]
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "Pydantic settings": {
+    "scope": "python",
+    "prefix": "fastapi.config.settings",
+    "description": "Create cached application settings using pydantic-settings",
+    "body": [
+      "from functools import lru_cache",
+      "",
+      "from pydantic import Field",
+      "from pydantic_settings import BaseSettings, SettingsConfigDict",
+      "",
+      "",
+      "class Settings(BaseSettings):",
+      "    model_config = SettingsConfigDict(",
+      "        env_file=\".env\",",
+      "        env_file_encoding=\"utf-8\",",
+      "        extra=\"ignore\",",
+      "    )",
+      "",
+      "    app_name: str = \"${1:Application API}\"",
+      "    mongo_url: str = Field(min_length=1)",
+      "    mongo_database: str = Field(min_length=1)",
+      "",
+      "",
+      "@lru_cache",
+      "def get_settings() -> Settings:",
+      "    return Settings()",
+      "$0"
+    ]
+  },
+  "UTC timestamps": {
+    "scope": "python",
+    "prefix": "fastapi.time.utc",
+    "description": "Create an aware UTC timestamp",
+    "body": [
+      "from datetime import datetime, timezone",
+      "",
+      "",
+      "now = datetime.now(timezone.utc)$0"
+    ]
+  },
+  "Structured logger": {
+    "scope": "python",
+    "prefix": "fastapi.logger",
+    "description": "Create a module logger",
+    "body": [
+      "import logging",
+      "",
+      "",
+      "logger = logging.getLogger(__name__)$0"
+    ]
+  },
+  "Background asyncio task": {
+    "scope": "python",
+    "prefix": "fastapi.task.create",
+    "description": "Schedule an application-owned async background task",
+    "body": [
+      "import asyncio",
+      "",
+      "",
+      "app.state.${1:background_task} = asyncio.create_task(",
+      "    ${2:run_periodically}()",
+      ")$0"
+    ]
+  },
+  "Register middleware": {
+    "scope": "python",
+    "prefix": "fastapi.middleware.register",
+    "description": "Register a middleware class",
+    "body": [
+      "app.add_middleware(${1:MiddlewareClass})$0"
+    ]
+  }
+}
