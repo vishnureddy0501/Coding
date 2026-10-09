@@ -1,0 +1,52 @@
+{
+  "Mongo insert one": {
+    "scope": "python",
+    "prefix": "mongo-insert-one",
+    "description": "Insert one document and return its id",
+    "body": [
+      "document = ${1:payload}.model_dump(exclude_none=True)",
+      "result = await ${2:collection}.insert_one(document)",
+      "return {\"id\": str(result.inserted_id)}"
+    ]
+  },
+  "Mongo insert one with timestamps": {
+    "scope": "python",
+    "prefix": "mongo-insert-timestamps",
+    "description": "Insert a model with UTC created/updated timestamps",
+    "body": [
+      "from datetime import datetime, timezone",
+      "",
+      "now = datetime.now(timezone.utc)",
+      "document = ${1:payload}.model_dump(exclude_none=True)",
+      "document.update({\"created_at\": now, \"updated_at\": now})",
+      "result = await ${2:collection}.insert_one(document)",
+      "document[\"_id\"] = result.inserted_id",
+      "return document"
+    ]
+  },
+  "Mongo insert many": {
+    "scope": "python",
+    "prefix": "mongo-insert-many",
+    "description": "Insert multiple Pydantic models",
+    "body": [
+      "documents = [item.model_dump(exclude_none=True) for item in ${1:items}]",
+      "if not documents:",
+      "    return []",
+      "result = await ${2:collection}.insert_many(documents, ordered=${3:True})",
+      "return [str(object_id) for object_id in result.inserted_ids]"
+    ]
+  },
+  "Mongo idempotent insert": {
+    "scope": "python",
+    "prefix": "mongo-insert-if-missing",
+    "description": "Create a document only if its unique key does not exist",
+    "body": [
+      "result = await ${1:collection}.update_one(",
+      "    {\"${2:unique_field}\": ${3:value}},",
+      "    {\"\\$setOnInsert\": ${4:document}},",
+      "    upsert=True,",
+      ")",
+      "created = result.upserted_id is not None"
+    ]
+  }
+}

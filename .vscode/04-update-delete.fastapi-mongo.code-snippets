@@ -1,0 +1,79 @@
+{
+  "Mongo update one": {
+    "scope": "python",
+    "prefix": "mongo-update-one",
+    "description": "Apply a partial Pydantic update",
+    "body": [
+      "changes = ${1:payload}.model_dump(exclude_unset=True, exclude_none=True)",
+      "if changes:",
+      "    result = await ${2:collection}.update_one(",
+      "        {\"_id\": ${3:object_id}},",
+      "        {\"\\$set\": changes},",
+      "    )"
+    ]
+  },
+  "Mongo update operators": {
+    "scope": "python",
+    "prefix": "mongo-update-operators",
+    "description": "Common set, unset, increment, add, push, and pull operators",
+    "body": [
+      "update = {",
+      "    \"\\$set\": {\"${1:status}\": ${2:value}},",
+      "    \"\\$unset\": {\"${3:obsolete_field}\": \"\"},",
+      "    \"\\$inc\": {\"${4:attempts}\": ${5:1}},",
+      "    \"\\$addToSet\": {\"${6:tags}\": ${7:tag}},",
+      "    \"\\$push\": {\"${8:events}\": ${9:event}},",
+      "    \"\\$pull\": {\"${10:members}\": ${11:member_id}},",
+      "}"
+    ]
+  },
+  "Mongo find one and update": {
+    "scope": "python",
+    "prefix": "mongo-find-update",
+    "description": "Atomically update and return the changed document",
+    "body": [
+      "from pymongo import ReturnDocument",
+      "",
+      "document = await ${1:collection}.find_one_and_update(",
+      "    ${2:filter},",
+      "    {\"\\$set\": ${3:changes}},",
+      "    return_document=ReturnDocument.AFTER,",
+      ")"
+    ]
+  },
+  "Mongo upsert": {
+    "scope": "python",
+    "prefix": "mongo-upsert",
+    "description": "Update a document or insert it when missing",
+    "body": [
+      "result = await ${1:collection}.update_one(",
+      "    ${2:filter},",
+      "    {\"\\$set\": ${3:changes}, \"\\$setOnInsert\": ${4:create_defaults}},",
+      "    upsert=True,",
+      ")"
+    ]
+  },
+  "Mongo delete one": {
+    "scope": "python",
+    "prefix": "mongo-delete-one",
+    "description": "Delete one document and detect a missing record",
+    "body": [
+      "result = await ${1:collection}.delete_one({\"_id\": ${2:object_id}})",
+      "if result.deleted_count == 0:",
+      "    raise HTTPException(status_code=404, detail=\"Not found\")"
+    ]
+  },
+  "Mongo soft delete": {
+    "scope": "python",
+    "prefix": "mongo-soft-delete",
+    "description": "Soft-delete a document using a UTC timestamp",
+    "body": [
+      "from datetime import datetime, timezone",
+      "",
+      "result = await ${1:collection}.update_one(",
+      "    {\"_id\": ${2:object_id}, \"deleted_at\": {\"\\$exists\": False}},",
+      "    {\"\\$set\": {\"deleted_at\": datetime.now(timezone.utc)}},",
+      ")"
+    ]
+  }
+}

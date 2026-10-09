@@ -1,0 +1,57 @@
+{
+  "Mongo create indexes": {
+    "scope": "python",
+    "prefix": "mongo-create-indexes",
+    "description": "Create common unique, compound, partial, and TTL indexes",
+    "body": [
+      "from pymongo import ASCENDING, DESCENDING, IndexModel",
+      "",
+      "await ${1:collection}.create_indexes([",
+      "    IndexModel([(\"${2:email}\", ASCENDING)], unique=True, name=\"uniq_${2:email}\"),",
+      "    IndexModel([(\"${3:status}\", ASCENDING), (\"${4:created_at}\", DESCENDING)], name=\"${3:status}_${4:created_at}\"),",
+      "    IndexModel([(\"${5:optional_field}\", ASCENDING)], partialFilterExpression={\"${5:optional_field}\": {\"\\$exists\": True}}),",
+      "    IndexModel([(\"${6:expires_at}\", ASCENDING)], expireAfterSeconds=0, name=\"ttl_${6:expires_at}\"),",
+      "])"
+    ]
+  },
+  "Mongo text index and search": {
+    "scope": "python",
+    "prefix": "mongo-text-search",
+    "description": "Create a text index and perform ranked text search",
+    "body": [
+      "from pymongo import TEXT",
+      "",
+      "await ${1:collection}.create_index([(\"${2:title}\", TEXT), (\"${3:description}\", TEXT)])",
+      "cursor = (",
+      "    ${1:collection}",
+      "    .find({\"\\$text\": {\"\\$search\": ${4:search_term}}}, {\"score\": {\"\\$meta\": \"textScore\"}})",
+      "    .sort({\"score\": {\"\\$meta\": \"textScore\"}})",
+      ")"
+    ]
+  },
+  "Mongo bulk write": {
+    "scope": "python",
+    "prefix": "mongo-bulk-write",
+    "description": "Execute mixed insert, update, replace, and delete operations",
+    "body": [
+      "from pymongo import DeleteOne, InsertOne, ReplaceOne, UpdateOne",
+      "",
+      "operations = [",
+      "    InsertOne(${1:new_document}),",
+      "    UpdateOne(${2:filter}, {\"\\$set\": ${3:changes}}, upsert=True),",
+      "    ReplaceOne(${4:replace_filter}, ${5:replacement}),",
+      "    DeleteOne(${6:delete_filter}),",
+      "]",
+      "result = await ${7:collection}.bulk_write(operations, ordered=False)"
+    ]
+  },
+  "Mongo list indexes": {
+    "scope": "python",
+    "prefix": "mongo-list-indexes",
+    "description": "Inspect all indexes for a collection",
+    "body": [
+      "cursor = await ${1:collection}.list_indexes()",
+      "indexes = [index async for index in cursor]"
+    ]
+  }
+}

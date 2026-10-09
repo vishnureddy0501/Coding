@@ -1,0 +1,91 @@
+{
+  "Mongo Pydantic document model": {
+    "scope": "python",
+    "prefix": "mongo-document-model",
+    "description": "Pydantic response model that serializes ObjectId",
+    "body": [
+      "from datetime import datetime",
+      "from typing import Annotated",
+      "from bson import ObjectId",
+      "from pydantic import BaseModel, BeforeValidator, ConfigDict, Field",
+      "",
+      "PyObjectId = Annotated[str, BeforeValidator(str)]",
+      "",
+      "class ${1:ItemDocument}(BaseModel):",
+      "    model_config = ConfigDict(populate_by_name=True)",
+      "",
+      "    id: PyObjectId = Field(alias=\"_id\")",
+      "    ${2:name}: str",
+      "    created_at: datetime"
+    ]
+  },
+  "Mongo serialize document": {
+    "scope": "python",
+    "prefix": "mongo-serialize",
+    "description": "Convert a MongoDB document into a JSON-safe dictionary",
+    "body": [
+      "def serialize_document(document: dict) -> dict:",
+      "    serialized = dict(document)",
+      "    if \"_id\" in serialized:",
+      "        serialized[\"id\"] = str(serialized.pop(\"_id\"))",
+      "    return serialized"
+    ]
+  },
+  "Mongo ObjectId helper": {
+    "scope": "python",
+    "prefix": "mongo-object-id",
+    "description": "Safely parse an ObjectId for request handlers",
+    "body": [
+      "from bson import ObjectId",
+      "from bson.errors import InvalidId",
+      "from fastapi import HTTPException, status",
+      "",
+      "def parse_object_id(value: str) -> ObjectId:",
+      "    try:",
+      "        return ObjectId(value)",
+      "    except (InvalidId, TypeError) as exc:",
+      "        raise HTTPException(",
+      "            status_code=status.HTTP_400_BAD_REQUEST,",
+      "            detail=\"Invalid id\",",
+      "        ) from exc"
+    ]
+  },
+  "Mongo FastAPI CRUD router": {
+    "scope": "python",
+    "prefix": "mongo-crud-router",
+    "description": "Starter FastAPI router with async MongoDB CRUD handlers",
+    "body": [
+      "from bson import ObjectId",
+      "from fastapi import APIRouter, HTTPException, status",
+      "",
+      "router = APIRouter(prefix=\"/${1:items}\", tags=[\"${2:Items}\"])",
+      "",
+      "@router.post(\"\", status_code=status.HTTP_201_CREATED)",
+      "async def create_${3:item}(payload: ${4:CreateModel}, db: DatabaseDep):",
+      "    document = payload.model_dump(exclude_none=True)",
+      "    result = await db[\"${1:items}\"].insert_one(document)",
+      "    return await db[\"${1:items}\"].find_one({\"_id\": result.inserted_id})",
+      "",
+      "@router.get(\"/{item_id}\")",
+      "async def get_${3:item}(item_id: str, db: DatabaseDep):",
+      "    document = await db[\"${1:items}\"].find_one({\"_id\": parse_object_id(item_id)})",
+      "    if document is None:",
+      "        raise HTTPException(status_code=404, detail=\"Not found\")",
+      "    return document",
+      "",
+      "@router.patch(\"/{item_id}\")",
+      "async def update_${3:item}(item_id: str, payload: ${5:UpdateModel}, db: DatabaseDep):",
+      "    changes = payload.model_dump(exclude_unset=True, exclude_none=True)",
+      "    result = await db[\"${1:items}\"].update_one({\"_id\": parse_object_id(item_id)}, {\"\\$set\": changes})",
+      "    if result.matched_count == 0:",
+      "        raise HTTPException(status_code=404, detail=\"Not found\")",
+      "    return {\"updated\": result.modified_count == 1}",
+      "",
+      "@router.delete(\"/{item_id}\", status_code=status.HTTP_204_NO_CONTENT)",
+      "async def delete_${3:item}(item_id: str, db: DatabaseDep) -> None:",
+      "    result = await db[\"${1:items}\"].delete_one({\"_id\": parse_object_id(item_id)})",
+      "    if result.deleted_count == 0:",
+      "        raise HTTPException(status_code=404, detail=\"Not found\")"
+    ]
+  }
+}

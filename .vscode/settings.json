@@ -1,0 +1,20 @@
+{
+  "python.defaultInterpreterPath": "${workspaceFolder}/backend/fast-api/fast-api-app/.venv/bin/python",
+  "python.analysis.extraPaths": [
+    "${workspaceFolder}/backend/fast-api/fast-api-app"
+  ],
+  "python.analysis.autoImportCompletions": true,
+  "python.analysis.indexing": true,
+  "python.analysis.diagnosticMode": "workspace",
+  "editor.suggestOnTriggerCharacters": true,
+  "editor.snippetSuggestions": "top",
+  "editor.suggest.showSnippets": true,
+  "editor.suggest.snippetsPreventQuickSuggestions": false,
+  "[python]": {
+    "editor.quickSuggestions": {
+      "other": true,
+      "comments": false,
+      "strings": false
+    }
+  }
+}

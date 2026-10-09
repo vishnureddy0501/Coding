@@ -3,6 +3,12 @@
   "editor.suggest.showSnippets": true,
   "editor.suggest.snippetsPreventQuickSuggestions": false,
   "editor.suggestOnTriggerCharacters": true,
+  "python.defaultInterpreterPath": "${workspaceFolder}/fast-api-app/.venv/bin/python",
+  "python.analysis.extraPaths": [
+    "${workspaceFolder}/fast-api-app"
+  ],
+  "python.analysis.autoImportCompletions": true,
+  "python.analysis.indexing": true,
   "[python]": {
     "editor.quickSuggestions": {
       "other": true,

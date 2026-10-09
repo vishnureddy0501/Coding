@@ -1,0 +1,82 @@
+{
+  "Mongo async connection module": {
+    "scope": "python",
+    "prefix": "mongo-connection",
+    "description": "AsyncMongoClient lifecycle and database accessor",
+    "body": [
+      "from pymongo import AsyncMongoClient",
+      "from pymongo.asynchronous.database import AsyncDatabase",
+      "",
+      "from app.config import settings",
+      "",
+      "_client: AsyncMongoClient | None = None",
+      "_database: AsyncDatabase | None = None",
+      "",
+      "async def connect_to_mongodb() -> None:",
+      "    global _client, _database",
+      "    _client = AsyncMongoClient(settings.mongo_url, serverSelectionTimeoutMS=5000)",
+      "    try:",
+      "        await _client.admin.command(\"ping\")",
+      "    except Exception:",
+      "        await _client.close()",
+      "        _client = None",
+      "        raise",
+      "    _database = _client[settings.mongo_database]",
+      "",
+      "async def close_mongodb_connection() -> None:",
+      "    global _client, _database",
+      "    if _client is not None:",
+      "        await _client.close()",
+      "    _client = None",
+      "    _database = None",
+      "",
+      "def get_database() -> AsyncDatabase:",
+      "    if _database is None:",
+      "        raise RuntimeError(\"MongoDB is not connected\")",
+      "    return _database"
+    ]
+  },
+  "FastAPI Mongo lifespan": {
+    "scope": "python",
+    "prefix": "mongo-lifespan",
+    "description": "Connect and close MongoDB through FastAPI lifespan",
+    "body": [
+      "from contextlib import asynccontextmanager",
+      "from collections.abc import AsyncIterator",
+      "from fastapi import FastAPI",
+      "",
+      "@asynccontextmanager",
+      "async def lifespan(app: FastAPI) -> AsyncIterator[None]:",
+      "    await connect_to_mongodb()",
+      "    try:",
+      "        yield",
+      "    finally:",
+      "        await close_mongodb_connection()",
+      "",
+      "app = FastAPI(lifespan=lifespan)"
+    ]
+  },
+  "Mongo database dependency": {
+    "scope": "python",
+    "prefix": "mongo-dependency",
+    "description": "Typed FastAPI dependency for the Mongo database",
+    "body": [
+      "from typing import Annotated",
+      "from fastapi import Depends",
+      "from pymongo.asynchronous.database import AsyncDatabase",
+      "",
+      "DatabaseDep = Annotated[AsyncDatabase, Depends(get_database)]"
+    ]
+  },
+  "Mongo collection dependency": {
+    "scope": "python",
+    "prefix": "mongo-collection-dependency",
+    "description": "Reusable dependency that returns a collection",
+    "body": [
+      "from pymongo.asynchronous.collection import AsyncCollection",
+      "",
+      "def get_${1:items}_collection(db: DatabaseDep) -> AsyncCollection:",
+      "    return db[\"${1:items}\"]"
+    ]
+  }
+}

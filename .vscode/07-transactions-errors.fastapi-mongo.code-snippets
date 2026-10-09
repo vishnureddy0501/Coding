@@ -1,0 +1,68 @@
+{
+  "Mongo transaction": {
+    "scope": "python",
+    "prefix": "mongo-transaction",
+    "description": "Run multiple writes in an async transaction",
+    "body": [
+      "async with ${1:client}.start_session() as session:",
+      "    async with await session.start_transaction():",
+      "        await ${2:first_collection}.update_one(",
+      "            ${3:first_filter},",
+      "            {\"\\$set\": ${4:first_changes}},",
+      "            session=session,",
+      "        )",
+      "        await ${5:second_collection}.insert_one(${6:document}, session=session)"
+    ]
+  },
+  "Mongo retryable transaction": {
+    "scope": "python",
+    "prefix": "mongo-transaction-retry",
+    "description": "Run a transaction callback with PyMongo retry handling",
+    "body": [
+      "async def transaction_callback(session):",
+      "    await ${1:collection}.update_one(",
+      "        ${2:filter},",
+      "        {\"\\$set\": ${3:changes}},",
+      "        session=session,",
+      "    )",
+      "    return ${4:result}",
+      "",
+      "async with ${5:client}.start_session() as session:",
+      "    result = await session.with_transaction(transaction_callback)"
+    ]
+  },
+  "Mongo duplicate key handling": {
+    "scope": "python",
+    "prefix": "mongo-duplicate-key",
+    "description": "Translate a unique-index violation into HTTP 409",
+    "body": [
+      "from fastapi import HTTPException, status",
+      "from pymongo.errors import DuplicateKeyError",
+      "",
+      "try:",
+      "    result = await ${1:collection}.insert_one(${2:document})",
+      "except DuplicateKeyError as exc:",
+      "    raise HTTPException(",
+      "        status_code=status.HTTP_409_CONFLICT,",
+      "        detail=\"A record with that value already exists\",",
+      "    ) from exc"
+    ]
+  },
+  "Mongo operation error handling": {
+    "scope": "python",
+    "prefix": "mongo-operation-error",
+    "description": "Handle MongoDB availability and operation failures",
+    "body": [
+      "from fastapi import HTTPException, status",
+      "from pymongo.errors import PyMongoError",
+      "",
+      "try:",
+      "    ${1:result} = await ${2:operation}",
+      "except PyMongoError as exc:",
+      "    raise HTTPException(",
+      "        status_code=status.HTTP_503_SERVICE_UNAVAILABLE,",
+      "        detail=\"Database operation failed\",",
+      "    ) from exc"
+    ]
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "Mongo find by ObjectId": {
+    "scope": "python",
+    "prefix": "mongo-find-by-id",
+    "description": "Validate an ObjectId and return a 404 when absent",
+    "body": [
+      "from bson import ObjectId",
+      "from bson.errors import InvalidId",
+      "from fastapi import HTTPException, status",
+      "",
+      "try:",
+      "    object_id = ObjectId(${1:item_id})",
+      "except (InvalidId, TypeError):",
+      "    raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=\"Invalid id\")",
+      "",
+      "document = await ${2:collection}.find_one({\"_id\": object_id})",
+      "if document is None:",
+      "    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=\"Not found\")"
+    ]
+  },
+  "Mongo find one": {
+    "scope": "python",
+    "prefix": "mongo-find-one",
+    "description": "Find a single document using a filter and projection",
+    "body": [
+      "document = await ${1:collection}.find_one(",
+      "    {\"${2:field}\": ${3:value}},",
+      "    {\"${4:field_to_include}\": 1},",
+      ")"
+    ]
+  },
+  "Mongo find list": {
+    "scope": "python",
+    "prefix": "mongo-find-list",
+    "description": "Read a sorted and limited cursor asynchronously",
+    "body": [
+      "cursor = (",
+      "    ${1:collection}",
+      "    .find(${2:{}})",
+      "    .sort(\"${3:created_at}\", ${4:-1})",
+      "    .limit(${5:100})",
+      ")",
+      "documents = [document async for document in cursor]"
+    ]
+  },
+  "Mongo projection": {
+    "scope": "python",
+    "prefix": "mongo-projection",
+    "description": "Include selected fields while excluding Mongo _id",
+    "body": [
+      "projection = {\"_id\": 0, \"${1:name}\": 1, \"${2:status}\": 1}",
+      "cursor = ${3:collection}.find(${4:{}}, projection)"
+    ]
+  },
+  "Mongo common query operators": {
+    "scope": "python",
+    "prefix": "mongo-query-operators",
+    "description": "Common comparison, membership, logical, regex, and existence filters",
+    "body": [
+      "query = {",
+      "    \"${1:score}\": {\"\\$gte\": ${2:0}, \"\\$lte\": ${3:100}},",
+      "    \"${4:status}\": {\"\\$in\": ${5:[\"active\", \"pending\"]}},",
+      "    \"${6:name}\": {\"\\$regex\": ${7:search}, \"\\$options\": \"i\"},",
+      "    \"${8:deleted_at}\": {\"\\$exists\": False},",
+      "    \"\\$or\": [{\"${9:owner_id}\": ${10:user_id}}, {\"${11:is_public}\": True}],",
+      "}"
+    ]
+  },
+  "Mongo count documents": {
+    "scope": "python",
+    "prefix": "mongo-count",
+    "description": "Count documents matching a filter",
+    "body": [
+      "total = await ${1:collection}.count_documents(${2:{}})"
+    ]
+  },
+  "Mongo distinct values": {
+    "scope": "python",
+    "prefix": "mongo-distinct",
+    "description": "Read unique values for a field",
+    "body": [
+      "values = await ${1:collection}.distinct(\"${2:field}\", filter=${3:{}})"
+    ]
+  }
+}

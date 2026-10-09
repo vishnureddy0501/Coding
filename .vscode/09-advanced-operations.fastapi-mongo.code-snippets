@@ -1,0 +1,83 @@
+{
+  "Mongo update many": {
+    "scope": "python",
+    "prefix": "mongo-update-many",
+    "description": "Update every document matching a filter",
+    "body": [
+      "result = await ${1:collection}.update_many(",
+      "    ${2:filter},",
+      "    {\"\\$set\": ${3:changes}},",
+      ")",
+      "matched_count = result.matched_count",
+      "modified_count = result.modified_count"
+    ]
+  },
+  "Mongo delete many": {
+    "scope": "python",
+    "prefix": "mongo-delete-many",
+    "description": "Delete every document matching a filter",
+    "body": [
+      "result = await ${1:collection}.delete_many(${2:filter})",
+      "deleted_count = result.deleted_count"
+    ]
+  },
+  "Mongo replace one": {
+    "scope": "python",
+    "prefix": "mongo-replace-one",
+    "description": "Replace an entire document while preserving its id",
+    "body": [
+      "replacement = ${1:payload}.model_dump(exclude_none=True)",
+      "result = await ${2:collection}.replace_one(",
+      "    {\"_id\": ${3:object_id}},",
+      "    replacement,",
+      "    upsert=${4:False},",
+      ")"
+    ]
+  },
+  "Mongo find one and delete": {
+    "scope": "python",
+    "prefix": "mongo-find-delete",
+    "description": "Atomically delete and return a document",
+    "body": [
+      "document = await ${1:collection}.find_one_and_delete(${2:filter})",
+      "if document is None:",
+      "    raise HTTPException(status_code=404, detail=\"Not found\")"
+    ]
+  },
+  "Mongo array filtered update": {
+    "scope": "python",
+    "prefix": "mongo-array-update",
+    "description": "Update matching elements inside a nested array",
+    "body": [
+      "result = await ${1:collection}.update_one(",
+      "    {\"_id\": ${2:object_id}},",
+      "    {\"\\$set\": {\"${3:items}.\\$[item].${4:status}\": ${5:value}}},",
+      "    array_filters=[{\"item.${6:id}\": ${7:item_id}}],",
+      ")"
+    ]
+  },
+  "Mongo change stream": {
+    "scope": "python",
+    "prefix": "mongo-change-stream",
+    "description": "Watch collection changes asynchronously",
+    "body": [
+      "pipeline = [{\"\\$match\": {\"operationType\": {\"\\$in\": ${1:[\"insert\", \"update\", \"delete\"]}}}}]",
+      "async with await ${2:collection}.watch(pipeline, full_document=\"updateLookup\") as stream:",
+      "    async for change in stream:",
+      "        ${3:await handle_change(change)}"
+    ]
+  },
+  "Mongo optimistic concurrency": {
+    "scope": "python",
+    "prefix": "mongo-optimistic-lock",
+    "description": "Update only when the expected document version matches",
+    "body": [
+      "result = await ${1:collection}.update_one(",
+      "    {\"_id\": ${2:object_id}, \"version\": ${3:expected_version}},",
+      "    {\"\\$set\": ${4:changes}, \"\\$inc\": {\"version\": 1}},",
+      ")",
+      "if result.matched_count == 0:",
+      "    raise HTTPException(status_code=409, detail=\"Document was modified by another request\")"
+    ]
+  }
+}

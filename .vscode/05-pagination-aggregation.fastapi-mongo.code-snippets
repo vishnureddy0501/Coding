@@ -1,0 +1,78 @@
+{
+  "Mongo offset pagination": {
+    "scope": "python",
+    "prefix": "mongo-paginate-offset",
+    "description": "Offset pagination with total count",
+    "body": [
+      "page = max(${1:page}, 1)",
+      "page_size = min(max(${2:page_size}, 1), 100)",
+      "query = ${3:{}}",
+      "total = await ${4:collection}.count_documents(query)",
+      "cursor = (",
+      "    ${4:collection}.find(query)",
+      "    .sort(\"${5:created_at}\", -1)",
+      "    .skip((page - 1) * page_size)",
+      "    .limit(page_size)",
+      ")",
+      "items = [document async for document in cursor]",
+      "return {\"items\": items, \"page\": page, \"page_size\": page_size, \"total\": total}"
+    ]
+  },
+  "Mongo cursor pagination": {
+    "scope": "python",
+    "prefix": "mongo-paginate-cursor",
+    "description": "Stable ObjectId cursor pagination",
+    "body": [
+      "query = dict(${1:base_query})",
+      "if ${2:after_id}:",
+      "    query[\"_id\"] = {\"\\$lt\": ObjectId(${2:after_id})}",
+      "cursor = ${3:collection}.find(query).sort(\"_id\", -1).limit(${4:page_size} + 1)",
+      "items = [document async for document in cursor]",
+      "has_more = len(items) > ${4:page_size}",
+      "items = items[:${4:page_size}]",
+      "next_cursor = str(items[-1][\"_id\"]) if has_more and items else None"
+    ]
+  },
+  "Mongo aggregation pipeline": {
+    "scope": "python",
+    "prefix": "mongo-aggregate",
+    "description": "Match, join, unwind, group, sort, and project documents",
+    "body": [
+      "pipeline = [",
+      "    {\"\\$match\": ${1:query}},",
+      "    {\"\\$lookup\": {",
+      "        \"from\": \"${2:foreign_collection}\",",
+      "        \"localField\": \"${3:foreign_id}\",",
+      "        \"foreignField\": \"_id\",",
+      "        \"as\": \"${4:related}\",",
+      "    }},",
+      "    {\"\\$unwind\": {\"path\": \"\\$${4:related}\", \"preserveNullAndEmptyArrays\": True}},",
+      "    {\"\\$group\": {\"_id\": \"\\$${5:group_field}\", \"count\": {\"\\$sum\": 1}}},",
+      "    {\"\\$sort\": {\"count\": -1}},",
+      "    {\"\\$project\": {\"_id\": 0, \"value\": \"\\$_id\", \"count\": 1}},",
+      "]",
+      "cursor = await ${6:collection}.aggregate(pipeline)",
+      "results = [document async for document in cursor]"
+    ]
+  },
+  "Mongo facet pagination": {
+    "scope": "python",
+    "prefix": "mongo-paginate-facet",
+    "description": "Return page items and total in one aggregation",
+    "body": [
+      "pipeline = [",
+      "    {\"\\$match\": ${1:query}},",
+      "    {\"\\$facet\": {",
+      "        \"items\": [",
+      "            {\"\\$sort\": {\"${2:created_at}\": -1}},",
+      "            {\"\\$skip\": ${3:offset}},",
+      "            {\"\\$limit\": ${4:page_size}},",
+      "        ],",
+      "        \"metadata\": [{\"\\$count\": \"total\"}],",
+      "    }},",
+      "]",
+      "cursor = await ${5:collection}.aggregate(pipeline)",
+      "result = await cursor.to_list(length=1)"
+    ]
+  }
+}
