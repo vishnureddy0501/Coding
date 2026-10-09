@@ -1,8 +1,31 @@
 {
+  "Mongo find one": {
+    "scope": "python",
+    "prefix": "mongo-find-one",
+    "description": "Find one document matching a filter",
+    "body": [
+      "document = await ${1:collection}.find_one({\"${2:field}\": ${3:value}})"
+    ]
+  },
+  "Mongo find one or 404": {
+    "scope": "python",
+    "prefix": "mongo-find-one-or-404",
+    "description": "Find one document or raise an HTTP 404 error",
+    "body": [
+      "from fastapi import HTTPException, status",
+      "",
+      "document = await ${1:collection}.find_one(${2:query})",
+      "if document is None:",
+      "    raise HTTPException(",
+      "        status_code=status.HTTP_404_NOT_FOUND,",
+      "        detail=\"${3:Document not found}\",",
+      "    )"
+    ]
+  },
   "Mongo find by ObjectId": {
     "scope": "python",
     "prefix": "mongo-find-by-id",
-    "description": "Validate an ObjectId and return a 404 when absent",
+    "description": "Validate an ObjectId and find its document",
     "body": [
       "from bson import ObjectId",
       "from bson.errors import InvalidId",
@@ -10,60 +33,219 @@
       "",
       "try:",
       "    object_id = ObjectId(${1:item_id})",
-      "except (InvalidId, TypeError):",
-      "    raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=\"Invalid id\")",
+      "except (InvalidId, TypeError) as exc:",
+      "    raise HTTPException(",
+      "        status_code=status.HTTP_400_BAD_REQUEST,",
+      "        detail=\"Invalid id\",",
+      "    ) from exc",
       "",
       "document = await ${2:collection}.find_one({\"_id\": object_id})",
       "if document is None:",
-      "    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=\"Not found\")"
+      "    raise HTTPException(status_code=404, detail=\"Not found\")"
     ]
   },
-  "Mongo find one": {
+  "Mongo find many to list": {
     "scope": "python",
-    "prefix": "mongo-find-one",
-    "description": "Find a single document using a filter and projection",
+    "prefix": "mongo-find-many",
+    "description": "Find multiple documents and materialize the cursor",
     "body": [
-      "document = await ${1:collection}.find_one(",
-      "    {\"${2:field}\": ${3:value}},",
-      "    {\"${4:field_to_include}\": 1},",
-      ")"
+      "cursor = ${1:collection}.find(${2:query})",
+      "documents = await cursor.to_list(length=${3:100})"
     ]
   },
-  "Mongo find list": {
+  "Mongo iterate cursor": {
     "scope": "python",
-    "prefix": "mongo-find-list",
-    "description": "Read a sorted and limited cursor asynchronously",
+    "prefix": "mongo-find-iterate",
+    "description": "Process an async cursor without loading everything into memory",
     "body": [
+      "cursor = ${1:collection}.find(${2:query})",
+      "async for document in cursor:",
+      "    ${3:process_document(document)}"
+    ]
+  },
+  "Mongo sorted limited query": {
+    "scope": "python",
+    "prefix": "mongo-find-sorted",
+    "description": "Find, sort by multiple fields, and limit results",
+    "body": [
+      "from pymongo import ASCENDING, DESCENDING",
+      "",
       "cursor = (",
       "    ${1:collection}",
-      "    .find(${2:{}})",
-      "    .sort(\"${3:created_at}\", ${4:-1})",
-      "    .limit(${5:100})",
+      "    .find(${2:query})",
+      "    .sort([",
+      "        (\"${3:created_at}\", DESCENDING),",
+      "        (\"_id\", ASCENDING),",
+      "    ])",
+      "    .limit(${4:100})",
       ")",
-      "documents = [document async for document in cursor]"
+      "documents = await cursor.to_list(length=${4:100})"
     ]
   },
-  "Mongo projection": {
+  "Mongo include projection": {
     "scope": "python",
-    "prefix": "mongo-projection",
-    "description": "Include selected fields while excluding Mongo _id",
+    "prefix": "mongo-project-include",
+    "description": "Return only selected fields and omit _id",
     "body": [
       "projection = {\"_id\": 0, \"${1:name}\": 1, \"${2:status}\": 1}",
-      "cursor = ${3:collection}.find(${4:{}}, projection)"
+      "cursor = ${3:collection}.find(${4:query}, projection)",
+      "documents = await cursor.to_list(length=${5:100})"
     ]
   },
-  "Mongo common query operators": {
+  "Mongo exclude projection": {
     "scope": "python",
-    "prefix": "mongo-query-operators",
-    "description": "Common comparison, membership, logical, regex, and existence filters",
+    "prefix": "mongo-project-exclude",
+    "description": "Return all fields except selected sensitive or large fields",
+    "body": [
+      "projection = {\"${1:password}\": 0, \"${2:large_field}\": 0}",
+      "cursor = ${3:collection}.find(${4:query}, projection)",
+      "documents = await cursor.to_list(length=${5:100})"
+    ]
+  },
+  "Mongo comparison and range query": {
+    "scope": "python",
+    "prefix": "mongo-query-range",
+    "description": "Query using greater-than and less-than operators",
     "body": [
       "query = {",
-      "    \"${1:score}\": {\"\\$gte\": ${2:0}, \"\\$lte\": ${3:100}},",
-      "    \"${4:status}\": {\"\\$in\": ${5:[\"active\", \"pending\"]}},",
-      "    \"${6:name}\": {\"\\$regex\": ${7:search}, \"\\$options\": \"i\"},",
-      "    \"${8:deleted_at}\": {\"\\$exists\": False},",
-      "    \"\\$or\": [{\"${9:owner_id}\": ${10:user_id}}, {\"${11:is_public}\": True}],",
+      "    \"${1:score}\": {",
+      "        \"\\$gte\": ${2:minimum},",
+      "        \"\\$lte\": ${3:maximum},",
+      "    }",
+      "}",
+      "documents = await ${4:collection}.find(query).to_list(length=${5:100})"
+    ]
+  },
+  "Mongo in and not-in query": {
+    "scope": "python",
+    "prefix": "mongo-query-in",
+    "description": "Match or exclude values using $in and $nin",
+    "body": [
+      "query = {",
+      "    \"${1:status}\": {\"\\$in\": ${2:[\"ACTIVE\", \"PENDING\"]}},",
+      "    \"${3:category}\": {\"\\$nin\": ${4:excluded_categories}},",
       "}"
+    ]
+  },
+  "Mongo and-or query": {
+    "scope": "python",
+    "prefix": "mongo-query-logical",
+    "description": "Combine conditions using implicit AND and explicit $or",
+    "body": [
+      "query = {",
+      "    \"${1:is_active}\": True,",
+      "    \"\\$or\": [",
+      "        {\"${2:owner_id}\": ${3:user_id}},",
+      "        {\"${4:is_public}\": True},",
+      "    ],",
+      "}"
+    ]
+  },
+  "Mongo nested field query": {
+    "scope": "python",
+    "prefix": "mongo-query-nested",
+    "description": "Query a nested document field using dot notation",
+    "body": [
+      "query = {\"${1:address}.${2:city}\": ${3:city_name}}",
+      "documents = await ${4:collection}.find(query).to_list(length=${5:100})"
+    ]
+  },
+  "Mongo array contains query": {
+    "scope": "python",
+    "prefix": "mongo-query-array",
+    "description": "Match an array containing a value, all values, or an element",
+    "body": [
+      "contains_one = {\"${1:tags}\": ${2:tag}}",
+      "contains_all = {\"${1:tags}\": {\"\\$all\": ${3:required_tags}}}",
+      "matches_element = {",
+      "    \"${4:items}\": {",
+      "        \"\\$elemMatch\": {\"${5:status}\": ${6:status}, \"${7:score}\": {\"\\$gte\": ${8:minimum}}}",
+      "    }",
+      "}"
+    ]
+  },
+  "Mongo field existence and null query": {
+    "scope": "python",
+    "prefix": "mongo-query-exists",
+    "description": "Distinguish missing fields from explicit null values",
+    "body": [
+      "field_exists = {\"${1:field}\": {\"\\$exists\": True}}",
+      "field_is_missing = {\"${1:field}\": {\"\\$exists\": False}}",
+      "field_is_null_or_missing = {\"${1:field}\": None}",
+      "field_is_explicitly_null = {\"${1:field}\": {\"\\$type\": 10}}"
+    ]
+  },
+  "Mongo safe regex search": {
+    "scope": "python",
+    "prefix": "mongo-query-regex",
+    "description": "Perform a case-insensitive literal search using escaped input",
+    "body": [
+      "import re",
+      "",
+      "escaped_search = re.escape(${1:search_text})",
+      "query = {\"${2:name}\": {\"\\$regex\": escaped_search, \"\\$options\": \"i\"}}",
+      "documents = await ${3:collection}.find(query).to_list(length=${4:100})"
+    ]
+  },
+  "Mongo date range query": {
+    "scope": "python",
+    "prefix": "mongo-query-date-range",
+    "description": "Find documents within a timezone-aware date range",
+    "body": [
+      "query = {",
+      "    \"${1:created_at}\": {",
+      "        \"\\$gte\": ${2:start_datetime},",
+      "        \"\\$lt\": ${3:end_datetime},",
+      "    }",
+      "}",
+      "documents = await ${4:collection}.find(query).to_list(length=${5:100})"
+    ]
+  },
+  "Mongo text search": {
+    "scope": "python",
+    "prefix": "mongo-query-text",
+    "description": "Search fields covered by a MongoDB text index",
+    "body": [
+      "query = {\"\\$text\": {\"\\$search\": ${1:search_text}}}",
+      "projection = {\"score\": {\"\\$meta\": \"textScore\"}}",
+      "cursor = ${2:collection}.find(query, projection)",
+      "documents = await cursor.to_list(length=${3:100})"
+    ]
+  },
+  "Mongo dynamic optional filters": {
+    "scope": "python",
+    "prefix": "mongo-query-dynamic",
+    "description": "Build a query only from optional values supplied by the caller",
+    "body": [
+      "query: dict = {}",
+      "",
+      "if ${1:status} is not None:",
+      "    query[\"status\"] = ${1:status}",
+      "if ${2:priority} is not None:",
+      "    query[\"priority\"] = ${2:priority}",
+      "if ${3:search_text}:",
+      "    query[\"name\"] = {\"\\$regex\": re.escape(${3:search_text}), \"\\$options\": \"i\"}"
+    ]
+  },
+  "Mongo query multiple ObjectIds": {
+    "scope": "python",
+    "prefix": "mongo-query-object-ids",
+    "description": "Convert string IDs and fetch all matching documents",
+    "body": [
+      "from bson import ObjectId",
+      "",
+      "object_ids = [ObjectId(value) for value in ${1:item_ids}]",
+      "query = {\"_id\": {\"\\$in\": object_ids}}",
+      "documents = await ${2:collection}.find(query).to_list(length=len(object_ids))"
+    ]
+  },
+  "Mongo document exists": {
+    "scope": "python",
+    "prefix": "mongo-exists",
+    "description": "Check whether a matching document exists without reading every field",
+    "body": [
+      "document = await ${1:collection}.find_one(${2:query}, {\"_id\": 1})",
+      "exists = document is not None"
     ]
   },
   "Mongo count documents": {
@@ -71,15 +253,23 @@
     "prefix": "mongo-count",
     "description": "Count documents matching a filter",
     "body": [
-      "total = await ${1:collection}.count_documents(${2:{}})"
+      "total = await ${1:collection}.count_documents(${2:query})"
+    ]
+  },
+  "Mongo estimated document count": {
+    "scope": "python",
+    "prefix": "mongo-count-estimated",
+    "description": "Quickly estimate the total size of an entire collection",
+    "body": [
+      "estimated_total = await ${1:collection}.estimated_document_count()"
     ]
   },
   "Mongo distinct values": {
     "scope": "python",
     "prefix": "mongo-distinct",
-    "description": "Read unique values for a field",
+    "description": "Read unique field values, optionally restricted by a filter",
     "body": [
-      "values = await ${1:collection}.distinct(\"${2:field}\", filter=${3:{}})"
+      "values = await ${1:collection}.distinct(\"${2:field}\", filter=${3:query})"
     ]
   }
 }

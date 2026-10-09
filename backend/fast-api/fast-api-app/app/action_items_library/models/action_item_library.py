@@ -22,7 +22,23 @@ class ActionItemLibraryCreateRequest(BaseModel):
     )
     priority: PriorityValue = PriorityValue.LOW
 
+class ActionItemLibraryUpdateRequest(BaseModel):
+    action_name: str = Field(
+        description="Enter action item name",
+        min_length=5,
+        max_length=20,
+    )
+    description: str = Field(
+        description="Enter description",
+        min_length=5,
+        max_length=20,
+    )
+    priority: PriorityValue = None
 
 class ActionItemLibraryCreateResponse(BaseModel):
+    action_library_id: str
+    success: bool    
+
+class ActionItemLibraryUpdateResponse(BaseModel):
     action_library_id: str
     success: bool    

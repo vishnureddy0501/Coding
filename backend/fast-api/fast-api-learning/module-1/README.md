@@ -24,6 +24,7 @@ Read and run the lessons in order:
 4. [Pydantic and response contracts](4.pydantic-models.md)
 5. [Build the task API](5.practice.md)
 6. [Reference implementation](6.reference-implementation.md)
+7. [Python comprehensions and generator expressions](7.python-comprehensions.md)
 
 Do not merely read code. For each example:
 

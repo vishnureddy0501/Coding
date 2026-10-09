@@ -4,9 +4,30 @@
     "prefix": "mongo-insert-one",
     "description": "Insert one document and return its id",
     "body": [
-      "document = ${1:payload}.model_dump(exclude_none=True)",
+      "document = ${1:payload}.model_dump(mode=\"json\", exclude_none=True)",
       "result = await ${2:collection}.insert_one(document)",
       "return {\"id\": str(result.inserted_id)}"
+    ]
+  },
+  "Mongo insert dictionary": {
+    "scope": "python",
+    "prefix": "mongo-insert-dict",
+    "description": "Insert an already prepared dictionary",
+    "body": [
+      "document = {\"${1:name}\": ${2:value}}",
+      "result = await ${3:collection}.insert_one(document)",
+      "inserted_id = str(result.inserted_id)"
+    ]
+  },
+  "Mongo insert and return document": {
+    "scope": "python",
+    "prefix": "mongo-insert-return-document",
+    "description": "Insert a model and return the complete created document",
+    "body": [
+      "document = ${1:payload}.model_dump(mode=\"json\", exclude_none=True)",
+      "result = await ${2:collection}.insert_one(document)",
+      "created_document = await ${2:collection}.find_one({\"_id\": result.inserted_id})",
+      "return created_document"
     ]
   },
   "Mongo insert one with timestamps": {
@@ -17,7 +38,7 @@
       "from datetime import datetime, timezone",
       "",
       "now = datetime.now(timezone.utc)",
-      "document = ${1:payload}.model_dump(exclude_none=True)",
+      "document = ${1:payload}.model_dump(mode=\"json\", exclude_none=True)",
       "document.update({\"created_at\": now, \"updated_at\": now})",
       "result = await ${2:collection}.insert_one(document)",
       "document[\"_id\"] = result.inserted_id",
@@ -29,17 +50,55 @@
     "prefix": "mongo-insert-many",
     "description": "Insert multiple Pydantic models",
     "body": [
-      "documents = [item.model_dump(exclude_none=True) for item in ${1:items}]",
+      "documents = [item.model_dump(mode=\"json\", exclude_none=True) for item in ${1:items}]",
       "if not documents:",
       "    return []",
       "result = await ${2:collection}.insert_many(documents, ordered=${3:True})",
       "return [str(object_id) for object_id in result.inserted_ids]"
     ]
   },
-  "Mongo idempotent insert": {
+  "Mongo unordered insert many": {
+    "scope": "python",
+    "prefix": "mongo-insert-many-unordered",
+    "description": "Attempt every insert even when individual documents fail",
+    "body": [
+      "from pymongo.errors import BulkWriteError",
+      "",
+      "documents = [item.model_dump(mode=\"json\", exclude_none=True) for item in ${1:items}]",
+      "if not documents:",
+      "    return {\"inserted_count\": 0, \"errors\": []}",
+      "",
+      "try:",
+      "    result = await ${2:collection}.insert_many(documents, ordered=False)",
+      "    return {\"inserted_count\": len(result.inserted_ids), \"errors\": []}",
+      "except BulkWriteError as exc:",
+      "    return {",
+      "        \"inserted_count\": exc.details.get(\"nInserted\", 0),",
+      "        \"errors\": exc.details.get(\"writeErrors\", []),",
+      "    }"
+    ]
+  },
+  "Mongo insert with duplicate handling": {
+    "scope": "python",
+    "prefix": "mongo-insert-unique",
+    "description": "Convert a unique-index conflict into HTTP 409",
+    "body": [
+      "from fastapi import HTTPException, status",
+      "from pymongo.errors import DuplicateKeyError",
+      "",
+      "try:",
+      "    result = await ${1:collection}.insert_one(${2:document})",
+      "except DuplicateKeyError as exc:",
+      "    raise HTTPException(",
+      "        status_code=status.HTTP_409_CONFLICT,",
+      "        detail=\"A document with that value already exists\",",
+      "    ) from exc"
+    ]
+  },
+  "Mongo insert only if missing": {
     "scope": "python",
     "prefix": "mongo-insert-if-missing",
-    "description": "Create a document only if its unique key does not exist",
+    "description": "Insert only when no document matches; an existing document is not changed",
     "body": [
       "result = await ${1:collection}.update_one(",
       "    {\"${2:unique_field}\": ${3:value}},",
@@ -47,6 +106,26 @@
       "    upsert=True,",
       ")",
       "created = result.upserted_id is not None"
+    ]
+  },
+  "Mongo upsert create or update": {
+    "scope": "python",
+    "prefix": "mongo-upsert-create-or-update",
+    "description": "Update a matching document or insert a new one",
+    "body": [
+      "from datetime import datetime, timezone",
+      "",
+      "now = datetime.now(timezone.utc)",
+      "result = await ${1:collection}.update_one(",
+      "    {\"${2:unique_field}\": ${3:value}},",
+      "    {",
+      "        \"\\$set\": {**${4:document}, \"updated_at\": now},",
+      "        \"\\$setOnInsert\": {\"created_at\": now},",
+      "    },",
+      "    upsert=True,",
+      ")",
+      "created = result.upserted_id is not None",
+      "updated = result.modified_count > 0"
     ]
   }
 }
