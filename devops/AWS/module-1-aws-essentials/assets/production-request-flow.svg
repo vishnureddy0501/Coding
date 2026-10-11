@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1900" height="1500" viewBox="0 0 1900 1500" role="img" aria-labelledby="title desc">
+  <title id="title">End-to-end production request flow for FastAPI on AWS</title>
+  <desc id="desc">A numbered production request diagram from user and Route 53 through an Application Load Balancer, EC2, Nginx, FastAPI, MongoDB Atlas, and S3, with explanations beside every step.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="11" markerHeight="11" refX="9" refY="4" orient="auto"><path d="M0,0 L0,8 L10,4 z" fill="#2563eb"/></marker>
+    <marker id="returnArrow" markerWidth="11" markerHeight="11" refX="9" refY="4" orient="auto"><path d="M0,0 L0,8 L10,4 z" fill="#059669"/></marker>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="4" stdDeviation="5" flood-opacity="0.15"/></filter>
+    <style>
+      .title{font:700 34px Arial,sans-serif;fill:#0f172a}.sub{font:400 17px Arial,sans-serif;fill:#475569}
+      .h{font:700 20px Arial,sans-serif;fill:#0f172a}.t{font:400 15px Arial,sans-serif;fill:#334155}
+      .b{font:700 15px Arial,sans-serif;fill:#1e293b}.n{font:700 17px Arial,sans-serif;fill:#fff}
+      .flow{fill:none;stroke:#2563eb;stroke-width:4;marker-end:url(#arrow)}
+      .return{fill:none;stroke:#059669;stroke-width:4;stroke-dasharray:10 8;marker-end:url(#returnArrow)}
+      .box{fill:#fff;stroke:#94a3b8;stroke-width:2;filter:url(#shadow)}
+    </style>
+  </defs>
+  <rect width="1900" height="1500" fill="#f8fafc"/>
+  <text x="950" y="48" text-anchor="middle" class="title">End-to-End Production Request</text>
+  <text x="950" y="78" text-anchor="middle" class="sub">Blue = request path • Green dashed = response path • Follow the numbered circles</text>
+
+  <!-- Architecture area -->
+  <rect x="35" y="105" width="1010" height="1345" rx="22" fill="#f1f5f9" stroke="#64748b" stroke-width="2"/>
+  <text x="60" y="140" class="h">Request path</text>
+
+  <!-- User -->
+  <g filter="url(#shadow)"><rect x="350" y="155" width="360" height="85" rx="16" fill="#fff" stroke="#2563eb" stroke-width="2"/><text x="530" y="190" text-anchor="middle" class="h">User / Browser</text><text x="530" y="216" text-anchor="middle" class="t">GET https://api.example.com/items</text></g>
+  <circle cx="300" cy="260" r="22" fill="#2563eb"/><text x="300" y="266" text-anchor="middle" class="n">1</text>
+  <path d="M530 241 L530 290" class="flow"/>
+
+  <!-- Route53 -->
+  <g filter="url(#shadow)"><rect x="350" y="292" width="360" height="85" rx="16" fill="#e0f2fe" stroke="#0284c7" stroke-width="2"/><text x="530" y="327" text-anchor="middle" class="h">Route 53 DNS</text><text x="530" y="353" text-anchor="middle" class="t">api.example.com → ALB DNS name</text></g>
+  <circle cx="300" cy="395" r="22" fill="#2563eb"/><text x="300" y="401" text-anchor="middle" class="n">2</text>
+  <path d="M530 378 L530 430" class="flow"/>
+
+  <!-- Internet Gateway -->
+  <g filter="url(#shadow)"><rect x="350" y="432" width="360" height="80" rx="16" fill="#fef3c7" stroke="#d97706" stroke-width="2"/><text x="530" y="465" text-anchor="middle" class="h">Internet Gateway + Public Route</text><text x="530" y="490" text-anchor="middle" class="t">Network path from internet into the VPC</text></g>
+  <circle cx="300" cy="530" r="22" fill="#2563eb"/><text x="300" y="536" text-anchor="middle" class="n">3</text>
+  <path d="M530 513 L530 565" class="flow"/>
+
+  <!-- VPC boundary -->
+  <rect x="120" y="560" width="820" height="690" rx="22" fill="#eff6ff" stroke="#2563eb" stroke-width="3"/>
+  <text x="145" y="594" class="h">AWS VPC — private network</text>
+
+  <!-- ALB SG -->
+  <g filter="url(#shadow)"><rect x="300" y="620" width="460" height="90" rx="16" fill="#fdf2f8" stroke="#db2777" stroke-width="2"/><text x="530" y="653" text-anchor="middle" class="h">ALB Security Group</text><text x="530" y="680" text-anchor="middle" class="t">Allows public HTTPS traffic on port 443</text></g>
+  <circle cx="260" cy="728" r="22" fill="#2563eb"/><text x="260" y="734" text-anchor="middle" class="n">4</text>
+  <path d="M530 711 L530 755" class="flow"/>
+
+  <!-- ALB -->
+  <g filter="url(#shadow)"><rect x="280" y="757" width="500" height="110" rx="16" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/><text x="530" y="790" text-anchor="middle" class="h">Application Load Balancer</text><text x="530" y="817" text-anchor="middle" class="t">ACM certificate decrypts HTTPS</text><text x="530" y="842" text-anchor="middle" class="t">Listener :443 forwards to target group</text></g>
+  <circle cx="260" cy="887" r="22" fill="#2563eb"/><text x="260" y="893" text-anchor="middle" class="n">5</text>
+  <path d="M530 869 L530 915" class="flow"/>
+
+  <!-- Target group -->
+  <g filter="url(#shadow)"><rect x="300" y="917" width="460" height="85" rx="16" fill="#e0e7ff" stroke="#4f46e5" stroke-width="2"/><text x="530" y="949" text-anchor="middle" class="h">Target Group</text><text x="530" y="977" text-anchor="middle" class="t">Uses GET /health; selects healthy EC2 target</text></g>
+  <circle cx="260" cy="1020" r="22" fill="#2563eb"/><text x="260" y="1026" text-anchor="middle" class="n">6</text>
+  <path d="M530 1004 L530 1046" class="flow"/>
+
+  <!-- EC2 SG -->
+  <g filter="url(#shadow)"><rect x="300" y="1048" width="460" height="80" rx="16" fill="#fdf2f8" stroke="#db2777" stroke-width="2"/><text x="530" y="1080" text-anchor="middle" class="h">Production EC2 Security Group</text><text x="530" y="1106" text-anchor="middle" class="t">Allows port 80 only from the ALB security group</text></g>
+  <circle cx="260" cy="1144" r="22" fill="#2563eb"/><text x="260" y="1150" text-anchor="middle" class="n">7</text>
+  <path d="M530 1129 L530 1168" class="flow"/>
+
+  <!-- Nginx/FastAPI -->
+  <g filter="url(#shadow)"><rect x="210" y="1170" width="640" height="65" rx="16" fill="#ecfccb" stroke="#65a30d" stroke-width="2"/><rect x="250" y="1183" width="220" height="40" rx="10" fill="#fff7ed" stroke="#ea580c"/><text x="360" y="1209" text-anchor="middle" class="b">Nginx :80</text><rect x="590" y="1183" width="220" height="40" rx="10" fill="#dcfce7" stroke="#16a34a"/><text x="700" y="1209" text-anchor="middle" class="b">FastAPI :8000</text><path d="M472 1203 L586 1203" class="flow"/></g>
+  <circle cx="170" cy="1203" r="22" fill="#2563eb"/><text x="170" y="1209" text-anchor="middle" class="n">8</text>
+
+  <!-- Dependencies -->
+  <path d="M700 1237 C700 1280 390 1270 390 1312" class="flow"/>
+  <path d="M700 1237 C700 1280 700 1270 700 1312" class="flow"/>
+  <path d="M700 1237 C700 1280 880 1270 880 1312" class="flow"/>
+  <g filter="url(#shadow)"><rect x="265" y="1315" width="250" height="88" rx="15" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/><text x="390" y="1348" text-anchor="middle" class="h">MongoDB Atlas</text><text x="390" y="1375" text-anchor="middle" class="t">Read/write application records</text></g>
+  <g filter="url(#shadow)"><rect x="575" y="1315" width="250" height="88" rx="15" fill="#fff7ed" stroke="#ea580c" stroke-width="2"/><text x="700" y="1348" text-anchor="middle" class="h">Amazon S3</text><text x="700" y="1375" text-anchor="middle" class="t">Read/write private files</text></g>
+  <g filter="url(#shadow)"><rect x="845" y="1315" width="165" height="88" rx="15" fill="#f1f5f9" stroke="#64748b" stroke-width="2"/><text x="927" y="1348" text-anchor="middle" class="h">Parameter</text><text x="927" y="1375" text-anchor="middle" class="t">Store settings</text></g>
+  <circle cx="170" cy="1358" r="22" fill="#2563eb"/><text x="170" y="1364" text-anchor="middle" class="n">9</text>
+
+  <!-- Return arrow -->
+  <path d="M225 1385 C75 1385 75 205 345 205" class="return"/>
+  <circle cx="80" cy="820" r="22" fill="#059669"/><text x="80" y="826" text-anchor="middle" class="n">10</text>
+  <text x="96" y="850" class="b" fill="#059669">Response returns</text>
+
+  <!-- Explanation panel -->
+  <rect x="1080" y="105" width="785" height="1345" rx="22" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+  <text x="1110" y="145" class="h">What each numbered step does</text>
+
+  <g transform="translate(1110,180)"><circle cx="22" cy="22" r="21" fill="#2563eb"/><text x="22" y="28" text-anchor="middle" class="n">1</text><text x="58" y="17" class="h">User sends an HTTPS request</text><text x="58" y="44" class="t">The browser knows the domain and route, but not the EC2 server.</text></g>
+  <g transform="translate(1110,285)"><circle cx="22" cy="22" r="21" fill="#2563eb"/><text x="22" y="28" text-anchor="middle" class="n">2</text><text x="58" y="17" class="h">Route 53 resolves the domain</text><text x="58" y="44" class="t">DNS tells the browser that api.example.com points to the ALB.</text></g>
+  <g transform="translate(1110,390)"><circle cx="22" cy="22" r="21" fill="#2563eb"/><text x="22" y="28" text-anchor="middle" class="n">3</text><text x="58" y="17" class="h">Traffic enters the VPC</text><text x="58" y="44" class="t">The public route and Internet Gateway provide the network path.</text></g>
+  <g transform="translate(1110,495)"><circle cx="22" cy="22" r="21" fill="#2563eb"/><text x="22" y="28" text-anchor="middle" class="n">4</text><text x="58" y="17" class="h">ALB firewall checks port 443</text><text x="58" y="44" class="t">The ALB security group must allow inbound HTTPS traffic.</text></g>
+  <g transform="translate(1110,600)"><circle cx="22" cy="22" r="21" fill="#2563eb"/><text x="22" y="28" text-anchor="middle" class="n">5</text><text x="58" y="17" class="h">ALB handles HTTPS</text><text x="58" y="44" class="t">ACM proves the domain identity; the listener decrypts and routes the request.</text></g>
+  <g transform="translate(1110,705)"><circle cx="22" cy="22" r="21" fill="#2563eb"/><text x="22" y="28" text-anchor="middle" class="n">6</text><text x="58" y="17" class="h">Target group selects EC2</text><text x="58" y="44" class="t">Only a target passing GET /health receives normal requests.</text></g>
+  <g transform="translate(1110,810)"><circle cx="22" cy="22" r="21" fill="#2563eb"/><text x="22" y="28" text-anchor="middle" class="n">7</text><text x="58" y="17" class="h">EC2 firewall checks the ALB</text><text x="58" y="44" class="t">Port 80 is allowed only when traffic comes from the ALB security group.</text></g>
+  <g transform="translate(1110,915)"><circle cx="22" cy="22" r="21" fill="#2563eb"/><text x="22" y="28" text-anchor="middle" class="n">8</text><text x="58" y="17" class="h">Nginx forwards to FastAPI</text><text x="58" y="44" class="t">Nginx receives port 80 and proxies locally to 127.0.0.1:8000.</text></g>
+  <g transform="translate(1110,1020)"><circle cx="22" cy="22" r="21" fill="#2563eb"/><text x="22" y="28" text-anchor="middle" class="n">9</text><text x="58" y="17" class="h">FastAPI performs the work</text><text x="58" y="44" class="t">It may query Atlas, access S3 with its IAM role, or read configuration.</text></g>
+  <g transform="translate(1110,1125)"><circle cx="22" cy="22" r="21" fill="#059669"/><text x="22" y="28" text-anchor="middle" class="n">10</text><text x="58" y="17" class="h">Response returns to the user</text><text x="58" y="44" class="t">FastAPI → Nginx → ALB → encrypted HTTPS response → browser.</text></g>
+
+  <rect x="1110" y="1245" width="715" height="155" rx="15" fill="#fefce8" stroke="#ca8a04" stroke-width="2"/>
+  <text x="1135" y="1280" class="h">Three checks happen at different layers</text>
+  <text x="1135" y="1314" class="b">Route table:</text><text x="1260" y="1314" class="t">Where should the packet go?</text>
+  <text x="1135" y="1348" class="b">Security group:</text><text x="1260" y="1348" class="t">Is this network traffic allowed?</text>
+  <text x="1135" y="1382" class="b">IAM / app auth:</text><text x="1260" y="1382" class="t">May this identity perform the requested action?</text>
+</svg>

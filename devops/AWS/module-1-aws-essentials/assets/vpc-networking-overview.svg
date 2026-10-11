@@ -1,0 +1,146 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="940" viewBox="0 0 1400 940" role="img" aria-labelledby="title description">
+  <title id="title">Beginner AWS VPC networking overview for FastAPI</title>
+  <desc id="description">Diagram showing a user reaching an Application Load Balancer through an internet gateway, then Nginx and FastAPI on EC2, with MongoDB Atlas and S3 outbound connections.</desc>
+
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#334155"/>
+    </marker>
+    <marker id="arrow-blue" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#2563eb"/>
+    </marker>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-opacity="0.16"/>
+    </filter>
+    <style>
+      .title { font: 700 30px Arial, sans-serif; fill: #0f172a; }
+      .subtitle { font: 400 16px Arial, sans-serif; fill: #475569; }
+      .heading { font: 700 19px Arial, sans-serif; fill: #0f172a; }
+      .label { font: 600 16px Arial, sans-serif; fill: #1e293b; }
+      .small { font: 400 14px Arial, sans-serif; fill: #475569; }
+      .tiny { font: 600 13px Arial, sans-serif; fill: #334155; }
+      .white { fill: #ffffff; }
+      .flow { fill: none; stroke: #334155; stroke-width: 3; marker-end: url(#arrow); }
+      .flow-blue { fill: none; stroke: #2563eb; stroke-width: 3; marker-end: url(#arrow-blue); }
+      .dashed { stroke-dasharray: 8 7; }
+    </style>
+  </defs>
+
+  <rect width="1400" height="940" fill="#f8fafc"/>
+  <text x="700" y="45" text-anchor="middle" class="title">FastAPI on AWS: VPC Networking Overview</text>
+  <text x="700" y="72" text-anchor="middle" class="subtitle">Follow the blue arrows from the user to FastAPI; dashed arrows show outbound application traffic.</text>
+
+  <!-- Internet user -->
+  <g filter="url(#shadow)">
+    <rect x="45" y="165" width="175" height="92" rx="18" fill="#ffffff" stroke="#64748b" stroke-width="2"/>
+    <circle cx="92" cy="201" r="18" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+    <path d="M66 240 Q92 214 118 240" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+    <text x="153" y="202" text-anchor="middle" class="heading">User</text>
+    <text x="153" y="228" text-anchor="middle" class="small">Public internet</text>
+  </g>
+
+  <!-- VPC boundary -->
+  <rect x="300" y="105" width="1030" height="650" rx="24" fill="#eff6ff" stroke="#2563eb" stroke-width="3"/>
+  <text x="325" y="140" class="heading">VPC 10.0.0.0/16</text>
+  <text x="520" y="140" class="small">Your private AWS network in ap-south-1</text>
+
+  <!-- Internet gateway -->
+  <g filter="url(#shadow)">
+    <rect x="250" y="175" width="150" height="75" rx="14" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+    <text x="325" y="205" text-anchor="middle" class="label">Internet</text>
+    <text x="325" y="228" text-anchor="middle" class="label">Gateway</text>
+  </g>
+
+  <!-- User to IGW -->
+  <path d="M220 211 L248 211" class="flow-blue"/>
+  <text x="233" y="192" text-anchor="middle" class="tiny">HTTPS :443</text>
+
+  <!-- Public subnet A -->
+  <rect x="445" y="175" width="400" height="450" rx="18" fill="#ffffff" stroke="#38bdf8" stroke-width="2"/>
+  <rect x="445" y="175" width="400" height="48" rx="18" fill="#e0f2fe"/>
+  <rect x="445" y="205" width="400" height="18" fill="#e0f2fe"/>
+  <text x="465" y="206" class="heading">Public Subnet A — 10.0.1.0/24</text>
+  <text x="700" y="244" text-anchor="middle" class="small">Availability Zone ap-south-1a</text>
+
+  <!-- ALB -->
+  <g filter="url(#shadow)">
+    <rect x="515" y="275" width="260" height="105" rx="18" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+    <text x="645" y="310" text-anchor="middle" class="heading">Application Load Balancer</text>
+    <text x="645" y="336" text-anchor="middle" class="small">Listener :443 (HTTPS)</text>
+    <text x="645" y="359" text-anchor="middle" class="small">Health check: GET /health</text>
+  </g>
+
+  <!-- EC2 -->
+  <g filter="url(#shadow)">
+    <rect x="505" y="440" width="280" height="145" rx="18" fill="#ecfccb" stroke="#65a30d" stroke-width="2"/>
+    <text x="645" y="474" text-anchor="middle" class="heading">Production EC2</text>
+    <rect x="535" y="493" width="100" height="60" rx="10" fill="#fff7ed" stroke="#ea580c" stroke-width="2"/>
+    <text x="585" y="518" text-anchor="middle" class="label">Nginx</text>
+    <text x="585" y="540" text-anchor="middle" class="small">port 80</text>
+    <rect x="655" y="493" width="100" height="60" rx="10" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+    <text x="705" y="518" text-anchor="middle" class="label">FastAPI</text>
+    <text x="705" y="540" text-anchor="middle" class="small">port 8000</text>
+    <path d="M636 523 L653 523" class="flow"/>
+  </g>
+
+  <!-- IGW to ALB and ALB to EC2 -->
+  <path d="M400 211 C455 211 460 327 512 327" class="flow-blue"/>
+  <path d="M645 382 L645 437" class="flow-blue"/>
+  <text x="662" y="414" class="tiny">HTTP :80</text>
+
+  <!-- Public subnet B -->
+  <rect x="875" y="175" width="380" height="230" rx="18" fill="#ffffff" stroke="#38bdf8" stroke-width="2"/>
+  <rect x="875" y="175" width="380" height="48" rx="18" fill="#e0f2fe"/>
+  <rect x="875" y="205" width="380" height="18" fill="#e0f2fe"/>
+  <text x="895" y="206" class="heading">Public Subnet B — 10.0.2.0/24</text>
+  <text x="1065" y="244" text-anchor="middle" class="small">Availability Zone ap-south-1b</text>
+  <rect x="955" y="280" width="220" height="78" rx="14" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+  <text x="1065" y="311" text-anchor="middle" class="label">Managed ALB node</text>
+  <text x="1065" y="337" text-anchor="middle" class="small">AWS spreads ALB across 2 AZs</text>
+
+  <!-- Route table -->
+  <g filter="url(#shadow)">
+    <rect x="900" y="465" width="305" height="125" rx="16" fill="#ffffff" stroke="#64748b" stroke-width="2"/>
+    <text x="1052" y="496" text-anchor="middle" class="heading">Public Route Table</text>
+    <line x1="925" y1="510" x2="1180" y2="510" stroke="#cbd5e1"/>
+    <text x="925" y="535" class="tiny">10.0.0.0/16</text>
+    <text x="1120" y="535" class="tiny">local</text>
+    <text x="925" y="562" class="tiny">0.0.0.0/0</text>
+    <text x="1085" y="562" class="tiny">Internet Gateway</text>
+  </g>
+
+  <!-- Security callouts -->
+  <rect x="450" y="650" width="380" height="82" rx="14" fill="#fdf2f8" stroke="#db2777" stroke-width="2"/>
+  <text x="470" y="679" class="label">Security-group rules</text>
+  <text x="470" y="703" class="small">ALB: allow 80/443 from internet</text>
+  <text x="470" y="724" class="small">EC2: allow 80 only from ALB security group</text>
+
+  <rect x="875" y="650" width="380" height="82" rx="14" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+  <text x="895" y="679" class="label">Important boundary</text>
+  <text x="895" y="703" class="small">Port 8000 is local; it is not public.</text>
+  <text x="895" y="724" class="small">Nginx is the only process calling FastAPI.</text>
+
+  <!-- External services -->
+  <g filter="url(#shadow)">
+    <rect x="390" y="810" width="245" height="82" rx="16" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+    <text x="512" y="843" text-anchor="middle" class="heading">MongoDB Atlas</text>
+    <text x="512" y="870" text-anchor="middle" class="small">Database + Atlas network rules</text>
+  </g>
+  <g filter="url(#shadow)">
+    <rect x="760" y="810" width="245" height="82" rx="16" fill="#fff7ed" stroke="#ea580c" stroke-width="2"/>
+    <text x="882" y="843" text-anchor="middle" class="heading">Amazon S3</text>
+    <text x="882" y="870" text-anchor="middle" class="small">Private object storage + IAM</text>
+  </g>
+
+  <!-- Outbound traffic -->
+  <path d="M600 585 C600 720 520 730 512 807" class="flow dashed"/>
+  <path d="M690 585 C690 720 860 730 882 807" class="flow dashed"/>
+  <text x="492" y="778" class="tiny">Outbound DB connection</text>
+  <text x="820" y="778" class="tiny">Outbound AWS API call</text>
+
+  <!-- Legend -->
+  <line x1="1080" y1="831" x2="1130" y2="831" class="flow-blue"/>
+  <text x="1145" y="837" class="small">Inbound API request</text>
+  <line x1="1080" y1="870" x2="1130" y2="870" class="flow dashed"/>
+  <text x="1145" y="876" class="small">Outbound dependency call</text>
+</svg>
