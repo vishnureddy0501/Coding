@@ -1,53 +1,51 @@
 # FastAPI application
 
-Minimal FastAPI setup with a separate asynchronous MongoDB connection module.
+Deployment-ready FastAPI app using MongoDB Atlas, Docker, and environment-based configuration.
 
-## Structure
+## Configuration
 
-```text
-fast-api-app/
-├── app/
-│   ├── __init__.py
-│   ├── config.py
-│   ├── database.py
-│   └── main.py
-├── .env
-├── .gitignore
-├── pyproject.toml
-└── uv.lock
+Create a local environment file from the correct template:
+
+```bash
+cp .env.development.example .env.development
 ```
 
-## Environment
+Replace every `<...>` placeholder. Never commit the completed file. Production uses `.env.production.example` as its template and must use a different Atlas database.
 
-The local `.env` file contains:
-
-```text
-FASTAPI_PRACTICE_APP_NAME
-FASTAPI_PRACTICE_APP_ENV
-FASTAPI_PRACTICE_DEBUG
-MONGO_URL
-MONGO_DATABASE
-```
-
-Keep `.env` out of Git. Use a real secret manager in production.
-
-## Install
+## Run without Docker
 
 ```bash
 uv sync
+uv run fastapi dev app/main.py --env-file .env.development
 ```
 
-## Run
+## Run with Docker
 
-Start MongoDB locally, then run:
+Development:
 
 ```bash
-uv run fastapi dev app/main.py
+APP_ENV_FILE=.env.development docker compose up --build
+```
+
+Production-style run using an image pulled from ECR:
+
+```bash
+APP_IMAGE=<account-id>.dkr.ecr.<region>.amazonaws.com/fastapi-app:<version> \
+APP_ENV_FILE=.env.production \
+docker compose up -d --no-build
 ```
 
 Open:
 
-- Swagger: `http://127.0.0.1:8000/swagger`
-- Health: `http://127.0.0.1:8000/health`
+- API docs: `http://127.0.0.1:8000/docs`
+- Process health: `http://127.0.0.1:8000/health`
+- MongoDB readiness: `http://127.0.0.1:8000/ready`
 
-The application verifies MongoDB during startup. If MongoDB is unavailable, startup fails instead of accepting requests without a database connection.
+The container listens on host loopback only. Nginx accepts web traffic on port `80` and proxies it to port `8000`. Use `deploy/nginx/fastapi.conf` on the EC2 host.
+
+## Important behavior
+
+- Startup fails if required settings or MongoDB are unavailable.
+- `/health` is lightweight and is suitable for the Docker and ALB health check.
+- `/ready` returns HTTP `503` when Atlas becomes unavailable.
+- Logs go to standard output so Docker and CloudWatch can collect them.

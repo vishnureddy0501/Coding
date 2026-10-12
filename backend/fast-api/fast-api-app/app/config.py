@@ -1,4 +1,5 @@
 from functools import lru_cache
+from typing import Literal
 
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -15,7 +16,7 @@ class Settings(BaseSettings):
         default="FastAPI Application",
         validation_alias="FASTAPI_PRACTICE_APP_NAME",
     )
-    app_env: str = Field(
+    app_env: Literal["development", "production"] = Field(
         default="development",
         validation_alias="FASTAPI_PRACTICE_APP_ENV",
     )
@@ -24,13 +25,22 @@ class Settings(BaseSettings):
         validation_alias="FASTAPI_PRACTICE_DEBUG",
     )
     mongo_url: str = Field(
-        default="mongodb://localhost:27017",
+        default="",
         validation_alias="MONGO_URL",
     )
     mongo_database: str = Field(
-        default="fastapi_app",
+        default="",
         validation_alias="MONGO_DATABASE",
     )
+    def validate_runtime(self) -> None:
+        missing: list[str] = []
+        if not self.mongo_url:
+            missing.append("MONGO_URL")
+        if not self.mongo_database:
+            missing.append("MONGO_DATABASE")
+        if missing:
+            names = ", ".join(missing)
+            raise RuntimeError(f"Missing required environment variables: {names}")
 
 
 @lru_cache

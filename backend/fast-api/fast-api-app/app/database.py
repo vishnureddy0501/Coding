@@ -39,6 +39,13 @@ async def close_mongodb_connection() -> None:
     _database = None
 
 
+async def check_mongodb_connection() -> None:
+    if _client is None:
+        raise RuntimeError("MongoDB is not connected")
+
+    await _client.admin.command("ping")
+
+
 def get_database() -> AsyncDatabase[dict[str, Any]]:
     if _database is None:
         raise RuntimeError("MongoDB is not connected")

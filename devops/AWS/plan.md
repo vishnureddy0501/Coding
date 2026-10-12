@@ -7,9 +7,8 @@ Deploy one FastAPI application in two separate environments:
 - **Development:** one small EC2 instance.
 - **Production:** one dedicated EC2 instance behind an Application Load Balancer.
 - **Web server:** Nginx in front of FastAPI on both instances.
-- **Files:** stored privately in Amazon S3.
 - **Database:** MongoDB hosted in Atlas.
-- **HTTPS:** an AWS-managed certificate for the production API.
+- **Public endpoint:** the AWS-provided ALB DNS name over HTTP for now.
 
 We will not use Auto Scaling yet. It will be easier to learn after the single-server production deployment is working.
 
@@ -28,9 +27,9 @@ Nginx :80
    |
    v
 FastAPI :8000
-   |              |
-   v              v
-MongoDB Atlas   Dev S3 bucket
+   |
+   v
+MongoDB Atlas
 ```
 
 ### Production
@@ -39,10 +38,7 @@ MongoDB Atlas   Dev S3 bucket
 Users
   |
   v
-api.example.com
-  |
-  v
-Application Load Balancer :443
+Application Load Balancer :80
   |
   v
 Target Group + /health check
@@ -52,12 +48,12 @@ Production EC2
   |
   v
 Nginx :80 -> FastAPI :8000
-  |                    |
-  v                    v
-MongoDB Atlas       Prod S3 bucket
+                       |
+                       v
+                 MongoDB Atlas
 ```
 
-The production load balancer initially has one EC2 target. It gives us a stable endpoint, HTTPS termination, and health checks. We can attach an Auto Scaling Group later without redesigning the application.
+The production load balancer initially has one EC2 target. It gives us a stable endpoint and health checks. We can add a domain, HTTPS, and Auto Scaling later.
 
 ## Environment separation
 
@@ -65,12 +61,11 @@ The production load balancer initially has one EC2 target. It gives us a stable 
 |---|---|---|
 | Compute | Dev EC2 | Prod EC2 |
 | Load balancer | Not required | Application Load Balancer |
-| S3 | Separate dev bucket | Separate prod bucket |
 | MongoDB Atlas | Development database | Production database |
 | Configuration | `/fastapi/dev/...` | `/fastapi/prod/...` |
-| Domain | `api-dev.example.com` | `api.example.com` |
+| Address | EC2 public IP | AWS-provided ALB DNS name |
 
-Development and production must not share files, credentials, or databases.
+Development and production must not share credentials or databases.
 
 ## Modules
 
@@ -84,7 +79,7 @@ Learn only what this deployment uses:
 - IAM users, roles, and policies
 - EC2 and EBS
 - VPC, subnet, route table, internet gateway, and security group
-- S3 and ECR
+- ECR
 - Application Load Balancer and target groups
 - Route 53 and ACM
 - Parameter Store and CloudWatch
@@ -93,6 +88,8 @@ Learn only what this deployment uses:
 **Outcome:** You can explain every component in the architecture.
 
 ### Module 2 — Prepare FastAPI for deployment
+
+[Open Module 2 lessons](module-2-prepare-fastapi/README.md)
 
 - Add `/health` and `/ready` endpoints
 - Read configuration from environment variables
@@ -106,29 +103,26 @@ Learn only what this deployment uses:
 
 ### Module 3 — Account safety and cost controls
 
+[Open Module 3 lessons](module-3-account-safety-and-cost/README.md)
+
 - Enable MFA on the root account
 - Create an administrator identity for normal work
 - Configure an AWS Budget and billing alerts
 - Select one AWS Region
 - Use an EC2 IAM role instead of access keys
-- Understand the costs of EC2, ALB, S3, storage, and data transfer
+- Understand the costs of EC2, ALB, storage, and data transfer
 
 **Outcome:** The AWS account has basic security and billing protection.
 
-### Module 4 — Store application files in S3
+### Module 4 — Explore S3 (optional)
 
-- Create private dev and prod buckets
-- Keep Block Public Access enabled
-- Give the application access through its EC2 IAM role
-- Upload and download objects with `boto3`
-- Generate short-lived presigned URLs
-- Configure CORS only if the browser uploads directly
-- Store S3 object keys in MongoDB instead of storing files in MongoDB
-- Add a basic lifecycle rule when useful
+[Open Module 4 lessons](module-4-s3-deferred/README.md)
 
-**Outcome:** Files survive EC2 replacement and remain private.
+Learn the basic concepts and optionally create a test bucket. Application integration remains postponed.
 
 ### Module 5 — Deploy the development environment
+
+[Open Module 5 lessons](module-5-deploy-development/README.md)
 
 - Launch one small Ubuntu EC2 instance
 - Configure its security group
@@ -139,11 +133,13 @@ Learn only what this deployment uses:
 - Configure Nginx as a reverse proxy to port `8000`
 - Store dev settings in SSM Parameter Store
 - Connect to the Atlas development database
-- Test `/health`, `/docs`, MongoDB, and S3
+- Test `/health`, `/ready`, `/docs`, and MongoDB
 
 **Outcome:** The development API runs through Nginx on one EC2 instance.
 
 ### Module 6 — Deploy the production EC2 instance
+
+[Open Module 6 lessons](module-6-deploy-production/README.md)
 
 - Launch a separate production EC2 instance
 - Attach the application IAM role
@@ -157,28 +153,30 @@ Learn only what this deployment uses:
 
 **Outcome:** Production runs independently from development.
 
-### Module 7 — Add the Application Load Balancer and HTTPS
+### Module 7 — Add the Application Load Balancer
+
+[Open Module 7 lessons](module-7-alb/README.md)
 
 - Create an internet-facing Application Load Balancer
 - Create a target group containing the production EC2 instance
 - Configure `/health` as the target health check
 - Allow EC2 web traffic only from the load balancer security group
 - Understand listeners, target groups, and healthy targets
-- Create an ACM certificate
-- Point the production domain to the ALB with Route 53
-- Serve HTTPS on port `443`
-- Redirect HTTP to HTTPS
+- Use the AWS-provided ALB DNS name over HTTP
+- Add a domain, ACM, and HTTPS later
 
-**Outcome:** `https://api.example.com` securely reaches the production FastAPI server.
+**Outcome:** The AWS-provided ALB URL reaches the production FastAPI server.
 
 ### Module 8 — Logging, deployment, and maintenance
+
+[Open Module 8 lessons](module-8-operations/README.md)
 
 - View application and Nginx logs
 - Send important logs to CloudWatch
 - Add simple alarms for unhealthy targets, high CPU, and HTTP 5xx errors
 - Build and push a new Docker image
 - Update dev first, verify it, and then update prod
-- Create a small GitHub Actions workflow when the manual process is understood
+- Plan GitHub Actions after the manual deployment is understood
 - Back up important configuration
 - Patch and restart the server safely
 - Remove unused AWS resources to avoid unexpected charges
@@ -190,13 +188,11 @@ Learn only what this deployment uses:
 ```text
 Prepare FastAPI
     -> Secure AWS account
-    -> Create S3 buckets
     -> Create ECR repository
     -> Deploy dev EC2 + Nginx
     -> Deploy prod EC2 + Nginx
     -> Connect MongoDB Atlas
     -> Add ALB
-    -> Add domain + HTTPS
     -> Add logs and basic deployment automation
 ```
 
@@ -231,19 +227,14 @@ Prepare FastAPI
 It provides:
 
 - one stable public endpoint;
-- AWS-managed HTTPS termination;
 - target health checks;
 - a clean path to add more instances later.
 
-For a very small personal application, the ALB can be skipped to reduce cost and Nginx can serve HTTPS directly. We will include it because learning load balancing is one of the goals.
+For a very small personal application, the ALB can be skipped to reduce cost. We include it because learning load balancing is one of the goals.
 
 ### Why use Nginx behind the load balancer?
 
-The ALB handles public HTTPS and routing. Nginx provides a stable local reverse proxy to FastAPI, access logs, request-size limits, and timeout configuration. Its configuration will remain minimal.
-
-### Why use separate S3 buckets and Atlas databases?
-
-This prevents development tests from modifying production files or records.
+The ALB handles public routing and health checks. Nginx provides a stable local reverse proxy to FastAPI, access logs, request-size limits, and timeout configuration. Its configuration will remain minimal.
 
 ### Why use IAM roles?
 
@@ -254,12 +245,11 @@ The EC2 instances receive temporary AWS credentials automatically. We do not sto
 The initial course is complete when:
 
 - dev and prod run on separate EC2 instances;
-- each environment uses separate settings, S3 buckets, and Atlas databases;
+- each environment uses separate settings and Atlas databases;
 - Docker starts FastAPI automatically;
 - Nginx proxies requests to FastAPI;
 - the ALB health check passes;
-- production is available over HTTPS;
-- S3 works without making the buckets public;
+- production is available through the ALB URL;
 - secrets are not committed to Git;
 - basic logs and alarms are available;
 - a new version can be tested in dev and then deployed to prod;
@@ -278,11 +268,10 @@ Launch Template
     -> Instance replacement and deployment refresh
 ```
 
-The existing Docker image, Nginx configuration, health endpoint, ALB, S3 buckets, and Atlas database can all be reused.
+The existing Docker image, Nginx configuration, health endpoint, ALB, and Atlas database can all be reused.
 
 ## Primary references
 
 - [AWS: Application Load Balancers](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancers.html)
 - [AWS: ALB target groups and health checks](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html)
-- [AWS: S3 presigned URLs](https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-presigned-url.html)
 - [MongoDB Atlas: AWS networking](https://www.mongodb.com/docs/atlas/manage-vpc-peering/)
