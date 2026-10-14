@@ -1,0 +1,40 @@
+:root {
+  color: #172033;
+  background: #f4f5f7;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-synthesis: none;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; }
+button, input, textarea { font: inherit; }
+.layout { width: min(900px, calc(100% - 32px)); margin: 48px auto; }
+header { margin-bottom: 28px; }
+h1 { margin: 4px 0 8px; font-size: clamp(2rem, 5vw, 3.5rem); }
+h2 { margin-top: 0; font-size: 1.15rem; }
+.eyebrow { color: #5267d8; font-size: .75rem; font-weight: 800; letter-spacing: .12em; }
+.card { margin: 16px 0; padding: 22px; border: 1px solid #e1e5ec; border-radius: 16px; background: white; box-shadow: 0 8px 30px rgba(21, 31, 52, .05); }
+form { display: grid; gap: 12px; }
+button { width: fit-content; padding: 10px 15px; border: 0; border-radius: 9px; color: white; background: #334ac0; font-weight: 700; cursor: pointer; }
+button:disabled { opacity: .55; cursor: wait; }
+button.secondary { color: #273579; background: #e9ecf8; }
+button.danger { padding: 6px 8px; color: #b42318; background: transparent; }
+textarea, input[type="file"] { width: 100%; padding: 11px; border: 1px solid #ccd3df; border-radius: 9px; }
+.title-row, .resume-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.resume-row { padding: 12px 0; border-top: 1px solid #edf0f4; }
+.resume-row:first-child { border-top: 0; }
+.resume-label { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.resume-label span { overflow-wrap: anywhere; }
+.resume-meta { color: #697386; font-size: .85rem; }
+.status { min-height: 1.2em; color: #526071; }
+.status.error { color: #b42318; }
+.answer { padding: 16px; border-left: 4px solid #5267d8; border-radius: 8px; background: #f3f6ff; line-height: 1.6; white-space: pre-wrap; }
+.sources { display: grid; gap: 10px; margin-top: 14px; }
+.source { padding: 12px; border: 1px solid #e1e5ec; border-radius: 9px; }
+.source summary { font-weight: 700; cursor: pointer; }
+.source p { color: #465267; line-height: 1.5; white-space: pre-wrap; }
+
+@media (max-width: 560px) {
+  .layout { margin: 28px auto; }
+  .resume-row { align-items: flex-start; }
+}

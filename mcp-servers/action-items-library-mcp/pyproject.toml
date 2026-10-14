@@ -1,0 +1,9 @@
+[project]
+name = "action-items-library-mcp"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    "mcp[cli]>=2,<3",
+    "pydantic-settings>=2.10,<3",
+    "pymongo>=4.9,<5",
+]
