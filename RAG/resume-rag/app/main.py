@@ -1,15 +1,24 @@
 from contextlib import asynccontextmanager
 from datetime import UTC, datetime
 from pathlib import Path
+import json
 from uuid import UUID, uuid4
 
 from fastapi import FastAPI, File, HTTPException, UploadFile, status
 from fastapi.responses import RedirectResponse
+from fastapi.responses import StreamingResponse
 from fastapi.staticfiles import StaticFiles
 
 from sqlalchemy import select
 
-from app.ai_client import AIProviderError, create_embeddings, generate_answer
+from app.ai_client import (
+    AIProviderError,
+    close_ai_client,
+    create_embeddings,
+    generate_answer,
+    start_ai_client,
+    stream_answer,
+)
 from app.cloud_storage import delete_resume_asset, upload_resume
 from app.config import PROJECT_DIR, settings
 from app.database import ResumeChunk, ResumeRecord, SessionFactory, engine, initialize_database
@@ -23,10 +32,12 @@ from app.text_processing import chunk_text
 async def lifespan(_app: FastAPI):
     """Validate cloud configuration and prepare the Neon pgvector schema."""
     settings.validate_runtime()
+    await start_ai_client()
     await initialize_database()
     try:
         yield
     finally:
+        await close_ai_client()
         await engine.dispose()
 
 
@@ -182,6 +193,44 @@ async def ask_question(body: QuestionRequest) -> QuestionResponse:
         raise HTTPException(status_code=400, detail=str(error)) from error
     except AIProviderError as error:
         raise HTTPException(status_code=503, detail=str(error)) from error
+
+
+@app.post("/api/questions/stream")
+async def ask_question_stream(body: QuestionRequest) -> StreamingResponse:
+    """Retrieve context, then stream newline-delimited JSON events to React."""
+    try:
+        question_embedding = (
+            await create_embeddings([body.question], "RETRIEVAL_QUERY")
+        )[0]
+        sources = await retrieve(
+            question_embedding=question_embedding,
+            resume_ids=body.resume_ids,
+            top_k=body.top_k or settings.top_k,
+        )
+        if not sources:
+            raise HTTPException(status_code=400, detail="Selected resumes contain no chunks")
+    except ValueError as error:
+        raise HTTPException(status_code=400, detail=str(error)) from error
+    except AIProviderError as error:
+        raise HTTPException(status_code=503, detail=str(error)) from error
+
+    async def events():
+        yield json.dumps({
+            "type": "sources",
+            "sources": [source.model_dump(mode="json") for source in sources],
+        }) + "\n"
+        try:
+            async for text in stream_answer(body.question, build_context(sources)):
+                yield json.dumps({"type": "token", "text": text}) + "\n"
+            yield json.dumps({"type": "done"}) + "\n"
+        except AIProviderError as error:
+            yield json.dumps({"type": "error", "detail": str(error)}) + "\n"
+
+    return StreamingResponse(
+        events(),
+        media_type="application/x-ndjson",
+        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
+    )
 
 
 # Keep this mount after the API routes. The compiled React app and the API are

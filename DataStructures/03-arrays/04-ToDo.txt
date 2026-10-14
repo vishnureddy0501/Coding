@@ -1,4 +1,0 @@
-885. Spiral Matrix III
-count inversions
-reverse pairs
-maximum product subarray

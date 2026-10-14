@@ -18,4 +18,4 @@ services:
       - key: MAX_UPLOAD_MB
         value: 5
       - key: TOP_K
-        value: 5
+        value: 3

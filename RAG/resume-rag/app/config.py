@@ -24,7 +24,7 @@ class Settings(BaseSettings):
     gemini_embedding_model: str = "gemini-embedding-001"
     gemini_chat_model: str = "gemini-3.1-flash-lite"
     max_upload_mb: int = Field(default=5, ge=1, le=25)
-    top_k: int = Field(default=5, ge=1, le=15)
+    top_k: int = Field(default=3, ge=1, le=15)
 
     @property
     def async_database_url(self) -> str:

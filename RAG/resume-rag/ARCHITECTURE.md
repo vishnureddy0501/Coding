@@ -55,10 +55,12 @@ sequenceDiagram
     G-->>API: Query vector
     API->>DB: Cosine search filtered by selected IDs
     DB-->>API: Top resume chunks
-    API->>G: Question + retrieved context
-    G-->>API: Grounded answer
-    API-->>UI: Answer + source chunks
+    API->>G: Question + top 3 retrieved chunks
+    G-->>API: Stream answer chunks
+    API-->>UI: Stream Markdown answer + sources
 ```
+
+The Gemini HTTP client is created once at FastAPI startup and reuses its connections. Streaming reduces perceived latency because React renders the first answer text before Gemini finishes the complete response.
 
 ## What is stored where?
 

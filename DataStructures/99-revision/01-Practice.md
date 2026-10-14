@@ -1,0 +1,22 @@
+
+learn intution:
+---------------
+(priority queue is straight forward. learn other approach):
+https://leetcode.com/problems/minimum-array-length-after-pair-removals/description/
+
+
+300. Longest Increasing Subsequence
+718. Maximum Length of Repeated Subarray (good question to revise)
+LeetCode 29,
+leetcode 166,
+611. Valid Triangle Number
+1039. Minimum Score Triangulation of Polygon
+1688. Count of Matches in Tournament
+470. Implement Rand10() Using Rand7()
+
+
+Very complex(super hard):
+------------------------
+https://leetcode.com/problems/trapping-rain-water-ii/description/
+
+https://leetcode.com/problems/the-skyline-problem/description/
