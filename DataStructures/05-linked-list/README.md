@@ -1,28 +1,25 @@
-# Linked Lists
+# Linked List
 
-A linked list stores values in nodes connected through pointers.
+Keep linked-list preparation focused on pointer movement and a few reusable patterns.
 
-## Study order
+## Learn in this order
 
-1. [Introduction and dummy nodes](01-Introduction.md)
-2. [Singly linked list](02-SinglyLinkedList.md)
-3. [Memory management](03-MemoryManagement.md)
-4. [Doubly linked list](04-DoublyLinkedList.md)
-5. [Slow and fast pointers](05-SlowFastPointer.md)
-6. [Cycle-start template](06-CycleStartTemplate.md)
-7. [Cycle and intersection problems](07-CycleProblems.md)
-8. [Delete the middle node](08-DeleteMiddleNode.md)
-9. [Delete the kth node from the end](09-DeleteKthNodeFromEnd.md)
-10. [Sort 0s, 1s, and 2s](10-Sort012DummyNodes.md)
-11. [Merge sort a linked list](11-SortListMergeSort.md)
-12. [Clone a list with random pointers](12-CloneWithRandomPointers.md)
+1. [Basics and dummy node](01-basics.md)
+2. [Reverse a linked list](02-reverse-linked-list.md)
+3. [Slow and fast pointers](03-slow-fast-pointers.md)
+4. [Common interview problems](04-common-problems.md)
+5. [Merge sort](05-merge-sort.md)
+6. [Clone with random pointer](06-clone-random-pointer.md)
+7. [Practice problems](07-practice.md)
 
-## Most important patterns
+## Patterns to remember
 
-| Pattern | Used for |
+| Pattern | Use |
 |---|---|
-| Dummy node | Building a new list and safely deleting near the head |
-| Slow/fast pointers | Middle node, cycle detection, cycle entry |
-| Two redirected pointers | Intersection of two linked lists |
-| Merge sort | Sorting a linked list in `O(n log n)` |
-| Insert copied nodes between originals | Clone list with random pointers in `O(1)` extra space |
+| `prev, current, next` | Reverse a list |
+| Slow and fast pointers | Middle, cycle, cycle starting point |
+| Dummy node | Deletion near the head, building a result list |
+| Redirect two pointers | Intersection of two lists |
+| Merge sort | Sort a linked list in `O(n log n)` |
+
+These patterns cover most linked-list interview questions.

@@ -1,0 +1,70 @@
+# 4. Two Pointers and Intervals
+
+## 3Sum
+
+Sort, fix one value, and use two pointers for the remaining two values.
+
+```cpp
+vector<vector<int>> threeSum(vector<int>& nums) {
+    sort(nums.begin(), nums.end());
+    vector<vector<int>> answer;
+
+    for (int i = 0; i < nums.size(); ++i) {
+        if (i > 0 && nums[i] == nums[i - 1]) continue;
+
+        int left = i + 1;
+        int right = nums.size() - 1;
+
+        while (left < right) {
+            int sum = nums[i] + nums[left] + nums[right];
+
+            if (sum < 0) {
+                ++left;
+            } else if (sum > 0) {
+                --right;
+            } else {
+                answer.push_back({nums[i], nums[left], nums[right]});
+                ++left;
+                --right;
+
+                while (left < right && nums[left] == nums[left - 1]) ++left;
+                while (left < right && nums[right] == nums[right + 1]) --right;
+            }
+        }
+    }
+
+    return answer;
+}
+```
+
+Time: `O(n²)` after sorting.
+
+## Merge intervals
+
+Sort intervals by start time, then compare with the last merged interval.
+
+```cpp
+vector<vector<int>> mergeIntervals(vector<vector<int>>& intervals) {
+    sort(intervals.begin(), intervals.end());
+    vector<vector<int>> merged;
+
+    for (vector<int>& interval : intervals) {
+        if (merged.empty() || merged.back()[1] < interval[0]) {
+            merged.push_back(interval);
+        } else {
+            merged.back()[1] = max(merged.back()[1], interval[1]);
+        }
+    }
+
+    return merged;
+}
+```
+
+## Common two-pointer problems
+
+- Two Sum in a sorted array
+- Container With Most Water
+- Trapping Rain Water
+- 3Sum and 4Sum
+- Remove Duplicates
+- Merge two sorted arrays
