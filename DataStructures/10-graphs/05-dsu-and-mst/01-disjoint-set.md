@@ -49,8 +49,6 @@ public:
 };
 ```
 
-`vector` uses `push_back()`, not `push()`. Therefore, write `parent.push_back(i)`.
-
 ## Why it is fast
 
 **Path compression:** `findParent` directly connects nodes to their main parent, making future searches faster.

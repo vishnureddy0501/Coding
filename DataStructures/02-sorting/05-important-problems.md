@@ -1,14 +1,19 @@
-# 5. Important Problems
+# Important Sorting Problems
 
-1. Implement Selection, Bubble, and Insertion Sort
-2. Implement Merge Sort
-3. Implement Quick Sort
-4. LeetCode 75 — Sort Colors
-5. LeetCode 56 — Merge Intervals
-6. Count Inversions
-7. LeetCode 493 — Reverse Pairs
-8. LeetCode 215 — Kth Largest Element using Quickselect
-9. LeetCode 912 — Sort an Array
-10. Sort a linked list using merge sort
+Company names are commonly reported public interview tags, not official guarantees.
 
-Minimum revision: Merge Sort, Quick Sort, Count Inversions, and Sort Colors.
+| Priority | Problem | Pattern | Commonly reported companies |
+|---|---|---|---|
+| ⭐⭐⭐⭐⭐ | Implement Merge Sort | Divide and conquer | Amazon, Microsoft, Oracle |
+| ⭐⭐⭐⭐⭐ | Implement Quick Sort | Partitioning | Amazon, Google, Microsoft |
+| ⭐⭐⭐⭐⭐ | [Sort Colors](https://leetcode.com/problems/sort-colors/) | Dutch flag | Amazon, Microsoft, Meta |
+| ⭐⭐⭐⭐⭐ | Count Inversions | Merge sort counting | Amazon, Microsoft, Adobe, Goldman Sachs |
+| ⭐⭐⭐⭐⭐ | [Merge Intervals](https://leetcode.com/problems/merge-intervals/) | Sort intervals | Meta, Amazon, Google, Microsoft |
+| ⭐⭐⭐⭐ | [Kth Largest Element](https://leetcode.com/problems/kth-largest-element-in-an-array/) | Quickselect | Amazon, Meta, Microsoft |
+| ⭐⭐⭐⭐ | [Reverse Pairs](https://leetcode.com/problems/reverse-pairs/) | Modified merge sort | Google, Amazon, Microsoft |
+| ⭐⭐⭐⭐ | [Sort an Array](https://leetcode.com/problems/sort-an-array/) | Sorting implementation | Amazon, Microsoft, Apple |
+| ⭐⭐⭐⭐ | [Sort List](https://leetcode.com/problems/sort-list/) | Linked-list merge sort | Meta, Amazon, Microsoft |
+| ⭐⭐⭐ | Implement Selection, Bubble, and Insertion Sort | Foundations | TCS, Infosys, Accenture |
+
+Minimum revision: Merge Sort, Quick Sort, Sort Colors, Count Inversions, and Merge Intervals.
+

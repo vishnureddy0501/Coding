@@ -1,51 +1,24 @@
 # Important Graph Problems
 
-Solve them in this order.
+Company names are commonly reported public interview tags, not official guarantees.
 
-## Must do
+| Priority | Problem | Pattern | Commonly reported companies |
+|---|---|---|---|
+| ⭐⭐⭐⭐⭐ | [Number of Islands](https://leetcode.com/problems/number-of-islands/) | Grid DFS/BFS | Amazon, Google, Microsoft, Meta |
+| ⭐⭐⭐⭐⭐ | [Rotting Oranges](https://leetcode.com/problems/rotting-oranges/) | Multi-source BFS | Amazon, Microsoft, Google |
+| ⭐⭐⭐⭐⭐ | [Is Graph Bipartite?](https://leetcode.com/problems/is-graph-bipartite/) | Two colors | Google, Amazon, Microsoft |
+| ⭐⭐⭐⭐⭐ | [Course Schedule](https://leetcode.com/problems/course-schedule/) | Directed cycle | Amazon, Google, Microsoft |
+| ⭐⭐⭐⭐⭐ | [Course Schedule II](https://leetcode.com/problems/course-schedule-ii/) | Topological order | Amazon, Microsoft, Google |
+| ⭐⭐⭐⭐⭐ | [Word Ladder](https://leetcode.com/problems/word-ladder/) | BFS transformations | Amazon, Meta, Google |
+| ⭐⭐⭐⭐⭐ | [Network Delay Time](https://leetcode.com/problems/network-delay-time/) | Dijkstra | Amazon, Google, Microsoft |
+| ⭐⭐⭐⭐⭐ | [Accounts Merge](https://leetcode.com/problems/accounts-merge/) | DSU | Amazon, Meta, Google |
+| ⭐⭐⭐⭐⭐ | [Min Cost to Connect All Points](https://leetcode.com/problems/min-cost-to-connect-all-points/) | MST | Amazon, Microsoft, Google |
+| ⭐⭐⭐⭐ | [01 Matrix](https://leetcode.com/problems/01-matrix/) | Multi-source BFS | Amazon, Microsoft, Google |
+| ⭐⭐⭐⭐ | [Surrounded Regions](https://leetcode.com/problems/surrounded-regions/) | Boundary traversal | Amazon, Google, Microsoft |
+| ⭐⭐⭐⭐ | [Cheapest Flights Within K Stops](https://leetcode.com/problems/cheapest-flights-within-k-stops/) | Distance + stops | Amazon, Google, Microsoft |
+| ⭐⭐⭐⭐ | [Path With Minimum Effort](https://leetcode.com/problems/path-with-minimum-effort/) | Grid Dijkstra | Google, Amazon, Microsoft |
+| ⭐⭐⭐⭐ | [Redundant Connection](https://leetcode.com/problems/redundant-connection/) | DSU cycle | Amazon, Google, Microsoft |
+| ⭐⭐⭐⭐ | [Making a Large Island](https://leetcode.com/problems/making-a-large-island/) | DSU sizes | Google, Amazon, Meta |
 
-| # | Problem | Main idea |
-|---|---|---|
-| 1 | BFS and DFS Traversal | Basic traversal |
-| 2 | Number of Provinces | Connected components |
-| 3 | Number of Islands | Grid DFS/BFS |
-| 4 | Flood Fill | Grid traversal |
-| 5 | Rotten Oranges | Multi-source BFS |
-| 6 | 01 Matrix | Multi-source BFS |
-| 7 | Detect Cycle in Undirected Graph | BFS with parent |
-| 8 | Is Graph Bipartite? | Two-color BFS |
-| 9 | Course Schedule I | Directed cycle using Kahn's |
-| 10 | Course Schedule II | Topological order |
-| 11 | Shortest Path in Binary Matrix | BFS |
-| 12 | Word Ladder | BFS by transformations |
-| 13 | Network Delay Time | Dijkstra |
-| 14 | Cheapest Flights Within K Stops | State includes stops |
-| 15 | Number of Ways to Arrive at Destination | Dijkstra + path count |
-| 16 | Number of Provinces using DSU | Basic DSU |
-| 17 | Redundant Connection | DSU cycle detection |
-| 18 | Accounts Merge | DSU with real data |
-| 19 | Min Cost to Connect All Points | MST |
-
-## Good next problems
-
-| Problem | Main idea |
-|---|---|
-| Surrounded Regions | Boundary traversal |
-| Number of Enclaves | Boundary traversal |
-| Number of Distinct Islands | Store relative shape |
-| Eventual Safe States | Reverse graph + Kahn's |
-| Alien Dictionary | Build graph + topological sort |
-| Path With Minimum Effort | Dijkstra on a grid |
-| Number of Operations to Make Network Connected | DSU and extra edges |
-| Most Stones Removed | DSU modeling |
-| Making a Large Island | DSU component sizes |
-
-## Learn later
-
-- Strongly Connected Components: Kosaraju's algorithm.
-- Bridges and articulation points: Tarjan's algorithm.
-- Floyd-Warshall implementation.
-- Advanced 0-1 BFS problems.
-
-Existing advanced notes are in [advanced-later/04-graphs](../advanced-later/04-graphs/).
+Minimum revision: Number of Islands, Rotten Oranges, Bipartite, Course Schedule, Word Ladder, Dijkstra, Accounts Merge, and MST.
 

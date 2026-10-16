@@ -1,25 +1,22 @@
-# 7. Important Practice Problems
+# Important Linked-List Problems
 
-Solve in this order:
+Company names are commonly reported public interview tags, not official guarantees.
 
-1. LeetCode 206 — Reverse Linked List
-2. LeetCode 876 — Middle of the Linked List
-3. LeetCode 141 — Linked List Cycle
-4. LeetCode 142 — Linked List Cycle II
-5. LeetCode 19 — Remove Nth Node From End
-6. LeetCode 160 — Intersection of Two Linked Lists
-7. LeetCode 234 — Palindrome Linked List
-8. LeetCode 21 — Merge Two Sorted Lists
-9. LeetCode 2 — Add Two Numbers
-10. LeetCode 148 — Sort List
-11. LeetCode 138 — Copy List with Random Pointer
+| Priority | Problem | Pattern | Commonly reported companies |
+|---|---|---|---|
+| ⭐⭐⭐⭐⭐ | [Reverse Linked List](https://leetcode.com/problems/reverse-linked-list/) | Pointer reversal | Amazon, Microsoft, Meta, Google |
+| ⭐⭐⭐⭐⭐ | [Linked List Cycle](https://leetcode.com/problems/linked-list-cycle/) | Slow/fast pointers | Amazon, Microsoft, Meta |
+| ⭐⭐⭐⭐⭐ | [Linked List Cycle II](https://leetcode.com/problems/linked-list-cycle-ii/) | Cycle entry | Amazon, Microsoft, Google |
+| ⭐⭐⭐⭐⭐ | [Remove Nth Node From End](https://leetcode.com/problems/remove-nth-node-from-end-of-list/) | Two pointers | Meta, Amazon, Microsoft |
+| ⭐⭐⭐⭐⭐ | [Merge Two Sorted Lists](https://leetcode.com/problems/merge-two-sorted-lists/) | Dummy node | Amazon, Meta, Microsoft |
+| ⭐⭐⭐⭐⭐ | [Add Two Numbers](https://leetcode.com/problems/add-two-numbers/) | Carry + pointers | Microsoft, Google, Amazon, Meta |
+| ⭐⭐⭐⭐⭐ | [Copy List with Random Pointer](https://leetcode.com/problems/copy-list-with-random-pointer/) | Map / node weaving | Meta, Amazon, Microsoft |
+| ⭐⭐⭐⭐⭐ | [Sort List](https://leetcode.com/problems/sort-list/) | Merge sort | Meta, Amazon, Microsoft |
+| ⭐⭐⭐⭐ | [Palindrome Linked List](https://leetcode.com/problems/palindrome-linked-list/) | Reverse second half | Meta, Amazon, Microsoft |
+| ⭐⭐⭐⭐ | [Intersection of Two Lists](https://leetcode.com/problems/intersection-of-two-linked-lists/) | Pointer switching | Amazon, Microsoft, Apple |
+| ⭐⭐⭐⭐ | [Reverse Nodes in K Group](https://leetcode.com/problems/reverse-nodes-in-k-group/) | Group reversal | Amazon, Microsoft, Google |
+| ⭐⭐⭐⭐ | [LRU Cache](https://leetcode.com/problems/lru-cache/) | DLL + hash map | Amazon, Meta, Microsoft, LinkedIn |
+| ⭐⭐⭐ | [Middle of the Linked List](https://leetcode.com/problems/middle-of-the-linked-list/) | Slow/fast pointers | Amazon, Microsoft, Adobe |
 
-## Minimum revision set
+Minimum revision: Reverse List, Cycle II, Remove Nth, Add Two Numbers, Copy Random List, and Sort List.
 
-If you have less time, revise these five:
-
-1. Reverse Linked List
-2. Linked List Cycle II
-3. Remove Nth Node From End
-4. Sort List
-5. Copy List with Random Pointer
