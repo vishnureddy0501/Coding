@@ -1,64 +1,42 @@
-# Graphs — Study Roadmap
+# Graphs — Interview Roadmap
 
-Go folder by folder, file by file, in number order. Each step uses ideas from the steps before it.
+Learn in this order:
 
-## 01-basics
-| # | File | What you learn |
-|---|------|----------------|
-| 1 | [GraphRepresentation](01-basics/01-GraphRepresentation.md) | Edge list vs adjacency list vs matrix, building the graph |
-| 2 | [BFS](01-basics/02-BFS.md) | Queue traversal, level-wise BFS, multi-source BFS, grid BFS |
-| 3 | [DFS](01-basics/03-DFS.md) | Recursive traversal, connected components, BFS vs DFS |
-| 4 | [ImportantNotes](01-basics/04-ImportantNotes.md) | Quick tips |
+| Step | Topic | Files |
+|---|---|---|
+| 1 | Basics | [Representation](01-basics/01-representation.md), [BFS and DFS](01-basics/02-bfs-and-dfs.md), [Grid graphs](01-basics/03-grid-graphs.md) |
+| 2 | Cycles | [Cycle detection](02-cycles-and-bipartite/01-cycle-detection.md), [Bipartite graph](02-cycles-and-bipartite/02-bipartite.md) |
+| 3 | Dependencies | [Topological sort](03-topological-sort/01-topological-sort.md) |
+| 4 | Shortest path | [Choose algorithm](04-shortest-path/01-choose-algorithm.md), [BFS and Dijkstra](04-shortest-path/02-bfs-and-dijkstra.md), [Other algorithms](04-shortest-path/03-other-shortest-paths.md) |
+| 5 | Grouping and minimum cost | [Disjoint Set](05-dsu-and-mst/01-disjoint-set.md), [MST](05-dsu-and-mst/02-minimum-spanning-tree.md) |
+| 6 | Practice | [Important problems](06-important-problems.md) |
+| 7 | Revision | [Cheat sheet](07-cheat-sheet.md) |
 
-## 02-cycles-and-bipartite (undirected graphs)
-| # | File | What you learn |
-|---|------|----------------|
-| 1 | [DetectCycleUndirectedGraph](02-cycles-and-bipartite/01-DetectCycleUndirectedGraph.md) | BFS/DFS with parent tracking |
-| 2 | [BipartiteGraph](02-cycles-and-bipartite/02-BipartiteGraph.md) | 2-coloring, odd cycle ⇒ not bipartite |
+## Patterns you must know
 
-## 03-topological-sort (directed graphs)
-| # | File | What you learn |
-|---|------|----------------|
-| 1 | [TopologicalSort](03-topological-sort/01-TopologicalSort.md) | DFS topo sort, Kahn's (BFS) algorithm, applications |
-| 2 | [DetectCycleDirectedGraph](03-topological-sort/02-DetectCycleDirectedGraph.md) | DFS + recursion stack, Kahn's count check |
+1. Build an adjacency list.
+2. BFS and DFS.
+3. Connected components and grid traversal.
+4. Cycle detection in undirected and directed graphs.
+5. Bipartite graph using two colors.
+6. Topological sort using Kahn's algorithm.
+7. BFS for unweighted shortest paths.
+8. Dijkstra for non-negative weights.
+9. Disjoint Set Union (DSU).
+10. Minimum Spanning Tree using Prim or Kruskal.
 
-## 04-shortest-path
-| # | File | What you learn |
-|---|------|----------------|
-| 1 | [ShortestPathUnitDistance](04-shortest-path/01-ShortestPathUnitDistance.md) | BFS for unit weights |
-| 2 | [ShortestPathInDAG](04-shortest-path/02-ShortestPathInDAG.md) | Topo sort + relaxation |
-| 3 | [Dijkstra](04-shortest-path/03-Dijkstra.md) | Priority queue, non-negative weights |
-| 4 | [DijkstraDoubts](04-shortest-path/04-DijkstraDoubts.md) | Why store distance in the queue |
-| 5 | [ShortestPathInBinaryMaze](04-shortest-path/05-ShortestPathInBinaryMaze.md) | Grid shortest path |
-| 6 | [WordLadder2](04-shortest-path/06-WordLadder2.md) | BFS storing whole paths |
-| 7 | [BellmanFord](04-shortest-path/07-BellmanFord.md) | Negative edges, negative-cycle detection |
-| 8 | [FloydWarshall](04-shortest-path/08-FloydWarshall.md) | All-pairs shortest path + **which algorithm to pick** |
+Bellman-Ford, Floyd-Warshall, SCC, and bridges are lower priority. Understand when they are used; learn their code after the above topics.
 
-## 05-disjoint-set-and-mst
-| # | File | What you learn |
-|---|------|----------------|
-| 1 | [Prims](05-disjoint-set-and-mst/01-Prims.md) | MST definition, Prim's with a min-heap |
-| 2 | [DisjointSet](05-disjoint-set-and-mst/02-DisjointSet.md) | Union by rank/size, path compression |
-| 3 | [Kruskals](05-disjoint-set-and-mst/03-Kruskals.md) | MST using sorted edges + DSU |
-| 4 | [NumberOfProvinces](05-disjoint-set-and-mst/04-NumberOfProvinces.md) | Counting components with DSU |
-| 5 | [SimilarStringGroups](05-disjoint-set-and-mst/05-SimilarStringGroups.md) | DSU on strings |
-| 6 | [PracticeProblems](05-disjoint-set-and-mst/06-PracticeProblems.md) | More DSU problems |
+## Quick decision guide
 
-## Advanced (later)
-Kosaraju SCC and Bridges/Tarjan moved to [advanced-later/04-graphs](../advanced-later/04-graphs/).
-
-## Cheat sheet
-| Problem says… | Think… |
+| Problem asks for | Use |
 |---|---|
-| minimum steps / moves, all edges cost 1 | BFS |
-| spread from many starting points at once | Multi-source BFS |
-| count islands / groups | DFS/BFS from each unvisited node, or DSU |
-| ordering with dependencies (courses, tasks) | Topological sort |
-| cycle in directed graph | DFS + recursion stack, or Kahn's |
-| cycle in undirected graph | BFS/DFS with parent, or DSU |
-| weighted shortest path, weights ≥ 0 | Dijkstra |
-| negative weights | Bellman-Ford |
-| distance between every pair | Floyd-Warshall |
-| connect everything with minimum cost | MST (Prim's / Kruskal's) |
-| edges keep getting added, "are u and v connected?" | Disjoint Set |
-| critical edge / connection | Bridges (Tarjan) — see advanced-later |
+| Visit or count groups | BFS or DFS |
+| Minimum moves, every move has equal cost | BFS |
+| Spread from many starting points | Multi-source BFS |
+| Dependencies or course ordering | Topological sort |
+| Weighted shortest path, no negative weight | Dijkstra |
+| Negative edge weights | Bellman-Ford |
+| Connect all nodes with minimum total cost | MST |
+| Repeatedly merge groups | DSU |
+
