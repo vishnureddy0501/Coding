@@ -1,4 +1,4 @@
-# 3. Quick Sort
+# Quick Sort — Optional
 
 Choose a pivot, place smaller values on its left and larger values on its right, then recursively sort both portions.
 

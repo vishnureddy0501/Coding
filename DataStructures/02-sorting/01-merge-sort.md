@@ -1,4 +1,4 @@
-# 2. Merge Sort
+# 1. Merge Sort
 
 Split the array into halves, sort both halves, and merge them.
 

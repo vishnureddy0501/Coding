@@ -5,36 +5,40 @@
 Sort, fix one value, and use two pointers for the remaining two values.
 
 ```cpp
-vector<vector<int>> threeSum(vector<int>& nums) {
-    sort(nums.begin(), nums.end());
-    vector<vector<int>> answer;
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
 
-    for (int i = 0; i < nums.size(); ++i) {
-        if (i > 0 && nums[i] == nums[i - 1]) continue;
+        vector<vector<int>> res;
+        int n = nums.size();
 
-        int left = i + 1;
-        int right = nums.size() - 1;
+        for (int i = 0; i < n; i++) {
+            if (i - 1 >= 0 && nums[i] == nums[i - 1]) {
+                continue;
+            }
 
-        while (left < right) {
-            int sum = nums[i] + nums[left] + nums[right];
+            for (int j = i + 1, k = n - 1; j < k;) {
+                int sum = nums[i] + nums[j] + nums[k];
 
-            if (sum < 0) {
-                ++left;
-            } else if (sum > 0) {
-                --right;
-            } else {
-                answer.push_back({nums[i], nums[left], nums[right]});
-                ++left;
-                --right;
+                if (sum == 0) {
+                    res.push_back({nums[i], nums[j], nums[k]});
+                    j++;
+                    k--;
 
-                while (left < right && nums[left] == nums[left - 1]) ++left;
-                while (left < right && nums[right] == nums[right + 1]) --right;
+                    while (j < k && nums[j] == nums[j - 1]) j++;
+                    while (j < k && nums[k] == nums[k + 1]) k--;
+                } else if (sum < 0) {
+                    j++;
+                } else {
+                    k--;
+                }
             }
         }
-    }
 
-    return answer;
-}
+        return res;
+    }
+};
 ```
 
 Time: `O(n²)` after sorting.

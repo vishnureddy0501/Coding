@@ -5,17 +5,22 @@
 Maximum sum of a contiguous subarray.
 
 ```cpp
-int maxSubArray(vector<int>& nums) {
-    int currentSum = nums[0];
-    int bestSum = nums[0];
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) {
+        // At every index, start a new subarray
+        // or extend the previous subarray.
+        int currSum = 0;
+        int bestSum = INT_MIN;
 
-    for (int i = 1; i < nums.size(); ++i) {
-        currentSum = max(nums[i], currentSum + nums[i]);
-        bestSum = max(bestSum, currentSum);
+        for (int i = 0; i < nums.size(); i++) {
+            currSum = max(currSum + nums[i], nums[i]);
+            bestSum = max(currSum, bestSum);
+        }
+
+        return bestSum;
     }
-
-    return bestSum;
-}
+};
 ```
 
 At every index, either start a new subarray or extend the previous one.
@@ -49,39 +54,74 @@ void sortColors(vector<int>& nums) {
 ## Majority element greater than `n / 2`
 
 ```cpp
-int majorityElement(vector<int>& nums) {
-    int candidate = 0;
-    int count = 0;
+class Solution {
+public:
+    int majorityElement(vector<int>& nums) {
+        int count = 0;
+        int candidate = 0;
 
-    for (int value : nums) {
-        if (count == 0) candidate = value;
-        count += value == candidate ? 1 : -1;
+        for (int i = 0; i < nums.size(); i++) {
+            if (count == 0) {
+                candidate = nums[i];
+            }
+
+            count = (candidate == nums[i] ? count + 1 : count - 1);
+        }
+
+        return candidate;
     }
-
-    return candidate;
-}
+};
 ```
 
 If the problem does not guarantee a majority, count the candidate in a second pass.
 
-## Next permutation
+## Next permutation — ⭐⭐⭐⭐⭐ Must revise
 
 ```cpp
-void nextPermutation(vector<int>& nums) {
-    int breakpoint = nums.size() - 2;
+class Solution {
+public:
+    void nextPermutation(vector<int>& nums) {
+        int n = nums.size();
+        int index = n - 2;
 
-    while (breakpoint >= 0 && nums[breakpoint] >= nums[breakpoint + 1]) {
-        --breakpoint;
+        // Find the first smaller number from the right.
+        while (index >= 0 && nums[index] >= nums[index + 1]) {
+            index--;
+        }
+
+        if (index >= 0) {
+            // Find the smallest number larger than nums[index].
+            int nextLarger = n - 1;
+
+            while (nums[nextLarger] <= nums[index]) {
+                nextLarger--;
+            }
+
+            swap(nums[index], nums[nextLarger]);
+        }
+
+        // Make the remaining part as small as possible.
+        reverse(nums.begin() + index + 1, nums.end());
     }
-
-    if (breakpoint >= 0) {
-        int larger = nums.size() - 1;
-        while (nums[larger] <= nums[breakpoint]) --larger;
-        swap(nums[breakpoint], nums[larger]);
-    }
-
-    reverse(nums.begin() + breakpoint + 1, nums.end());
-}
+};
 ```
 
-Steps: find breakpoint → swap with the next larger value → reverse the suffix.
+### Algorithm
+
+1. From the right, find the first index where `nums[index] < nums[index + 1]`.
+2. If found, search from the right for the first number greater than `nums[index]`.
+3. Swap these two numbers.
+4. Reverse the array after `index` to make the remaining part smallest.
+
+If the array is `[3, 2, 1]`, no smaller number is found. Reversing the complete array gives `[1, 2, 3]`.
+
+### Why reversal is enough
+
+The suffix is already in descending order. Descending is its largest arrangement; reversing it produces ascending order, its smallest arrangement.
+
+### Complexity
+
+```text
+Time:  O(n)
+Space: O(1)
+```

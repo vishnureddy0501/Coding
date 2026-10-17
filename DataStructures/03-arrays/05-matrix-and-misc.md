@@ -1,22 +1,59 @@
 # 5. Matrix and Miscellaneous Patterns
 
-## Pascal's Triangle row
+## Pascal's Triangle I
 
-Generate a row without repeatedly calculating factorials.
+[LeetCode 118: Pascal's Triangle](https://leetcode.com/problems/pascals-triangle/)
 
 ```cpp
-vector<long long> generateRow(int rowNumber) {
-    vector<long long> row;
-    long long value = 1;
-    row.push_back(value);
+class Solution {
+public:
+    vector<vector<int>> generate(int numRows) {
+        vector<vector<int>> res;
 
-    for (int column = 1; column < rowNumber; ++column) {
-        value = value * (rowNumber - column) / column;
-        row.push_back(value);
+        for (int row = 0; row < numRows; row++) {
+            vector<int> current(row + 1, 1);
+
+            for (int col = 1; col < row; col++) {
+                current[col] =
+                    res[row - 1][col - 1] +
+                    res[row - 1][col];
+            }
+
+            res.push_back(current);
+        }
+
+        return res;
     }
+};
+```
 
-    return row;
-}
+## Pascal's Triangle II
+
+[LeetCode 119: Pascal's Triangle II](https://leetcode.com/problems/pascals-triangle-ii/)
+
+> Use the same previous-row logic. You do not need to learn the combination formula.
+
+```cpp
+class Solution {
+public:
+    vector<int> getRow(int rowIndex) {
+        vector<int> previous;
+
+        for (int row = 0; row <= rowIndex; row++) {
+            vector<int> current(row + 1, 1);
+
+            for (int col = 1; col < row; col++) {
+                current[col] =
+                    previous[col - 1] +
+                    previous[col];
+            }
+
+            previous = current;
+        }
+
+        return previous;
+    }
+};
 ```
 
 ## Matrix patterns to know
@@ -29,7 +66,7 @@ vector<long long> generateRow(int rowNumber) {
 
 ## Count inversions and reverse pairs
 
-These are merge-sort problems. See [Merge Sort](../02-sorting/02-merge-sort.md).
+These are merge-sort problems. See [Merge Sort](../02-sorting/01-merge-sort.md).
 
 ## Repeating and missing number
 

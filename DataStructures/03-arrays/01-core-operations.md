@@ -3,20 +3,23 @@
 ## Remove duplicates from a sorted array
 
 ```cpp
-int removeDuplicates(vector<int>& nums) {
-    if (nums.empty()) return 0;
+class Solution {
+public:
+    int removeDuplicates(vector<int>& nums) {
+        int n = nums.size();
+        int start = 1;
 
-    int write = 1;
-
-    for (int read = 1; read < nums.size(); ++read) {
-        if (nums[read] != nums[write - 1]) {
-            nums[write] = nums[read];
-            ++write;
+        for (int i = 1; i < n; i++) {
+            if (nums[i] == nums[i - 1]) {
+                // Duplicate: do not increment start.
+            } else {
+                nums[start++] = nums[i];
+            }
         }
-    }
 
-    return write;
-}
+        return start;
+    }
+};
 ```
 
 ## Move zeroes to the end
@@ -43,19 +46,32 @@ vector<int> sortedUnion(vector<int>& first, vector<int>& second) {
     int i = 0;
     int j = 0;
 
-    while (i < first.size() || j < second.size()) {
-        int value;
-
-        if (j == second.size() ||
-            (i < first.size() && first[i] <= second[j])) {
-            value = first[i++];
+    while (i < first.size() && j < second.size()) {
+        if (first[i] <= second[j]) {
+            if (result.empty() || result.back() != first[i]) {
+                result.push_back(first[i]);
+            }
+            i++;
         } else {
-            value = second[j++];
+            if (result.empty() || result.back() != second[j]) {
+                result.push_back(second[j]);
+            }
+            j++;
         }
+    }
 
-        if (result.empty() || result.back() != value) {
-            result.push_back(value);
+    while (i < first.size()) {
+        if (result.empty() || result.back() != first[i]) {
+            result.push_back(first[i]);
         }
+        i++;
+    }
+
+    while (j < second.size()) {
+        if (result.empty() || result.back() != second[j]) {
+            result.push_back(second[j]);
+        }
+        j++;
     }
 
     return result;
