@@ -31,3 +31,6 @@ Nginx is the front door. The backend and database stay behind it.
 
 Do not learn Kubernetes now. Docker and Docker Compose are enough.
 
+## Practice project
+
+Use [FastAPI Docker Demo](fastapi-app/README.md) to test a basic API locally and deploy the same container on AWS EC2.

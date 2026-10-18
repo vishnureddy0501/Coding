@@ -52,4 +52,86 @@ During merging, when `nums[left] > nums[right]`, every remaining value from `lef
 count += middle - left + 1;
 ```
 
-The same merge-sort idea is used for Reverse Pairs and Count of Smaller Numbers After Self.
+## Reverse Pairs
+
+A reverse pair satisfies:
+
+```text
+i < j and nums[i] > 2 * nums[j]
+```
+
+Count the pairs after sorting both halves but before merging them.
+
+```cpp
+class Solution {
+public:
+    void merge(vector<int>& nums, int low, int mid, int high) {
+        vector<int> res;
+        int left = low, right = mid + 1;
+
+        while (left <= mid && right <= high) {
+            if (nums[left] <= nums[right]) {
+                res.push_back(nums[left]);
+                left++;
+            } else {
+                res.push_back(nums[right]);
+                right++;
+            }
+        }
+
+        while (left <= mid) {
+            res.push_back(nums[left]);
+            left++;
+        }
+
+        while (right <= high) {
+            res.push_back(nums[right]);
+            right++;
+        }
+
+        for (int i = low; i <= high; i++) {
+            nums[i] = res[i - low];
+        }
+    }
+
+    int countPairs(vector<int>& nums, int low, int mid, int high) {
+        int count = 0;
+        int right = mid + 1;
+
+        for (int left = low; left <= mid; left++) {
+            while (right <= high &&
+                   (long long)nums[left] > 2LL * nums[right]) {
+                right++;
+            }
+
+            count += right - (mid + 1);
+        }
+
+        return count;
+    }
+
+    void mergeSortAlgo(vector<int>& nums, int low, int high, int& ans) {
+        if (low >= high) return;
+
+        int mid = low + (high - low) / 2;
+
+        mergeSortAlgo(nums, low, mid, ans);
+        mergeSortAlgo(nums, mid + 1, high, ans);
+
+        ans += countPairs(nums, low, mid, high);
+        merge(nums, low, mid, high);
+    }
+
+    int reversePairs(vector<int>& nums) {
+        int ans = 0;
+        mergeSortAlgo(nums, 0, nums.size() - 1, ans);
+        return ans;
+    }
+};
+```
+
+Why count before merging? Both halves must remain separately sorted while counting cross-half pairs.
+
+Use `2LL * nums[right]` to prevent integer overflow.
+
+Time: `O(n log n)`; extra space: `O(n)`.

@@ -8,7 +8,7 @@ Company names are commonly reported public interview tags, not official guarante
 | ⭐⭐⭐⭐⭐ | [Sort Colors](https://leetcode.com/problems/sort-colors/) | Dutch flag | Amazon, Microsoft, Meta |
 | ⭐⭐⭐⭐⭐ | [Count Inversions](https://www.geeksforgeeks.org/problems/inversion-of-array-1587115620/1) | Merge sort counting | Amazon, Microsoft, Adobe, Goldman Sachs |
 | ⭐⭐⭐⭐⭐ | [Merge Intervals](https://leetcode.com/problems/merge-intervals/) | Sort intervals | Meta, Amazon, Google, Microsoft |
-| ⭐⭐⭐⭐ | [Reverse Pairs](https://leetcode.com/problems/reverse-pairs/) **(Yet to solve)** | Modified merge sort | Google, Amazon, Microsoft |
+| ⭐⭐⭐⭐ | [Reverse Pairs](https://leetcode.com/problems/reverse-pairs/) | Modified merge sort | Google, Amazon, Microsoft |
 | ⭐⭐⭐⭐ | [Sort List](https://leetcode.com/problems/sort-list/) | Linked-list merge sort | Meta, Amazon, Microsoft |
 | ⭐⭐⭐ | Counting Sort | Small integer range | Amazon, Microsoft, Adobe |
 
