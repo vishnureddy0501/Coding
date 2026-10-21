@@ -1,5 +1,6 @@
 import logging
 from contextlib import asynccontextmanager
+from typing import Dict, Union
 
 from fastapi import FastAPI
 
@@ -53,7 +54,7 @@ def health_check() -> dict[str, str]:
 
 
 @app.get("/api/items/{item_id}")
-def get_item(item_id: int) -> dict[str, int | str]:
+def get_item(item_id: int) -> Dict[str, Union[int, str]]:
     return {
         "item_id": item_id,
         "message": f"You requested item {item_id}",

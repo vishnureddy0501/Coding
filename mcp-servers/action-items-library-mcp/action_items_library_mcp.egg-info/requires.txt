@@ -1,0 +1,3 @@
+mcp[cli]<3,>=2
+pydantic-settings<3,>=2.10
+pymongo<5,>=4.9
